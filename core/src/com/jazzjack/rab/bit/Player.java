@@ -1,21 +1,24 @@
 package com.jazzjack.rab.bit;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class Player {
 
-    private static final int DEFAULT_MOVEMENT_SPEED = 24;
-    private static final int DEFAULT_SIGHT = 200;
-    public static final int DEFAULT_SIZE = 50;
+    private static final int DEFAULT_MOVEMENT_SPEED = 32;
+    private static final int DEFAULT_SIGHT = 256;
+    public static final int DEFAULT_SIZE = 32;
 
-    private final TextureAtlas.AtlasRegion playerTexture;
+    private final Texture playerTexture;
 
     private int x = 0;
     private int y = 0;
 
     public Player() {
-        final TextureAtlas spritesAtlas = new TextureAtlas("sprites.txt");
-        playerTexture = spritesAtlas.findRegion("hammer");
+        //final TextureAtlas spritesAtlas = new TextureAtlas("sprites.txt");
+        //playerTexture = spritesAtlas.findRegion("hammer");
+
+        playerTexture = new Texture("pixel-art/player.png");
     }
 
     public int getSight() {
@@ -34,7 +37,7 @@ public class Player {
         return DEFAULT_MOVEMENT_SPEED;
     }
 
-    public TextureAtlas.AtlasRegion getPlayerTexture() {
+    public Texture getPlayerTexture() {
         return playerTexture;
     }
 

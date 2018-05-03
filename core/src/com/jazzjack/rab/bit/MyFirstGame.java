@@ -16,27 +16,20 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
 
     private OrthographicCamera camera;
 
-    private SpriteBatch batch;
-    private TextureAtlas textureAtlas;
-
     private GameRenderer gameRenderer;
     private Player player;
 
     @Override
     public void create() {
-        Gdx.graphics.setWindowedMode(720, 480);
+        Gdx.graphics.setWindowedMode(640, 320);
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 720, 480);
+        camera.setToOrtho(false, 640, 320);
         camera.update();
 
-        TiledMap tiledMap = new TmxMapLoader().load("map1.tmx");
+        TiledMap tiledMap = new TmxMapLoader().load("pixel-art1.tmx");
         player = new Player();
         gameRenderer = new GameRenderer(tiledMap, player);
-
-        textureAtlas = new TextureAtlas("sprites.txt");
-
-        batch = new SpriteBatch();
 
         Gdx.input.setInputProcessor(this);
     }
@@ -50,12 +43,11 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        batch.setProjectionMatrix(camera.combined);
+        gameRenderer.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
     public void dispose() {
-        textureAtlas.dispose();
         gameRenderer.dispose();
     }
 
