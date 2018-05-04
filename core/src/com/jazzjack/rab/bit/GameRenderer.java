@@ -6,9 +6,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class GameRenderer extends OrthogonalTiledMapRenderer {
@@ -19,8 +16,8 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     private boolean rebufferPlayer = true;
 
-    public GameRenderer(TiledMap map, Player player) {
-        super(map);
+    public GameRenderer(TacticalMap map, Player player) {
+        super(map.getTiledMap());
 
         this.player = player;
 

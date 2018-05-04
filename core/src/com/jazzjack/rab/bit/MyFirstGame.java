@@ -5,10 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
@@ -27,9 +23,9 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
         camera.setToOrtho(false, 640, 320);
         camera.update();
 
-        TiledMap tiledMap = new TmxMapLoader().load("pixel-art1.tmx");
-        player = new Player();
-        gameRenderer = new GameRenderer(tiledMap, player);
+        TacticalMap tacticalMap = new TacticalMap("pixel-art1.tmx");
+        player = new Player(new TiledMapCollisionDetector(tacticalMap), 1 * tacticalMap.getTileWidth(), 2 * tacticalMap.getTileHeight());
+        gameRenderer = new GameRenderer(tacticalMap, player);
 
         Gdx.input.setInputProcessor(this);
     }

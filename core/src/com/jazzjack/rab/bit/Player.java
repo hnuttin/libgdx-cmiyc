@@ -1,23 +1,25 @@
 package com.jazzjack.rab.bit;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Player {
 
     private static final int DEFAULT_MOVEMENT_SPEED = 32;
     private static final int DEFAULT_SIGHT = 256;
-    public static final int DEFAULT_SIZE = 32;
+    private static final int DEFAULT_SIZE = 32;
 
     private final Texture playerTexture;
 
-    private int x = 0;
-    private int y = 0;
+    private final CollisionDetector collisionDetector;
 
-    public Player() {
-        //final TextureAtlas spritesAtlas = new TextureAtlas("sprites.txt");
-        //playerTexture = spritesAtlas.findRegion("hammer");
+    private float x;
+    private float y;
 
+    public Player(CollisionDetector collisionDetector, float x, float y) {
+        this.collisionDetector = collisionDetector;
+        this.x = x;
+        this.y = y;
         playerTexture = new Texture("pixel-art/player.png");
     }
 
@@ -41,27 +43,43 @@ public class Player {
         return playerTexture;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
     public void movePlayerRight() {
-        x += getMovementSpeed();
+        float futureX = x + getMovementSpeed();
+        if (!collisionDetector.collides(playerRectangle(futureX, y))) {
+            x = futureX;
+        }
     }
 
     public void movePlayerLeft() {
-        x -= getMovementSpeed();
+        float futureX = x - getMovementSpeed();
+        if (!collisionDetector.collides(playerRectangle(futureX, y))) {
+            x = futureX;
+        }
     }
 
     public void movePlayerUp() {
-        y += getMovementSpeed();
+        float futureY = y + getMovementSpeed();
+        if (!collisionDetector.collides(playerRectangle(x, futureY))) {
+            y = futureY;
+        }
     }
 
     public void movePlayerDown() {
-        y -= getMovementSpeed();
+        float futureY = y - getMovementSpeed();
+        if (!collisionDetector.collides(playerRectangle(x, futureY))) {
+            y = futureY;
+        }
+    }
+
+    private Rectangle playerRectangle(float x, float y) {
+        return new Rectangle(x, y, DEFAULT_MOVEMENT_SPEED, DEFAULT_MOVEMENT_SPEED);
     }
 }
