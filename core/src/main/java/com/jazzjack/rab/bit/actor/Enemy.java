@@ -1,13 +1,9 @@
 package com.jazzjack.rab.bit.actor;
 
-import com.badlogic.gdx.graphics.Texture;
-
 import java.util.HashSet;
 import java.util.Set;
 
 public class Enemy implements Actor {
-
-    private final Texture texture;
 
     private float x;
     private float y;
@@ -17,13 +13,12 @@ public class Enemy implements Actor {
     public Enemy(float x, float y) {
         this.x = x;
         this.y = y;
-        texture = new Texture("pixel-art/enemy/enemy1.png");
         routes = new HashSet<>();
     }
 
     @Override
-    public Texture getTexture() {
-        return texture;
+    public String getName() {
+        return "enemy1";
     }
 
     @Override

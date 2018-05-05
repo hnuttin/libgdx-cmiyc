@@ -14,6 +14,7 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
 
     private GameRenderer gameRenderer;
     private Player player;
+    private GameAssetManager assetManager;
 
     @Override
     public void create() {
@@ -23,15 +24,20 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
         camera.setToOrtho(false, 640, 320);
         camera.update();
 
-        TacticalMap tacticalMap = new TacticalMap("pixel-art1.tmx");
+        assetManager = new GameAssetManager();
+
+        initGameObjects();
+
+        Gdx.input.setInputProcessor(this);
+    }
+
+    private void initGameObjects() {
+        TacticalMap tacticalMap = new TacticalMap(assetManager.getTiledMap1());
         TiledMapCollisionDetector collisionDetector = new TiledMapCollisionDetector(tacticalMap);
         player = new Player(collisionDetector, 1 * tacticalMap.getTileWidth(), 2 * tacticalMap.getTileHeight());
         Enemy enemy = new Enemy(6 * tacticalMap.getTileWidth(), 7 * tacticalMap.getTileHeight());
-        gameRenderer = new GameRenderer(tacticalMap, player, enemy);
-
+        gameRenderer = new GameRenderer(tacticalMap, assetManager, player, enemy);
         collisionDetector.addActor(player, enemy);
-
-        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -49,6 +55,7 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
     @Override
     public void dispose() {
         gameRenderer.dispose();
+        assetManager.dispose();
     }
 
     @Override

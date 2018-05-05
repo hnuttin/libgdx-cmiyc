@@ -4,6 +4,9 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.utils.Disposable;
+
+import javax.xml.ws.Dispatch;
 
 public class TacticalMap {
 
@@ -11,8 +14,8 @@ public class TacticalMap {
 
     private final TiledMap tiledMap;
 
-    public TacticalMap(String fileName) {
-        tiledMap = new TmxMapLoader().load(fileName);
+    public TacticalMap(TiledMap tiledMap) {
+        this.tiledMap = tiledMap;
     }
 
     public TiledMap getTiledMap() {
@@ -35,4 +38,5 @@ public class TacticalMap {
     public float getTileHeight() {
         return getMapLayer().getTileHeight();
     }
+
 }
