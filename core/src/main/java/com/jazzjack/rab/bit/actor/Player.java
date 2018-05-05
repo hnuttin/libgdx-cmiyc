@@ -1,15 +1,15 @@
-package com.jazzjack.rab.bit;
+package com.jazzjack.rab.bit.actor;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.jazzjack.rab.bit.CollisionDetector;
 
-public class Player {
+public class Player implements Actor {
 
     private static final int DEFAULT_MOVEMENT_SPEED = 32;
     private static final int DEFAULT_SIGHT = 256;
-    private static final int DEFAULT_SIZE = 32;
 
-    private final Texture playerTexture;
+    private final Texture texture;
 
     private final CollisionDetector collisionDetector;
 
@@ -20,33 +20,28 @@ public class Player {
         this.collisionDetector = collisionDetector;
         this.x = x;
         this.y = y;
-        playerTexture = new Texture("pixel-art/player.png");
+        texture = new Texture("pixel-art/player.png");
     }
 
     public int getSight() {
         return DEFAULT_SIGHT;
     }
 
-    public int getWidth() {
-        return DEFAULT_SIZE;
-    }
-
-    public int getHeight() {
-        return DEFAULT_SIZE;
-    }
-
     private int getMovementSpeed() {
         return DEFAULT_MOVEMENT_SPEED;
     }
 
-    public Texture getPlayerTexture() {
-        return playerTexture;
+    @Override
+    public Texture getTexture() {
+        return texture;
     }
 
+    @Override
     public float getX() {
         return x;
     }
 
+    @Override
     public float getY() {
         return y;
     }

@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.jazzjack.rab.bit.actor.Enemy;
+import com.jazzjack.rab.bit.actor.Player;
 
 public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
 
@@ -24,8 +24,12 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
         camera.update();
 
         TacticalMap tacticalMap = new TacticalMap("pixel-art1.tmx");
-        player = new Player(new TiledMapCollisionDetector(tacticalMap), 1 * tacticalMap.getTileWidth(), 2 * tacticalMap.getTileHeight());
-        gameRenderer = new GameRenderer(tacticalMap, player);
+        TiledMapCollisionDetector collisionDetector = new TiledMapCollisionDetector(tacticalMap);
+        player = new Player(collisionDetector, 1 * tacticalMap.getTileWidth(), 2 * tacticalMap.getTileHeight());
+        Enemy enemy = new Enemy(6 * tacticalMap.getTileWidth(), 7 * tacticalMap.getTileHeight());
+        gameRenderer = new GameRenderer(tacticalMap, player, enemy);
+
+        collisionDetector.addActor(player, enemy);
 
         Gdx.input.setInputProcessor(this);
     }
