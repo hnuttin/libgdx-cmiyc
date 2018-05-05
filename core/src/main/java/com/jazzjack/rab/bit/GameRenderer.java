@@ -12,7 +12,7 @@ import com.jazzjack.rab.bit.actor.Player;
 
 public class GameRenderer extends OrthogonalTiledMapRenderer {
 
-    private final TacticalMap tacticalMap;
+    private final Level level;
     private final GameAssetManager assetManager;
     private final Player player;
     private final Enemy enemy;
@@ -21,10 +21,10 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     private boolean rebufferPlayer = true;
 
-    public GameRenderer(TacticalMap tacticalMap, GameAssetManager assetManager, Player player, Enemy enemy) {
-        super(tacticalMap.getTiledMap());
+    public GameRenderer(Level level, GameAssetManager assetManager, Player player, Enemy enemy) {
+        super(level.getTiledMap());
 
-        this.tacticalMap = tacticalMap;
+        this.level = level;
         this.assetManager = assetManager;
         this.player = player;
         this.enemy = enemy;
@@ -58,8 +58,8 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     private void drawSight() {
         batch.draw(
                 assetManager.getLightAtlasRegion(),
-                player.getX() - (player.getSight() / 2) + (tacticalMap.getTileWidth() / 2),
-                player.getY() - (player.getSight() / 2) + (tacticalMap.getTileHeight() / 2),
+                player.getX() - (player.getSight() / 2) + (level.getTileWidth() / 2),
+                player.getY() - (player.getSight() / 2) + (level.getTileHeight() / 2),
                 player.getSight(),
                 player.getSight());
     }
@@ -67,7 +67,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     private void renderMap() {
         batch.begin();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        renderMapLayer(tacticalMap.getMapLayer());
+        renderMapLayer(level.getMapLayer());
         drawActor(player);
         drawActor(enemy);
         drawWithAlpha(0.5f, this::drawEnemyRoute);
@@ -78,27 +78,27 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
         batch.draw(
                 new Texture("pixel-art/enemy/route-vertical.png"),
                 enemy.getX(),
-                enemy.getY() - tacticalMap.getTileHeight(),
-                tacticalMap.getTileWidth(),
-                tacticalMap.getTileHeight());
+                enemy.getY() - level.getTileHeight(),
+                level.getTileWidth(),
+                level.getTileHeight());
         batch.draw(
                 new Texture("pixel-art/enemy/route-corner-upper-right.png"),
                 enemy.getX(),
-                enemy.getY() - (tacticalMap.getTileHeight() * 2),
-                tacticalMap.getTileWidth(),
-                tacticalMap.getTileHeight());
+                enemy.getY() - (level.getTileHeight() * 2),
+                level.getTileWidth(),
+                level.getTileHeight());
         batch.draw(
                 new Texture("pixel-art/enemy/route-horizontal.png"),
-                enemy.getX() + tacticalMap.getTileWidth(),
-                enemy.getY() - (tacticalMap.getTileHeight() * 2),
-                tacticalMap.getTileWidth(),
-                tacticalMap.getTileHeight());
+                enemy.getX() + level.getTileWidth(),
+                enemy.getY() - (level.getTileHeight() * 2),
+                level.getTileWidth(),
+                level.getTileHeight());
         batch.draw(
                 new Texture("pixel-art/enemy/route-stop-right.png"),
-                enemy.getX() + (tacticalMap.getTileWidth() * 2),
-                enemy.getY() - (tacticalMap.getTileHeight() * 2),
-                tacticalMap.getTileWidth(),
-                tacticalMap.getTileHeight());
+                enemy.getX() + (level.getTileWidth() * 2),
+                enemy.getY() - (level.getTileHeight() * 2),
+                level.getTileWidth(),
+                level.getTileHeight());
     }
 
     private void drawWithAlpha(float alpha, Runnable runnable) {
@@ -112,8 +112,8 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
                 assetManager.getTextureForActor(actor),
                 actor.getX(),
                 actor.getY(),
-                tacticalMap.getTileWidth(),
-                tacticalMap.getTileHeight());
+                level.getTileWidth(),
+                level.getTileHeight());
     }
 
     private void renderSight() {

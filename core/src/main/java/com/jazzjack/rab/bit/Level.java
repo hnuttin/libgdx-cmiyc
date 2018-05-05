@@ -8,13 +8,13 @@ import com.badlogic.gdx.utils.Disposable;
 
 import javax.xml.ws.Dispatch;
 
-public class TacticalMap {
+public class Level {
 
     private static final String MAP_LAYER = "map";
 
     private final TiledMap tiledMap;
 
-    public TacticalMap(TiledMap tiledMap) {
+    public Level(TiledMap tiledMap) {
         this.tiledMap = tiledMap;
     }
 

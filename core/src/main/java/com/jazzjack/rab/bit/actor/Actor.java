@@ -1,7 +1,5 @@
 package com.jazzjack.rab.bit.actor;
 
-import com.badlogic.gdx.graphics.Texture;
-
 public interface Actor {
 
     String getName();
@@ -9,4 +7,6 @@ public interface Actor {
     float getX();
 
     float getY();
+
+    float getSize();
 }

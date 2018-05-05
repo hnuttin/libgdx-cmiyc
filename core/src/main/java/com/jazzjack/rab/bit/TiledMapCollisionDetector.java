@@ -6,21 +6,19 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.jazzjack.rab.bit.actor.Actor;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.Arrays.asList;
 
 public class TiledMapCollisionDetector implements CollisionDetector {
 
-    private final TacticalMap map;
+    private final Level level;
     private final Set<Actor> actors;
 
-    public TiledMapCollisionDetector(TacticalMap map) {
-        this.map = map;
+    public TiledMapCollisionDetector(Level level) {
+        this.level = level;
         this.actors = new HashSet<>();
     }
 
@@ -34,7 +32,7 @@ public class TiledMapCollisionDetector implements CollisionDetector {
     }
 
     private boolean collidesWithMap(Rectangle rectangle) {
-        TiledMapTileLayer mapLayer = map.getMapLayer();
+        TiledMapTileLayer mapLayer = level.getMapLayer();
         for (int cellX = 0; cellX < mapLayer.getWidth(); cellX++) {
             for (int cellY = 0; cellY < mapLayer.getHeight(); cellY++) {
                 if (collidesWithCell(cellX, cellY, rectangle)) {
@@ -46,14 +44,14 @@ public class TiledMapCollisionDetector implements CollisionDetector {
     }
 
     private boolean collidesWithCell(int cellX, int cellY, Rectangle rectangle) {
-        TiledMapTileLayer.Cell cell = map.getMapLayer().getCell(cellX, cellY);
+        TiledMapTileLayer.Cell cell = level.getMapLayer().getCell(cellX, cellY);
         MapObjects objects = cell.getTile().getObjects();
         return StreamSupport.stream(objects.getByType(RectangleMapObject.class).spliterator(), true)
                 .anyMatch(rectangleObject -> collidesWithRectangleMapObject(rectangleObject, cellX, cellY, rectangle));
     }
 
     private boolean collidesWithRectangleMapObject(RectangleMapObject rectangleObject, int cellX, int cellY, Rectangle rectangle) {
-        TiledMapTileLayer mapLayer = map.getMapLayer();
+        TiledMapTileLayer mapLayer = level.getMapLayer();
         Rectangle collisionRectangle = new Rectangle(rectangleObject.getRectangle());
         collisionRectangle.setX(cellX * mapLayer.getTileWidth());
         collisionRectangle.setY(cellY * mapLayer.getTileHeight());
@@ -68,8 +66,8 @@ public class TiledMapCollisionDetector implements CollisionDetector {
         Rectangle actorRectangle = new Rectangle(
                 actor.getX(),
                 actor.getY(),
-                map.getTileWidth(),
-                map.getTileHeight());
+                level.getTileWidth(),
+                level.getTileHeight());
         return actorRectangle.overlaps(rectangle);
     }
 

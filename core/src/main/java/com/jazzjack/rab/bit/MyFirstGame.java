@@ -7,6 +7,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jazzjack.rab.bit.actor.Enemy;
 import com.jazzjack.rab.bit.actor.Player;
+import com.jazzjack.rab.bit.common.Randomizer;
+import com.jazzjack.rab.bit.route.RouteGenerator;
 
 public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
 
@@ -15,6 +17,7 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
     private GameRenderer gameRenderer;
     private Player player;
     private GameAssetManager assetManager;
+    private TiledMapCollisionDetector collisionDetector;
 
     @Override
     public void create() {
@@ -32,11 +35,12 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
     }
 
     private void initGameObjects() {
-        TacticalMap tacticalMap = new TacticalMap(assetManager.getTiledMap1());
-        TiledMapCollisionDetector collisionDetector = new TiledMapCollisionDetector(tacticalMap);
-        player = new Player(collisionDetector, 1 * tacticalMap.getTileWidth(), 2 * tacticalMap.getTileHeight());
-        Enemy enemy = new Enemy(6 * tacticalMap.getTileWidth(), 7 * tacticalMap.getTileHeight());
-        gameRenderer = new GameRenderer(tacticalMap, assetManager, player, enemy);
+        Level level = new Level(assetManager.getTiledMap1());
+        collisionDetector = new TiledMapCollisionDetector(level);
+        player = new Player(1 * level.getTileWidth(), 2 * level.getTileHeight(), level.getTileWidth());
+        RouteGenerator routeGenerator = new RouteGenerator(collisionDetector, new Randomizer());
+        Enemy enemy = new Enemy(routeGenerator, 6 * level.getTileWidth(), 7 * level.getTileHeight(), level.getTileWidth());
+        gameRenderer = new GameRenderer(level, assetManager, player, enemy);
         collisionDetector.addActor(player, enemy);
     }
 
@@ -60,17 +64,25 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.LEFT)
-            player.movePlayerLeft();
-        if(keycode == Input.Keys.RIGHT)
-            player.movePlayerRight();
-        if(keycode == Input.Keys.UP)
-            player.movePlayerUp();
-        if(keycode == Input.Keys.DOWN)
-            player.movePlayerDown();
+        if (movePlayer(keycode)) {
+            gameRenderer.rebufferPlayer();
+            return true;
+        }
 
-        gameRenderer.rebufferPlayer();
+        return false;
+    }
 
+    private Boolean movePlayer(int keycode) {
+        switch (keycode) {
+            case Input.Keys.LEFT:
+                return player.moveLeft(collisionDetector);
+            case Input.Keys.RIGHT:
+                return player.moveRight(collisionDetector);
+            case Input.Keys.UP:
+                return player.moveUp(collisionDetector);
+            case Input.Keys.DOWN:
+                return player.moveDown(collisionDetector);
+        }
         return false;
     }
 

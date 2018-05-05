@@ -1,45 +1,28 @@
 package com.jazzjack.rab.bit.actor;
 
+import com.jazzjack.rab.bit.route.Route;
+import com.jazzjack.rab.bit.route.RouteGenerator;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public class Enemy implements Actor {
+public class Enemy extends SimpleActor {
 
-    private float x;
-    private float y;
-    
+    private final RouteGenerator routeGenerator;
+
     private Set<Route> routes;
 
-    public Enemy(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public Enemy(RouteGenerator routeGenerator, float startX, float startY, float size) {
+        super("enemy1", startX, startY, size);
+        this.routeGenerator = routeGenerator;
         routes = new HashSet<>();
     }
 
-    @Override
-    public String getName() {
-        return "enemy1";
+    public Set<Route> getRoutes() {
+        return routes;
     }
 
-    @Override
-    public float getX() {
-        return x;
-    }
-
-    @Override
-    public float getY() {
-        return y;
-    }
-    
-    public void generateRoutes(int amount) {
-        routes.clear();
-        for (int i = 0; i < amount; i++) {
-            routes.add(generateRoute());
-        }
-    }
-
-    private Route generateRoute() {
-        Direction direction = Direction.random();
-        return null;
+    public void generateRoutes(int amount, int maxLength) {
+        routes = routeGenerator.generateRoutes(this, amount, maxLength);
     }
 }
