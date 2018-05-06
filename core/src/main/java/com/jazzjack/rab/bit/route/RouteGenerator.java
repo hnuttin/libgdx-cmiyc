@@ -7,13 +7,12 @@ import com.jazzjack.rab.bit.actor.SimpleActor;
 import com.jazzjack.rab.bit.common.Direction;
 import com.jazzjack.rab.bit.common.Randomizer;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 public class RouteGenerator {
@@ -34,49 +33,79 @@ public class RouteGenerator {
     }
 
     private Route generateRoute(Actor actor, int maxLength) {
-        LinkedHashSet<Actor> steps = new LinkedHashSet<>(maxLength);
-        RouteGenerator.StepResult previousStepResult = null;
+        List<StepResult> stepsResults = new ArrayList<>(maxLength);
         for (int stepIndex = 0; stepIndex < maxLength; stepIndex++) {
-            RouteGenerator.StepResult stepResult = generateStep(
-                    previousStepResult == null ? actor : previousStepResult.step,
-                    copyWithoutDirection(asList(Direction.values()), previousStepResult == null ? null : previousStepResult.direction.getOppositeDirection()));
+            StepResult stepResult = generateStep(
+                    stepsResults.isEmpty() ? new StepResult(actor.getX(), actor.getY(), actor.getSize(), null) : stepsResults.get(stepsResults.size() - 1),
+                    copyWithoutDirection(Direction.valuesAsSet(), stepsResults.isEmpty() ? null : stepsResults.get(stepsResults.size() - 1).direction.getOppositeDirection()));
             if (stepResult != null) {
-                steps.add(stepResult.step);
-                previousStepResult = stepResult;
+                stepsResults.add(stepResult);
             } else {
                 break;
             }
         }
+        List<Actor> steps = correctStepNamesWithCornersAndEnding(stepsResults);
         return new Route(steps);
     }
 
-    private RouteGenerator.StepResult generateStep(Actor previousStep, List<Direction> allowedDirections) {
+    private List<Actor> correctStepNamesWithCornersAndEnding(List<StepResult> stepsResults) {
+        List<Actor> steps = new LinkedList<>();
+        int index = 0;
+        for (StepResult stepResult : stepsResults) {
+            if (index > 0) {
+                steps.add(createStepForPreviousStepResult(stepsResults.get(index - 1), stepResult));
+            }
+            if (index == stepsResults.size() - 1) {
+                steps.add(createEndingStep(stepResult));
+            }
+            index++;
+        }
+        return steps;
+    }
+
+    private Actor createEndingStep(StepResult stepResult) {
+        return new SimpleActor(
+                StepNames.getEndingForDirection(stepResult.direction),
+                stepResult.x,
+                stepResult.y,
+                stepResult.size);
+    }
+
+    private Actor createStepForPreviousStepResult(StepResult previousStepResult, StepResult stepResult) {
+        return new SimpleActor(
+                StepNames.getForDirectionAndNextDirection(previousStepResult.direction, stepResult.direction),
+                previousStepResult.x,
+                previousStepResult.y,
+                previousStepResult.size);
+    }
+
+    private StepResult generateStep(StepResult previousStep, Set<Direction> allowedDirections) {
         if (allowedDirections.isEmpty()) {
             return null;
         }
-        Direction direction = randomizer.randomFromList(allowedDirections);
+        Direction direction = randomizer.randomFromSet(allowedDirections);
         Rectangle stepRectangle = createStepRectangleForDirection(previousStep, direction);
         if (!collisionDetector.collides(stepRectangle)) {
-            return new RouteGenerator.StepResult(new SimpleActor(direction.getOrientation(), stepRectangle.getX(), stepRectangle.getY(), stepRectangle.getWidth()), direction);
+            return new StepResult(stepRectangle.getX(), stepRectangle.getY(), stepRectangle.getWidth(), direction);
         } else {
             return generateStep(previousStep, copyWithoutDirection(allowedDirections, direction));
         }
     }
 
-    private List<Direction> copyWithoutDirection(List<Direction> allowedDirections, Direction direction) {
-        return allowedDirections.stream().filter(d -> d != direction).collect(toList());
+    private Set<Direction> copyWithoutDirection(Set<Direction> allowedDirections, Direction direction) {
+        return allowedDirections.stream().filter(d -> d != direction).collect(toSet());
     }
 
-    private Rectangle createStepRectangleForDirection(Actor previousStep, Direction direction) {
+    private Rectangle createStepRectangleForDirection(StepResult previousStepResult, Direction direction) {
         switch (direction) {
             case UP:
-                return createStepRectangle(previousStep.getX(), previousStep.getY() + previousStep.getSize(), previousStep.getSize());
+                return createStepRectangle(previousStepResult.x, previousStepResult.y + previousStepResult.size, previousStepResult.size);
             case DOWN:
-                return createStepRectangle(previousStep.getX(), previousStep.getY() - previousStep.getSize(), previousStep.getSize());
+                return createStepRectangle(previousStepResult.x, previousStepResult.y - previousStepResult.size, previousStepResult.size);
             case LEFT:
-                return createStepRectangle(previousStep.getX() - previousStep.getSize(), previousStep.getY(), previousStep.getSize());
+                return createStepRectangle(previousStepResult.x - previousStepResult.size, previousStepResult.y, previousStepResult.size);
             case RIGHT:
-                return createStepRectangle(previousStep.getX() + previousStep.getSize(), previousStep.getY(), previousStep.getSize());
+                return createStepRectangle(previousStepResult.x + previousStepResult.size, previousStepResult.y, previousStepResult.size);
         }
         throw new IllegalArgumentException(direction.name());
     }
@@ -87,11 +116,15 @@ public class RouteGenerator {
 
     private static class StepResult {
 
-        private final Actor step;
+        private final float x;
+        private final float y;
+        private final float size;
         private final Direction direction;
 
-        private StepResult(Actor step, Direction direction) {
-            this.step = step;
+        private StepResult(float x, float y, float size, Direction direction) {
+            this.x = x;
+            this.y = y;
+            this.size = size;
             this.direction = direction;
         }
     }

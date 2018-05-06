@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jazzjack.rab.bit.actor.Actor;
+import com.jazzjack.rab.bit.route.StepNames;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,16 @@ public class GameAssetManager extends AssetManager {
         actorTextureMapping = new HashMap<>();
         actorTextureMapping.put("player", "pixel-art/player.png");
         actorTextureMapping.put("enemy1", "pixel-art/enemy/enemy1.png");
+        actorTextureMapping.put(StepNames.HORIZONTAL, "pixel-art/enemy/route-horizontal.png");
+        actorTextureMapping.put(StepNames.VERTICAL, "pixel-art/enemy/route-vertical.png");
+        actorTextureMapping.put(StepNames.ENDING_BOTTOM, "pixel-art/enemy/route-ending-bottom.png");
+        actorTextureMapping.put(StepNames.ENDING_LEFT, "pixel-art/enemy/route-ending-left.png");
+        actorTextureMapping.put(StepNames.ENDING_RIGHT, "pixel-art/enemy/route-ending-right.png");
+        actorTextureMapping.put(StepNames.ENDING_TOP, "pixel-art/enemy/route-ending-top.png");
+        actorTextureMapping.put(StepNames.CORNER_BOTTOM_LEFT, "pixel-art/enemy/route-corner-bottom-left.png");
+        actorTextureMapping.put(StepNames.CORNER_BOTTOM_RIGHT, "pixel-art/enemy/route-corner-bottom-right.png");
+        actorTextureMapping.put(StepNames.CORNER_TOP_LEFT, "pixel-art/enemy/route-corner-top-left.png");
+        actorTextureMapping.put(StepNames.CORNER_TOP_RIGHT, "pixel-art/enemy/route-corner-top-right.png");
     }
 
     public GameAssetManager() {

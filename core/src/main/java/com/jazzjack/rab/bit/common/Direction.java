@@ -1,8 +1,14 @@
 package com.jazzjack.rab.bit.common;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public enum Direction {
 
     LEFT("horizontal"), RIGHT("horizontal"), UP("vertical"), DOWN("vertical");
+
+    private static final Set<Direction> VALUES_AS_SET = new HashSet<>(Arrays.asList(values()));
 
     private final String orientation;
 
@@ -26,5 +32,9 @@ public enum Direction {
                 return RIGHT;
         }
         throw new IllegalArgumentException(name());
+    }
+
+    public static Set<Direction> valuesAsSet() {
+        return VALUES_AS_SET;
     }
 }

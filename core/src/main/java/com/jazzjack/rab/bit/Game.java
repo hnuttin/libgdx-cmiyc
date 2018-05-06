@@ -10,7 +10,7 @@ import com.jazzjack.rab.bit.actor.Player;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.route.RouteGenerator;
 
-public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
+public class Game extends ApplicationAdapter implements InputProcessor {
 
     private OrthographicCamera camera;
 
@@ -18,6 +18,7 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
     private Player player;
     private GameAssetManager assetManager;
     private TiledMapCollisionDetector collisionDetector;
+    private Enemy enemy;
 
     @Override
     public void create() {
@@ -39,9 +40,10 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
         collisionDetector = new TiledMapCollisionDetector(level);
         player = new Player(1 * level.getTileWidth(), 2 * level.getTileHeight(), level.getTileWidth());
         RouteGenerator routeGenerator = new RouteGenerator(collisionDetector, new Randomizer());
-        Enemy enemy = new Enemy(routeGenerator, 6 * level.getTileWidth(), 7 * level.getTileHeight(), level.getTileWidth());
+        enemy = new Enemy(routeGenerator, 6 * level.getTileWidth(), 7 * level.getTileHeight(), level.getTileWidth());
         gameRenderer = new GameRenderer(level, assetManager, player, enemy);
         collisionDetector.addActor(player, enemy);
+        enemy.generateRoutes(1, 4);
     }
 
     @Override
@@ -82,6 +84,9 @@ public class MyFirstGame extends ApplicationAdapter implements InputProcessor {
                 return player.moveUp(collisionDetector);
             case Input.Keys.DOWN:
                 return player.moveDown(collisionDetector);
+            case Input.Keys.G:
+                enemy.generateRoutes(1, 4);
+                return true;
         }
         return false;
     }

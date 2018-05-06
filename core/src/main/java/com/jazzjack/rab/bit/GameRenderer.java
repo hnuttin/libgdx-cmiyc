@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.jazzjack.rab.bit.actor.Actor;
 import com.jazzjack.rab.bit.actor.Enemy;
 import com.jazzjack.rab.bit.actor.Player;
+import com.jazzjack.rab.bit.route.Route;
 
 public class GameRenderer extends OrthogonalTiledMapRenderer {
 
@@ -70,35 +71,13 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
         renderMapLayer(level.getMapLayer());
         drawActor(player);
         drawActor(enemy);
-        drawWithAlpha(0.5f, this::drawEnemyRoute);
+        drawWithAlpha(0.5f, this::drawEnemyRoutes);
         batch.end();
     }
 
-    private void drawEnemyRoute() {
-        batch.draw(
-                new Texture("pixel-art/enemy/route-vertical.png"),
-                enemy.getX(),
-                enemy.getY() - level.getTileHeight(),
-                level.getTileWidth(),
-                level.getTileHeight());
-        batch.draw(
-                new Texture("pixel-art/enemy/route-corner-upper-right.png"),
-                enemy.getX(),
-                enemy.getY() - (level.getTileHeight() * 2),
-                level.getTileWidth(),
-                level.getTileHeight());
-        batch.draw(
-                new Texture("pixel-art/enemy/route-horizontal.png"),
-                enemy.getX() + level.getTileWidth(),
-                enemy.getY() - (level.getTileHeight() * 2),
-                level.getTileWidth(),
-                level.getTileHeight());
-        batch.draw(
-                new Texture("pixel-art/enemy/route-stop-right.png"),
-                enemy.getX() + (level.getTileWidth() * 2),
-                enemy.getY() - (level.getTileHeight() * 2),
-                level.getTileWidth(),
-                level.getTileHeight());
+    private void drawEnemyRoutes() {
+        enemy.getRoutes().stream().flatMap(route -> route.getSteps().stream()).forEach(this::drawActor);
+
     }
 
     private void drawWithAlpha(float alpha, Runnable runnable) {
@@ -108,12 +87,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     }
 
     private void drawActor(Actor actor) {
-        batch.draw(
-                assetManager.getTextureForActor(actor),
-                actor.getX(),
-                actor.getY(),
-                level.getTileWidth(),
-                level.getTileHeight());
+        batch.draw(assetManager.getTextureForActor(actor), actor.getX(), actor.getY());
     }
 
     private void renderSight() {
