@@ -52,7 +52,7 @@ public class StepNames {
         return DIRECTION_TO_ENDING_MAPPING.get(direction);
     }
 
-    public static String getForDirectionAndNextDirection(Direction direction, Direction nextDirection) {
+    public static String getBasedOnNextDirection(Direction direction, Direction nextDirection) {
         return DIRECTION_AND_NEXT_DIRECTION_MAPPING.get(new DirectionAndNextDirection(direction, nextDirection));
     }
 

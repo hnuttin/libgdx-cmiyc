@@ -44,11 +44,11 @@ public class RouteGenerator {
                 break;
             }
         }
-        List<Actor> steps = correctStepNamesWithCornersAndEnding(stepsResults);
+        List<Actor> steps = convertToSteps(stepsResults);
         return new Route(steps);
     }
 
-    private List<Actor> correctStepNamesWithCornersAndEnding(List<StepResult> stepsResults) {
+    private List<Actor> convertToSteps(List<StepResult> stepsResults) {
         List<Actor> steps = new LinkedList<>();
         int index = 0;
         for (StepResult stepResult : stepsResults) {
@@ -64,19 +64,15 @@ public class RouteGenerator {
     }
 
     private Actor createEndingStep(StepResult stepResult) {
-        return new SimpleActor(
-                StepNames.getEndingForDirection(stepResult.direction),
-                stepResult.x,
-                stepResult.y,
-                stepResult.size);
+        return createStep(StepNames.getEndingForDirection(stepResult.direction), stepResult);
     }
 
     private Actor createStepForPreviousStepResult(StepResult previousStepResult, StepResult stepResult) {
-        return new SimpleActor(
-                StepNames.getForDirectionAndNextDirection(previousStepResult.direction, stepResult.direction),
-                previousStepResult.x,
-                previousStepResult.y,
-                previousStepResult.size);
+        return createStep(StepNames.getBasedOnNextDirection(previousStepResult.direction, stepResult.direction), previousStepResult);
+    }
+
+    private Actor createStep(String stepName, StepResult stepResult) {
+        return new SimpleActor(stepName, stepResult.x, stepResult.y, stepResult.size);
     }
 
     private StepResult generateStep(StepResult previousStep, Set<Direction> allowedDirections) {
