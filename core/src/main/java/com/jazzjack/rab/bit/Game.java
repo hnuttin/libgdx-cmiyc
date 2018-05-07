@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jazzjack.rab.bit.actor.Enemy;
 import com.jazzjack.rab.bit.actor.Player;
+import com.jazzjack.rab.bit.collision.TiledMapCollisionDetector;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.route.RouteGenerator;
 
@@ -42,8 +43,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         RouteGenerator routeGenerator = new RouteGenerator(collisionDetector, new Randomizer());
         enemy = new Enemy(routeGenerator, 6 * level.getTileWidth(), 7 * level.getTileHeight(), level.getTileWidth());
         gameRenderer = new GameRenderer(level, assetManager, player, enemy);
-        collisionDetector.addActor(player, enemy);
-        enemy.generateRoutes(1, 4);
+        collisionDetector.addActor(enemy);
+        enemy.generateRoutes(2, 7);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
             case Input.Keys.DOWN:
                 return player.moveDown(collisionDetector);
             case Input.Keys.G:
-                enemy.generateRoutes(1, 4);
+                enemy.generateRoutes(2, 7);
                 return true;
         }
         return false;

@@ -1,12 +1,8 @@
 package com.jazzjack.rab.bit.actor;
 
-public interface Actor {
+import com.jazzjack.rab.bit.collision.Collidable;
+
+public interface Actor extends Collidable {
 
     String getName();
-
-    float getX();
-
-    float getY();
-
-    float getSize();
 }
