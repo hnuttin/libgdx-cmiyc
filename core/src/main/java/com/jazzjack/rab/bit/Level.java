@@ -18,10 +18,6 @@ public class Level {
         this.tiledMap = tiledMap;
     }
 
-    public TiledMap getTiledMap() {
-        return tiledMap;
-    }
-
     public TiledMapTileLayer getMapLayer() {
         for (MapLayer mapLayer : tiledMap.getLayers()) {
             if (MAP_LAYER.equalsIgnoreCase(mapLayer.getName()) && TiledMapTileLayer.class.isAssignableFrom(mapLayer.getClass())) {

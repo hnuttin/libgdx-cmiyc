@@ -3,50 +3,62 @@ package com.jazzjack.rab.bit;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.jazzjack.rab.bit.actor.Actor;
-import com.jazzjack.rab.bit.actor.Enemy;
+import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.Player;
-import com.jazzjack.rab.bit.route.Route;
+import com.jazzjack.rab.bit.animation.Animation;
+import com.jazzjack.rab.bit.animation.AnimationHandler;
+import com.jazzjack.rab.bit.game.GameObjectProvider;
 
-public class GameRenderer extends OrthogonalTiledMapRenderer {
+import java.util.List;
 
-    private final Level level;
+public class GameRenderer extends OrthogonalTiledMapRenderer implements AnimationHandler {
+
+    private final GameObjectProvider gameObjectProvider;
     private final GameAssetManager assetManager;
-    private final Player player;
-    private final Enemy enemy;
 
     private final FrameBuffer lightBuffer;
 
     private boolean rebufferPlayer = true;
 
-    public GameRenderer(Level level, GameAssetManager assetManager, Player player, Enemy enemy) {
-        super(level.getTiledMap());
+    private Animation currentAnimation;
+    private Runnable currentOnAnimationFinished;
 
-        this.level = level;
+    public GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager) {
+        super(null);
+
+        this.gameObjectProvider = gameObjectProvider;
         this.assetManager = assetManager;
-        this.player = player;
-        this.enemy = enemy;
 
         lightBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     }
 
-    public void rebufferPlayer() {
-        rebufferPlayer = true;
+    private Player getPlayer() {
+        return gameObjectProvider.getPlayer().get();
+    }
+
+    private List<Enemy> getEnemies() {
+        return gameObjectProvider.getEnemies();
+    }
+
+    private Level getLevel() {
+        return gameObjectProvider.getLevel().get();
     }
 
     @Override
     public void render() {
+        Gdx.graphics.getDeltaTime();
+
         bufferSight();
         renderMap();
         renderSight();
     }
 
     private void bufferSight() {
-        if (rebufferPlayer) {
-            rebufferPlayer = false;
+        if (rebufferPlayer && gameObjectProvider.getPlayer().isPresent()) {
+            rebufferPlayer = true;
 
             lightBuffer.begin();
             Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
@@ -59,25 +71,54 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     private void drawSight() {
         batch.draw(
                 assetManager.getLightAtlasRegion(),
-                player.getX() - (player.getSight() / 2) + (level.getTileWidth() / 2),
-                player.getY() - (player.getSight() / 2) + (level.getTileHeight() / 2),
-                player.getSight(),
-                player.getSight());
+                getPlayer().getX() - (getPlayer().getSight() / 2) + (getLevel().getTileWidth() / 2),
+                getPlayer().getY() - (getPlayer().getSight() / 2) + (getLevel().getTileHeight() / 2),
+                getPlayer().getSight(),
+                getPlayer().getSight());
     }
 
     private void renderMap() {
         batch.begin();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        renderMapLayer(level.getMapLayer());
-        drawActor(player);
-        drawActor(enemy);
-        drawWithAlpha(0.5f, this::drawEnemyRoutes);
+        renderMapLayer();
+        drawPlayer();
+        drawEnemies();
+        continueAnimations();
         batch.end();
     }
 
-    private void drawEnemyRoutes() {
-        enemy.getRoutes().stream().flatMap(route -> route.getSteps().stream()).forEach(this::drawActor);
+    private void continueAnimations() {
+        if (currentAnimation != null) {
+            currentAnimation.continueAnimation(Gdx.graphics.getDeltaTime());
+            if (currentAnimation.isFinished()) {
+                currentOnAnimationFinished.run();
+            }
+        }
+    }
 
+    private void renderMapLayer() {
+        if (gameObjectProvider.getLevel().isPresent()) {
+            renderMapLayer(getLevel().getMapLayer());
+        }
+    }
+
+    private void drawPlayer() {
+        if (gameObjectProvider.getPlayer().isPresent()) {
+            drawActor(getPlayer());
+        }
+    }
+
+    private void drawEnemies() {
+        getEnemies().forEach(this::drawEnemy);
+    }
+
+    private void drawEnemy(Enemy enemy) {
+        drawActor(enemy);
+        drawWithAlpha(0.5f, () -> drawEnemyRoutes(enemy));
+    }
+
+    private void drawEnemyRoutes(Enemy enemy) {
+        enemy.getRoutes().stream().flatMap(route -> route.getSteps().stream()).forEach(this::drawActor);
     }
 
     private void drawWithAlpha(float alpha, Runnable runnable) {
@@ -107,5 +148,11 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     public void dispose() {
         super.dispose();
 
+    }
+
+    @Override
+    public void handleAnimation(Animation animation, Runnable onAnimationFinished) {
+        currentAnimation = animation;
+        currentOnAnimationFinished = onAnimationFinished;
     }
 }

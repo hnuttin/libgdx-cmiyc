@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 public class RouteGenerator {
@@ -24,12 +25,12 @@ public class RouteGenerator {
         this.randomizer = randomizer;
     }
 
-    public Set<Route> generateRoutes(Actor actor, int amount, int maxLength) {
+    public List<Route> generateRoutes(Actor actor, int amount, int maxLength) {
         RouteCollisionDetector routeCollisionDetector = new RouteCollisionDetector(collisionDetector);
         return IntStream.range(0, amount)
                 .boxed()
                 .map(i -> generateRoute(actor, maxLength, routeCollisionDetector))
-                .collect(toSet());
+                .collect(toList());
     }
 
     private Route generateRoute(Actor actor, int maxLength, RouteCollisionDetector routeCollisionDetector) {
@@ -46,7 +47,7 @@ public class RouteGenerator {
                 break;
             }
         }
-        List<Actor> steps = convertToSteps(stepsResults);
+        List<Step> steps = convertToSteps(stepsResults);
         return new Route(steps);
     }
 
@@ -94,8 +95,8 @@ public class RouteGenerator {
         return allowedDirections.stream().filter(d -> d != direction).collect(toSet());
     }
 
-    private List<Actor> convertToSteps(List<StepResult> stepsResults) {
-        List<Actor> steps = new LinkedList<>();
+    private List<Step> convertToSteps(List<StepResult> stepsResults) {
+        List<Step> steps = new LinkedList<>();
         int index = 0;
         for (StepResult stepResult : stepsResults) {
             if (index > 0) {
@@ -109,16 +110,16 @@ public class RouteGenerator {
         return steps;
     }
 
-    private Actor createStepForPreviousStepResult(StepResult previousStepResult, StepResult stepResult) {
+    private Step createStepForPreviousStepResult(StepResult previousStepResult, StepResult stepResult) {
         return createStep(StepNames.getBasedOnNextDirection(previousStepResult.getDirection(), stepResult.getDirection()), previousStepResult);
     }
 
-    private Actor createEndingStep(StepResult stepResult) {
+    private Step createEndingStep(StepResult stepResult) {
         return createStep(StepNames.getEndingForDirection(stepResult.getDirection()), stepResult);
     }
 
-    private Actor createStep(String stepName, StepResult stepResult) {
-        return new SimpleActor(stepName, stepResult.getX(), stepResult.getY(), stepResult.getSize());
+    private Step createStep(String stepName, StepResult stepResult) {
+        return new Step(stepName, stepResult);
     }
 
 }

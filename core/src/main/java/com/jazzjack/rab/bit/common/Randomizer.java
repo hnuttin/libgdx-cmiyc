@@ -7,12 +7,18 @@ import java.util.Set;
 
 public class Randomizer {
 
+    private final Random random = new Random();
+
     public <T> T randomFromSet(Set<T> set) {
         Iterator<T> iterator = set.iterator();
         T randomFromSet = null;
-        for (int i = 0; i < new Random().nextInt(set.size()) + 1; i++) {
+        for (int i = 0; i < random.nextInt(set.size()) + 1; i++) {
             randomFromSet = iterator.next();
         }
         return randomFromSet;
+    }
+
+    public int randomInteger(int maxValue) {
+        return random.nextInt(maxValue);
     }
 }
