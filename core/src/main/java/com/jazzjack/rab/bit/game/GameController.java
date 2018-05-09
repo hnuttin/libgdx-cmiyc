@@ -84,18 +84,6 @@ public class GameController implements GameObjectProvider, InputProcessor {
         return false;
     }
 
-    private void startEnemyTurn() {
-        currentGamePhase = GamePhase.ENEMY_TURN;
-        Animation animation = enemy.animateEnemy(randomizer);
-        animationHandler.handleAnimation(animation, this::startPlayerTurn);
-    }
-
-    private void startPlayerTurn() {
-        currentGamePhase = GamePhase.PLAYER_TURN;
-        enemy.generateRoutes();
-        player.resetMovements();
-    }
-
     private Boolean movePlayer(int keycode) {
         switch (keycode) {
             case Input.Keys.LEFT:
@@ -111,6 +99,18 @@ public class GameController implements GameObjectProvider, InputProcessor {
                 return true;
         }
         return false;
+    }
+
+    private void startEnemyTurn() {
+        currentGamePhase = GamePhase.ENEMY_TURN;
+        Animation animation = enemy.animateEnemy(randomizer);
+        animationHandler.handleAnimation(animation, this::startPlayerTurn);
+    }
+
+    private void startPlayerTurn() {
+        currentGamePhase = GamePhase.PLAYER_TURN;
+        enemy.generateRoutes();
+        player.resetMovements();
     }
 
     @Override

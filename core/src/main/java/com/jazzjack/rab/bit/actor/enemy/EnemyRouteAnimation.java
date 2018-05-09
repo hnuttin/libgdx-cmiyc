@@ -6,6 +6,8 @@ import com.jazzjack.rab.bit.route.Step;
 
 class EnemyRouteAnimation implements Animation {
 
+    private static final float ANIMATION_SPEED_IN_SECONDS = 0.5f;
+
     private final Enemy enemy;
     private final Route routeToAnimate;
 
@@ -26,7 +28,7 @@ class EnemyRouteAnimation implements Animation {
     public void continueAnimation(float deltaTime) {
         if (inProgress) {
             timeSinceLastStep += deltaTime;
-            if (timeSinceLastStep >= 1f) {
+            if (timeSinceLastStep >= ANIMATION_SPEED_IN_SECONDS) {
                 moveEnemyToNextRouteStep();
                 timeSinceLastStep = 0;
             }

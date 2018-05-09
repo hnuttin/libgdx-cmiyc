@@ -83,7 +83,7 @@ class RouteGeneratorTest {
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
         assertThat(route.getSteps()).hasSize(5);
-        Iterator<Actor> steps = route.getSteps().iterator();
+        Iterator<Step> steps = route.getSteps().iterator();
         assertStep(steps.next(), 1, 1, StepNames.CORNER_TOP_RIGHT);
         assertStep(steps.next(), 1, 0, StepNames.CORNER_BOTTOM_LEFT);
         assertStep(steps.next(), 2, 0, StepNames.CORNER_BOTTOM_RIGHT);
@@ -114,13 +114,13 @@ class RouteGeneratorTest {
         Iterator<Route> routeIterator = routes.iterator();
         Route route1 = routeIterator.next();
         assertThat(route1.getSteps()).hasSize(3);
-        Iterator<Actor> stepsRoute1 = route1.getSteps().iterator();
+        Iterator<Step> stepsRoute1 = route1.getSteps().iterator();
         assertStep(stepsRoute1.next(), 1, 0, StepNames.HORIZONTAL);
         assertStep(stepsRoute1.next(), 2, 0, StepNames.HORIZONTAL);
         assertStep(stepsRoute1.next(), 3, 0, StepNames.ENDING_RIGHT);
         Route route2 = routeIterator.next();
         assertThat(route2.getSteps()).hasSize(3);
-        Iterator<Actor> stepsroute2 = route2.getSteps().iterator();
+        Iterator<Step> stepsroute2 = route2.getSteps().iterator();
         assertStep(stepsroute2.next(), 0, 1, StepNames.CORNER_TOP_LEFT);
         assertStep(stepsroute2.next(), 1, 1, StepNames.HORIZONTAL);
         assertStep(stepsroute2.next(), 2, 1, StepNames.ENDING_RIGHT);
@@ -175,7 +175,7 @@ class RouteGeneratorTest {
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
         assertThat(route.getSteps()).hasSize(18);
-        Iterator<Actor> steps = route.getSteps().iterator();
+        Iterator<Step> steps = route.getSteps().iterator();
         assertStep(steps.next(), 1, 0, StepNames.HORIZONTAL);
         assertStep(steps.next(), 2, 0, StepNames.CORNER_BOTTOM_RIGHT);
         assertStep(steps.next(), 2, 1, StepNames.VERTICAL);
@@ -249,7 +249,7 @@ class RouteGeneratorTest {
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
         assertThat(route.getSteps()).hasSize(2);
-        Iterator<Actor> steps = route.getSteps().iterator();
+        Iterator<Step> steps = route.getSteps().iterator();
         assertStep(steps.next(), 1, 0, StepNames.HORIZONTAL);
         assertStep(steps.next(), 2, 0, StepNames.ENDING_RIGHT);
     }

@@ -92,6 +92,8 @@ public class GameRenderer extends OrthogonalTiledMapRenderer implements Animatio
             currentAnimation.continueAnimation(Gdx.graphics.getDeltaTime());
             if (currentAnimation.isFinished()) {
                 currentOnAnimationFinished.run();
+                currentAnimation = null;
+                currentOnAnimationFinished = null;
             }
         }
     }
