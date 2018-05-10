@@ -3,10 +3,6 @@ package com.jazzjack.rab.bit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.utils.Disposable;
-
-import javax.xml.ws.Dispatch;
 
 public class Level {
 

@@ -4,10 +4,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.jazzjack.rab.bit.GameAssetManager;
 import com.jazzjack.rab.bit.Level;
-import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.Player;
+import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.animation.Animation;
-import com.jazzjack.rab.bit.animation.AnimationHandler;
+import com.jazzjack.rab.bit.animation.AnimationRegister;
 import com.jazzjack.rab.bit.collision.TiledMapCollisionDetector;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.route.RouteGenerator;
@@ -20,8 +20,8 @@ import static java.util.Collections.singletonList;
 public class GameController implements GameObjectProvider, InputProcessor {
 
     private final GameAssetManager assetManager;
+    private final AnimationRegister animationRegister;
     private final Randomizer randomizer;
-    private AnimationHandler animationHandler;
 
     private Level level;
     private TiledMapCollisionDetector collisionDetector;
@@ -30,13 +30,10 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     private GamePhase currentGamePhase;
 
-    public GameController(GameAssetManager assetManager, Randomizer randomizer) {
+    public GameController(GameAssetManager assetManager, AnimationRegister animationRegister, Randomizer randomizer) {
         this.assetManager = assetManager;
+        this.animationRegister = animationRegister;
         this.randomizer = randomizer;
-    }
-
-    public void setAnimationHandler(AnimationHandler animationHandler) {
-        this.animationHandler = animationHandler;
     }
 
     public void startGame() {
@@ -97,14 +94,15 @@ public class GameController implements GameObjectProvider, InputProcessor {
             case Input.Keys.G:
                 enemy.generateRoutes();
                 return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     private void startEnemyTurn() {
         currentGamePhase = GamePhase.ENEMY_TURN;
         Animation animation = enemy.animateEnemy(randomizer);
-        animationHandler.handleAnimation(animation, this::startPlayerTurn);
+        animationRegister.registerAnimation(animation, this::startPlayerTurn);
     }
 
     private void startPlayerTurn() {

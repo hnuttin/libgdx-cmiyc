@@ -3,6 +3,7 @@ package com.jazzjack.rab.bit;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.jazzjack.rab.bit.animation.AnimationHandler;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.game.GameController;
 
@@ -13,6 +14,7 @@ public class Game extends ApplicationAdapter {
     private GameRenderer gameRenderer;
     private GameAssetManager assetManager;
     private GameController gameController;
+    private AnimationHandler animationHandler;
 
     @Override
     public void create() {
@@ -31,11 +33,9 @@ public class Game extends ApplicationAdapter {
 
     private void initGameObjects() {
         assetManager = new GameAssetManager();
-        gameController = new GameController(assetManager, new Randomizer());
+        animationHandler = new AnimationHandler();
+        gameController = new GameController(assetManager, animationHandler, new Randomizer());
         gameRenderer = new GameRenderer(gameController, assetManager);
-
-        // TODO fix circular dependency
-        gameController.setAnimationHandler(gameRenderer);
     }
 
     private void startNewGame() {
@@ -46,6 +46,7 @@ public class Game extends ApplicationAdapter {
     @Override
     public void render() {
         camera.update();
+        animationHandler.continueAnimations(Gdx.graphics.getDeltaTime());
         gameRenderer.setView(camera);
         gameRenderer.render();
     }
