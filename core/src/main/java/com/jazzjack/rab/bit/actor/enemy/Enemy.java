@@ -31,10 +31,11 @@ public class Enemy extends SimpleActor {
         routes = routeGenerator.generateRoutes(this, 2, 4);
     }
 
-    public Animation animateEnemy(Randomizer randomizer) {
-        Animation animation = new EnemyRouteAnimation(this, chooseRoute(randomizer));
+    public Animation createAnimation(Randomizer randomizer) {
+        Route routeToAnimate = chooseRoute(randomizer);
         routes.clear();
-        return animation;
+        routes.add(routeToAnimate);
+        return new EnemyRouteAnimation(this, routeToAnimate);
     }
 
     private Route chooseRoute(Randomizer randomizer) {

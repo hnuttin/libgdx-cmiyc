@@ -249,6 +249,16 @@ class RouteGeneratorTest {
         assertStep(steps.next(), 2, 0, StepNames.ENDING_RIGHT);
     }
 
+    @Test
+    void expectEmptyRoutesToBeFilteredOut() {
+        when(randomizer.randomFromSet(anySet())).thenReturn(Direction.RIGHT, Direction.RIGHT, Direction.UP, Direction.DOWN, Direction.LEFT);
+        when(collisionDetector.collides(any(Collidable.class))).thenReturn(false, true, true, true);
+
+        List<Route> routes = routeGenerator.generateRoutes(startActor(0, 0), 2, 1);
+
+        assertThat(routes).hasSize(1);
+    }
+
     private void assertStep(Actor step, int x, int y, String name) {
         assertThat(step.getX()).isEqualTo(x);
         assertThat(step.getY()).isEqualTo(y);

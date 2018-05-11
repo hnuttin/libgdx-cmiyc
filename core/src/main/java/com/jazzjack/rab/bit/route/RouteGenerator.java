@@ -1,7 +1,6 @@
 package com.jazzjack.rab.bit.route;
 
 import com.jazzjack.rab.bit.actor.Actor;
-import com.jazzjack.rab.bit.actor.SimpleActor;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.common.Direction;
 import com.jazzjack.rab.bit.common.Randomizer;
@@ -26,23 +25,24 @@ public class RouteGenerator {
     }
 
     public List<Route> generateRoutes(Actor actor, int amount, int maxLength) {
-        RouteCollisionDetector routeCollisionDetector = new RouteCollisionDetector(collisionDetector);
+        StepResultCollisionDetector routeCollisionDetector = new StepResultCollisionDetector(collisionDetector);
         return IntStream.range(0, amount)
                 .boxed()
                 .map(i -> generateRoute(actor, maxLength, routeCollisionDetector))
+                .filter(route -> !route.getSteps().isEmpty())
                 .collect(toList());
     }
 
-    private Route generateRoute(Actor actor, int maxLength, RouteCollisionDetector routeCollisionDetector) {
+    private Route generateRoute(Actor actor, int maxLength, StepResultCollisionDetector collisionDetector) {
         List<StepResult> stepsResults = new ArrayList<>(maxLength);
         for (int stepIndex = 0; stepIndex < maxLength; stepIndex++) {
             StepResult stepResult = generateStep(
                     stepsResults.isEmpty() ? new StepResult(actor.getX(), actor.getY(), actor.getSize(), null) : stepsResults.get(stepsResults.size() - 1),
                     copyWithoutDirection(Direction.valuesAsSet(), stepsResults.isEmpty() ? null : stepsResults.get(stepsResults.size() - 1).getDirection().getOppositeDirection()),
-                    routeCollisionDetector);
+                    collisionDetector);
             if (stepResult != null) {
                 stepsResults.add(stepResult);
-                routeCollisionDetector.addStepResult(stepResult);
+                collisionDetector.addStepResult(stepResult);
             } else {
                 break;
             }
@@ -51,7 +51,7 @@ public class RouteGenerator {
         return new Route(steps);
     }
 
-    private StepResult generateStep(StepResult previousStep, Set<Direction> allowedDirections, RouteCollisionDetector routeCollisionDetector) {
+    private StepResult generateStep(StepResult previousStep, Set<Direction> allowedDirections, StepResultCollisionDetector routeCollisionDetector) {
         if (allowedDirections.isEmpty()) {
             return null;
         }

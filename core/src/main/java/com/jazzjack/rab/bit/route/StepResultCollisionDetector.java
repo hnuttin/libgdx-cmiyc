@@ -6,12 +6,12 @@ import com.jazzjack.rab.bit.collision.CollisionDetector;
 import java.util.ArrayList;
 import java.util.List;
 
-class RouteCollisionDetector implements CollisionDetector {
+class StepResultCollisionDetector implements CollisionDetector {
 
     private final CollisionDetector collisionDetector;
     private final List<StepResult> stepResults;
 
-    RouteCollisionDetector(CollisionDetector collisionDetector) {
+    StepResultCollisionDetector(CollisionDetector collisionDetector) {
         this.collisionDetector = collisionDetector;
         stepResults = new ArrayList<>();
     }

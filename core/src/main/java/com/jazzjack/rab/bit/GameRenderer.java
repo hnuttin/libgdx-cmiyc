@@ -44,7 +44,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
             rebufferPlayer = true;
 
             lightBuffer.begin();
-            Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
+            Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             drawWithBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE, () -> drawSight(player.get(), level.get()));
             lightBuffer.end();
