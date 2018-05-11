@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.actor.enemy;
 
 import com.jazzjack.rab.bit.actor.SimpleActor;
 import com.jazzjack.rab.bit.animation.Animation;
+import com.jazzjack.rab.bit.animation.EmptyAnimation;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.route.Route;
 import com.jazzjack.rab.bit.route.RouteGenerator;
@@ -31,14 +32,14 @@ public class Enemy extends SimpleActor {
         routes = routeGenerator.generateRoutes(this, 2, 4);
     }
 
-    public Optional<Animation> createAnimation(Randomizer randomizer) {
+    public Animation createAnimation(Randomizer randomizer) {
         if (routes.isEmpty()) {
-            return Optional.empty();
+            return new EmptyAnimation();
         } else {
             Route routeToAnimate = chooseRoute(randomizer);
             routes.clear();
             routes.add(routeToAnimate);
-            return Optional.of(new EnemyRouteAnimation(this, routeToAnimate));
+            return new EnemyRouteAnimation(this, routeToAnimate);
         }
     }
 

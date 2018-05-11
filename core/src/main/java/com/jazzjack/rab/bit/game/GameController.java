@@ -118,13 +118,9 @@ public class GameController implements GameObjectProvider, InputProcessor {
     private void animateEnemyForIndex() {
         if (enemyIndexToAnimate < enemies.size()) {
             Enemy enemyToAnimate = enemies.get(enemyIndexToAnimate);
-            Optional<Animation> animation = enemyToAnimate.createAnimation(randomizer);
+            Animation animation = enemyToAnimate.createAnimation(randomizer);
             enemyIndexToAnimate++;
-            if (animation.isPresent()) {
-                animationRegister.registerAnimation(animation.get(), this::animateEnemyForIndex);
-            } else {
-                animateEnemyForIndex();
-            }
+            animationRegister.registerAnimation(animation, this::animateEnemyForIndex);
         } else {
             startPlayerTurn();
         }
