@@ -29,7 +29,13 @@ public class RouteGenerator {
         return IntStream.range(0, amount)
                 .boxed()
                 .map(i -> generateRoute(actor, maxLength, routeCollisionDetector))
-                .filter(route -> !route.getSteps().isEmpty())
+                .filter(route -> {
+                    if (route.getSteps().isEmpty()) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                })
                 .collect(toList());
     }
 

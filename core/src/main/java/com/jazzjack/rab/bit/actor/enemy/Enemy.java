@@ -2,7 +2,6 @@ package com.jazzjack.rab.bit.actor.enemy;
 
 import com.jazzjack.rab.bit.actor.SimpleActor;
 import com.jazzjack.rab.bit.animation.Animation;
-import com.jazzjack.rab.bit.common.Direction;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.route.Route;
 import com.jazzjack.rab.bit.route.RouteGenerator;
@@ -10,6 +9,7 @@ import com.jazzjack.rab.bit.route.Step;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Enemy extends SimpleActor {
 
@@ -31,11 +31,15 @@ public class Enemy extends SimpleActor {
         routes = routeGenerator.generateRoutes(this, 2, 4);
     }
 
-    public Animation createAnimation(Randomizer randomizer) {
-        Route routeToAnimate = chooseRoute(randomizer);
-        routes.clear();
-        routes.add(routeToAnimate);
-        return new EnemyRouteAnimation(this, routeToAnimate);
+    public Optional<Animation> createAnimation(Randomizer randomizer) {
+        if (routes.isEmpty()) {
+            return Optional.empty();
+        } else {
+            Route routeToAnimate = chooseRoute(randomizer);
+            routes.clear();
+            routes.add(routeToAnimate);
+            return Optional.of(new EnemyRouteAnimation(this, routeToAnimate));
+        }
     }
 
     private Route chooseRoute(Randomizer randomizer) {

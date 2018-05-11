@@ -12,14 +12,12 @@ class EnemyRouteAnimation implements Animation {
     private final Route routeToAnimate;
 
     private float timeSinceLastStep;
-    private int currentStepIndex;
     private boolean inProgress;
 
     EnemyRouteAnimation(Enemy enemy, Route routeToAnimate) {
         this.enemy = enemy;
         this.routeToAnimate = routeToAnimate;
         this.timeSinceLastStep = 0;
-        this.currentStepIndex = 0;
         this.inProgress = true;
         moveEnemyToNextRouteStep();
     }
@@ -36,10 +34,11 @@ class EnemyRouteAnimation implements Animation {
     }
 
     private void moveEnemyToNextRouteStep() {
-        Step step = routeToAnimate.getSteps().get(currentStepIndex);
+        Step step = routeToAnimate.getSteps().get(0);
         enemy.moveToStep(step);
-        currentStepIndex++;
-        if (currentStepIndex == routeToAnimate.getSteps().size()) {
+        routeToAnimate.getSteps().remove(step);
+
+        if (routeToAnimate.getSteps().isEmpty()) {
             inProgress = false;
         }
     }
