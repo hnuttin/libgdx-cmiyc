@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Collections.singletonList;
+
 public class Randomizer {
 
     private final RandomInteger randomInteger;
@@ -23,23 +25,27 @@ public class Randomizer {
     }
 
     public List<Integer> randomPercentages(Predictability predictability, int amount) {
-        int percentagePart = Chance.HUNDRED_PERCENT / amount;
-        int predictabilityDelta = randomPredictabilityDelta(predictability);
-        List<Integer> percentages = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-            final int percentage;
-            if (i == 0) {
-                percentage = percentagePart + predictabilityDelta;
-            } else if (i == 1 && i < amount - 1) {
-                percentage = Math.max(1, percentagePart - predictabilityDelta);
-            } else if (i == amount - 1) {
-                percentage = Chance.HUNDRED_PERCENT - percentages.stream().mapToInt(Integer::intValue).sum();
-            } else {
-                percentage = percentagePart;
+        if (amount == 1) {
+            return singletonList(Chance.HUNDRED_PERCENT);
+        } else {
+            int percentagePart = Chance.HUNDRED_PERCENT / amount;
+            int predictabilityDelta = randomPredictabilityDelta(predictability);
+            List<Integer> percentages = new ArrayList<>();
+            for (int i = 0; i < amount; i++) {
+                final int percentage;
+                if (i == 0) {
+                    percentage = percentagePart + predictabilityDelta;
+                } else if (i == 1 && i < amount - 1) {
+                    percentage = Math.max(1, percentagePart - predictabilityDelta);
+                } else if (i == amount - 1) {
+                    percentage = Chance.HUNDRED_PERCENT - percentages.stream().mapToInt(Integer::intValue).sum();
+                } else {
+                    percentage = percentagePart;
+                }
+                percentages.add(percentage);
             }
-            percentages.add(percentage);
+            return percentages;
         }
-        return percentages;
     }
 
     private int randomPredictabilityDelta(Predictability predictability) {

@@ -8,11 +8,13 @@ import com.jazzjack.rab.bit.common.Direction;
 import com.jazzjack.rab.bit.common.Randomizer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -33,7 +35,7 @@ public class RouteGenerator {
                 .map(i -> generateRoute(enemy, maxLength, routeCollisionDetector))
                 .filter(route -> !route.getSteps().isEmpty())
                 .collect(toList());
-        List<Integer> percentages = randomizer.randomPercentages(enemy.getPredictability(), routeResults.size());
+        List<Integer> percentages = routeResults.isEmpty() ? emptyList() : randomizer.randomPercentages(enemy.getPredictability(), routeResults.size());
         return Streams
                 .zip(percentages.stream(), routeResults.stream(), (percentage, routeResult) -> new Route(percentage, routeResult.getSteps()))
                 .collect(toList());

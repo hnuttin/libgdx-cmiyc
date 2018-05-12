@@ -82,7 +82,7 @@ public class GameController implements GameObjectProvider, InputProcessor {
     }
 
     private boolean handlePlayerKeys(int keycode) {
-        if (keycode == Input.Keys.N) {
+        if (keycode == Input.Keys.E) {
             startEnemyTurn();
         }
         if (movePlayer(keycode)) {

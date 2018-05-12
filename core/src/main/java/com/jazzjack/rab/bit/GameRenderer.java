@@ -9,10 +9,14 @@ import com.jazzjack.rab.bit.actor.Actor;
 import com.jazzjack.rab.bit.actor.Player;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.game.GameObjectProvider;
+import com.jazzjack.rab.bit.route.Route;
+import com.jazzjack.rab.bit.route.Step;
 
 import java.util.Optional;
 
 public class GameRenderer extends OrthogonalTiledMapRenderer {
+
+    private static final float FOG_OF_WAR = 0.5f;
 
     private final GameObjectProvider gameObjectProvider;
     private final GameAssetManager assetManager;
@@ -44,7 +48,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
             rebufferPlayer = true;
 
             lightBuffer.begin();
-            Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1f);
+            Gdx.gl.glClearColor(FOG_OF_WAR, FOG_OF_WAR, FOG_OF_WAR, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             drawWithBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE, () -> drawSight(player.get(), level.get()));
             lightBuffer.end();
@@ -87,7 +91,16 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     }
 
     private void drawEnemyRoutes(Enemy enemy) {
-        enemy.getRoutes().stream().flatMap(route -> route.getSteps().stream()).forEach(this::drawActor);
+        enemy.getRoutes().forEach(this::drawEnemyRoute);
+    }
+
+    private void drawEnemyRoute(Route route) {
+        Step lastStep = route.getSteps().get(route.getSteps().size() - 1);
+        float percentageX = lastStep.getX() + 10;
+        float percentageY = lastStep.getY() + 34;
+        assetManager.getPercentageFont()
+                .draw(batch, route.getPercentage() + "%", percentageX, percentageY);
+        route.getSteps().forEach(this::drawActor);
     }
 
     private void drawWithAlpha(float alpha, Runnable runnable) {

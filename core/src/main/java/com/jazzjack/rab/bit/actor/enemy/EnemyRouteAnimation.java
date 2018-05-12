@@ -39,6 +39,7 @@ class EnemyRouteAnimation implements Animation {
         routeToAnimate.getSteps().remove(step);
 
         if (routeToAnimate.getSteps().isEmpty()) {
+            enemy.removeRoute(routeToAnimate);
             inProgress = false;
         }
     }

@@ -3,7 +3,11 @@ package com.jazzjack.rab.bit;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jazzjack.rab.bit.actor.Actor;
@@ -18,6 +22,8 @@ public class GameAssetManager extends AssetManager {
     private static final String LIGHTS = "lights.atlas";
 
     private static final Map<String, String> actorTextureMapping;
+
+    private static final String ROMANTICS10 = "romantics10.ttf";
 
     static {
         actorTextureMapping = new HashMap<>();
@@ -37,17 +43,32 @@ public class GameAssetManager extends AssetManager {
 
     public GameAssetManager() {
         super();
-        setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        configureLoaders();
         load(MAP1, TiledMap.class);
         load(LIGHTS, TextureAtlas.class);
         loadActorTextures();
+        loadFonts();
         finishLoading();
+    }
+
+    private void configureLoaders() {
+        InternalFileHandleResolver resolver = new InternalFileHandleResolver();
+        setLoader(TiledMap.class, new TmxMapLoader(resolver));
+        setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+        setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
     }
 
     private void loadActorTextures() {
         for (String texturePath : actorTextureMapping.values()) {
             load(texturePath, Texture.class);
         }
+    }
+
+    private void loadFonts() {
+        FreetypeFontLoader.FreeTypeFontLoaderParameter romantics10 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        romantics10.fontFileName = "fonts/romantics.ttf";
+        romantics10.fontParameters.size = 10;
+        load(ROMANTICS10, BitmapFont.class, romantics10);
     }
 
     public TiledMap getTiledMap1() {
@@ -60,5 +81,9 @@ public class GameAssetManager extends AssetManager {
 
     public Texture getTextureForActor(Actor actor) {
         return get(actorTextureMapping.get(actor.getName()), Texture.class);
+    }
+
+    public BitmapFont getPercentageFont() {
+        return get(ROMANTICS10, BitmapFont.class);
     }
 }

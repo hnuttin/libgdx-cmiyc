@@ -11,6 +11,14 @@ class Randomizer_RandomPercentagesTest {
     private final Randomizer randomizer = new Randomizer(new RandomInteger());
 
     @Test
+    void expect100PErcentWhenOnly1() {
+        List<Integer> percentages = randomizer.randomPercentages(Predictability.LOW, 1);
+
+        assertThat(percentages).hasSize(1);
+        assertThat(percentages.get(0)).isEqualTo(100);
+    }
+
+    @Test
     void expect2RandomPercentagesWithLowPredictability() {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.LOW, 2);
 

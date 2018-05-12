@@ -58,4 +58,7 @@ public class Enemy extends SimpleActor {
         super.moveToDirection(step.getDirection());
     }
 
+    void removeRoute(Route route) {
+        routes.remove(route);
+    }
 }
