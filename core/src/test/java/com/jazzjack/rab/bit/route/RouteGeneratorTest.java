@@ -55,10 +55,10 @@ class RouteGeneratorTest {
                 Direction.UP,
                 Direction.LEFT,
                 Direction.DOWN);
-        when(collisionDetector.collides(matchesCollidable(2, 1, 1))).thenReturn(true);
-        when(collisionDetector.collides(matchesCollidable(1, 2, 1))).thenReturn(true);
-        when(collisionDetector.collides(matchesCollidable(0, 1, 1))).thenReturn(true);
-        when(collisionDetector.collides(matchesCollidable(1, 0, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(2, 1))).thenReturn(true);
+        when(collisionDetector.collides(matchesCollidable(1, 2))).thenReturn(true);
+        when(collisionDetector.collides(matchesCollidable(0, 1))).thenReturn(true);
+        when(collisionDetector.collides(matchesCollidable(1, 0))).thenReturn(false);
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(1, 1), 1, 1);
 
@@ -77,12 +77,12 @@ class RouteGeneratorTest {
                 Direction.UP,
                 Direction.LEFT,
                 Direction.UP);
-        when(collisionDetector.collides(matchesCollidable(1, 1, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(1, 0, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(2, 0, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(2, 1, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(1, 1, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(2, 2, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(1, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(1, 0))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(2, 0))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(2, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(1, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(2, 2))).thenReturn(false);
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(0, 1), 1, 5);
 
@@ -107,12 +107,12 @@ class RouteGeneratorTest {
                 Direction.RIGHT,
                 Direction.DOWN,
                 Direction.RIGHT);
-        when(collisionDetector.collides(matchesCollidable(1, 0, 1))).thenReturn(false, false);
-        when(collisionDetector.collides(matchesCollidable(2, 0, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(3, 0, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(0, 1, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(1, 1, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(2, 1, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(1, 0))).thenReturn(false, false);
+        when(collisionDetector.collides(matchesCollidable(2, 0))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(3, 0))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(0, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(1, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(2, 1))).thenReturn(false);
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 2, 3);
 
@@ -139,10 +139,10 @@ class RouteGeneratorTest {
                 Direction.RIGHT,
                 Direction.UP,
                 Direction.DOWN);
-        when(collisionDetector.collides(matchesCollidable(1, 1, 1))).thenReturn(false);
-        when(collisionDetector.collides(matchesCollidable(2, 1, 1))).thenReturn(true);
-        when(collisionDetector.collides(matchesCollidable(1, 2, 1))).thenReturn(true);
-        when(collisionDetector.collides(matchesCollidable(1, 0, 1))).thenReturn(true);
+        when(collisionDetector.collides(matchesCollidable(1, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(2, 1))).thenReturn(true);
+        when(collisionDetector.collides(matchesCollidable(1, 2))).thenReturn(true);
+        when(collisionDetector.collides(matchesCollidable(1, 0))).thenReturn(true);
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(0, 1), 1, 2);
 
@@ -244,11 +244,11 @@ class RouteGeneratorTest {
     @Test
     void expectRandomizerOnlyCalledWithAllowedDirections() {
         when(randomizer.randomFromSet(Direction.valuesAsSet())).thenReturn(Direction.RIGHT);
-        when(collisionDetector.collides(matchesCollidable(1, 0, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(1, 0))).thenReturn(false);
         when(randomizer.randomFromSet(new HashSet<>(asList(Direction.RIGHT, Direction.UP, Direction.DOWN)))).thenReturn(Direction.UP);
-        when(collisionDetector.collides(matchesCollidable(1, 1, 1))).thenReturn(true);
+        when(collisionDetector.collides(matchesCollidable(1, 1))).thenReturn(true);
         when(randomizer.randomFromSet(new HashSet<>(asList(Direction.RIGHT, Direction.DOWN)))).thenReturn(Direction.RIGHT);
-        when(collisionDetector.collides(matchesCollidable(2, 0, 1))).thenReturn(false);
+        when(collisionDetector.collides(matchesCollidable(2, 0))).thenReturn(false);
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 1, 2);
 
@@ -277,7 +277,7 @@ class RouteGeneratorTest {
     }
 
     private Enemy enemy(int startX, int startY) {
-        return new Enemy(routeGenerator, startX, startY, 1);
+        return new Enemy(routeGenerator, startX, startY);
     }
 
 }
