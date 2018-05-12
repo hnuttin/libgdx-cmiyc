@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jazzjack.rab.bit.actor.Actor;
-import com.jazzjack.rab.bit.route.StepNames;
+import com.jazzjack.rab.bit.actor.enemy.route.StepNames;
 
 import java.util.HashMap;
 import java.util.Map;

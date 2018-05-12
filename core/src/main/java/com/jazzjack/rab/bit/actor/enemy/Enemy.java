@@ -1,13 +1,15 @@
 package com.jazzjack.rab.bit.actor.enemy;
 
+import com.google.common.collect.ImmutableList;
 import com.jazzjack.rab.bit.actor.SimpleActor;
+import com.jazzjack.rab.bit.actor.enemy.route.AnimationRoute;
 import com.jazzjack.rab.bit.animation.Animation;
 import com.jazzjack.rab.bit.animation.EmptyAnimation;
 import com.jazzjack.rab.bit.common.Predictability;
 import com.jazzjack.rab.bit.common.Randomizer;
-import com.jazzjack.rab.bit.route.Route;
-import com.jazzjack.rab.bit.route.RouteGenerator;
-import com.jazzjack.rab.bit.route.Step;
+import com.jazzjack.rab.bit.actor.enemy.route.Route;
+import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
+import com.jazzjack.rab.bit.actor.enemy.route.Step;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,8 @@ public class Enemy extends SimpleActor {
         this.routes = new ArrayList<>();
     }
 
-    public List<Route> getRoutes() {
-        return routes;
+    public ImmutableList<Route> getRoutes() {
+        return ImmutableList.copyOf(routes);
     }
 
     public Predictability getPredictability() {
@@ -43,7 +45,7 @@ public class Enemy extends SimpleActor {
         if (routes.isEmpty()) {
             return new EmptyAnimation();
         } else {
-            Route routeToAnimate = chooseRoute(randomizer);
+            AnimationRoute routeToAnimate = new AnimationRoute(chooseRoute(randomizer));
             routes.clear();
             routes.add(routeToAnimate);
             return new EnemyRouteAnimation(this, routeToAnimate);

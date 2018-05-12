@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.route;
+package com.jazzjack.rab.bit.actor.enemy.route;
 
 import com.google.common.collect.Streams;
 import com.jazzjack.rab.bit.actor.Actor;
@@ -8,7 +8,6 @@ import com.jazzjack.rab.bit.common.Direction;
 import com.jazzjack.rab.bit.common.Randomizer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;

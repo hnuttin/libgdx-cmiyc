@@ -1,20 +1,21 @@
 package com.jazzjack.rab.bit.actor.enemy;
 
+import com.jazzjack.rab.bit.actor.enemy.route.AnimationRoute;
 import com.jazzjack.rab.bit.animation.Animation;
-import com.jazzjack.rab.bit.route.Route;
-import com.jazzjack.rab.bit.route.Step;
+import com.jazzjack.rab.bit.actor.enemy.route.Route;
+import com.jazzjack.rab.bit.actor.enemy.route.Step;
 
 class EnemyRouteAnimation implements Animation {
 
     private static final float ANIMATION_SPEED_IN_SECONDS = 0.5f;
 
     private final Enemy enemy;
-    private final Route routeToAnimate;
+    private final AnimationRoute routeToAnimate;
 
     private float timeSinceLastStep;
     private boolean inProgress;
 
-    EnemyRouteAnimation(Enemy enemy, Route routeToAnimate) {
+    EnemyRouteAnimation(Enemy enemy, AnimationRoute routeToAnimate) {
         this.enemy = enemy;
         this.routeToAnimate = routeToAnimate;
         this.timeSinceLastStep = 0;
@@ -36,7 +37,7 @@ class EnemyRouteAnimation implements Animation {
     private void moveEnemyToNextRouteStep() {
         Step step = routeToAnimate.getSteps().get(0);
         enemy.moveToStep(step);
-        routeToAnimate.getSteps().remove(step);
+        routeToAnimate.removeStep(step);
 
         if (routeToAnimate.getSteps().isEmpty()) {
             enemy.removeRoute(routeToAnimate);

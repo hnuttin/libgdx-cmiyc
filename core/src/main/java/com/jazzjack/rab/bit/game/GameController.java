@@ -11,7 +11,7 @@ import com.jazzjack.rab.bit.animation.Animation;
 import com.jazzjack.rab.bit.animation.AnimationRegister;
 import com.jazzjack.rab.bit.collision.TiledMapCollisionDetector;
 import com.jazzjack.rab.bit.common.Randomizer;
-import com.jazzjack.rab.bit.route.RouteGenerator;
+import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,9 +11,9 @@ import com.jazzjack.rab.bit.actor.Actor;
 import com.jazzjack.rab.bit.actor.Player;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.game.GameObjectProvider;
-import com.jazzjack.rab.bit.route.Route;
-import com.jazzjack.rab.bit.route.Step;
-import com.jazzjack.rab.bit.route.StepNames;
+import com.jazzjack.rab.bit.actor.enemy.route.Route;
+import com.jazzjack.rab.bit.actor.enemy.route.Step;
+import com.jazzjack.rab.bit.actor.enemy.route.StepNames;
 
 import java.util.Optional;
 
@@ -129,19 +129,11 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     }
 
     private float getTileWidth() {
-        if (gameObjectProvider.getLevel().isPresent()) {
-            return gameObjectProvider.getLevel().get().getTileWidth() * getUnitScale();
-        } else {
-            return 0f;
-        }
+        return gameObjectProvider.getLevel().map(level -> level.getTileWidth() * getUnitScale()).orElse(0f);
     }
 
     private float getTileHeight() {
-        if (gameObjectProvider.getLevel().isPresent()) {
-            return gameObjectProvider.getLevel().get().getTileHeight() * getUnitScale();
-        } else {
-            return 0f;
-        }
+        return gameObjectProvider.getLevel().map(level -> level.getTileHeight() * getUnitScale()).orElse(0f);
     }
 
     private void renderSight() {

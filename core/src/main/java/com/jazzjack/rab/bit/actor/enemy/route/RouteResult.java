@@ -1,6 +1,4 @@
-package com.jazzjack.rab.bit.route;
-
-import com.jazzjack.rab.bit.route.Step;
+package com.jazzjack.rab.bit.actor.enemy.route;
 
 import java.util.List;
 

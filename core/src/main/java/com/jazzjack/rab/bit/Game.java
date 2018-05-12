@@ -32,7 +32,7 @@ public class Game extends ApplicationAdapter {
 
     private void initCamera() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, WIDTH * SCALE, HEIGHT * SCALE);
+        camera.setToOrtho(false, (float) WIDTH * SCALE, (float) HEIGHT * SCALE);
         camera.update();
     }
 

@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.route;
+package com.jazzjack.rab.bit.actor.enemy.route;
 
 import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
