@@ -11,14 +11,33 @@ public class Player extends SimpleActor {
     private int maxNumberOfMoves;
     private int movements;
 
+    private int hp;
+
     public Player(float startX, float startY) {
         super("player", startX, startY);
 
         maxNumberOfMoves = 3;
+        hp = 3;
     }
 
     public int getSight() {
         return DEFAULT_SIGHT;
+    }
+
+    public int getMovements() {
+        return movements;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void doDamage(int amount) {
+        hp = Math.min(0, hp - amount);
+    }
+
+    public boolean isDead() {
+        return hp == 0;
     }
 
     @Override

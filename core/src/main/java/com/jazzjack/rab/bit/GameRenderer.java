@@ -19,12 +19,14 @@ import java.util.Optional;
 
 public class GameRenderer extends OrthogonalTiledMapRenderer {
 
-    private static final float FOG_OF_WAR = 0f;
+    private static final float FOG_OF_WAR = 0.5f;
     private static final int ENDING_HEIGHT = 22;
     private static final float ROUTE_ALPHA = 0.7f;
 
     private final GameObjectProvider gameObjectProvider;
     private final GameAssetManager assetManager;
+
+    private final GameDrawer gameDrawer;
 
     private final FrameBuffer lightBuffer;
 
@@ -35,6 +37,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
         this.gameObjectProvider = gameObjectProvider;
         this.assetManager = assetManager;
+        this.gameDrawer = new GameDrawer(super.batch, 32 * scale);
 
         lightBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     }
@@ -55,31 +58,36 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
             lightBuffer.begin();
             Gdx.gl.glClearColor(FOG_OF_WAR, FOG_OF_WAR, FOG_OF_WAR, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            drawWithBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE, () -> drawSight(player.get()));
+            gameDrawer.drawWithBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE, () -> drawSight(player.get()));
             lightBuffer.end();
         }
     }
 
     private void drawSight(Player player) {
-        batch.draw(
+        gameDrawer.drawInMapRegion(
                 assetManager.getLightAtlasRegion(),
-                (player.getX() * getTileWidth()) - (player.getSight() * getTileWidth()),
-                (player.getY() * getTileHeight()) - (player.getSight() * getTileHeight()),
-                (player.getSight() * 2 + 1) * getTileWidth(),
-                (player.getSight() * 2 + 1) * getTileHeight());
+                (player.getX() * getScaledTileWidth()) - (player.getSight() * getScaledTileWidth()),
+                (player.getY() * getScaledTileHeight()) - (player.getSight() * getScaledTileHeight()),
+                (player.getSight() * 2 + 1) * getScaledTileWidth(),
+                (player.getSight() * 2 + 1) * getScaledTileHeight());
     }
 
     private void renderMap() {
-        batch.begin();
+        gameDrawer.begin();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        renderMapLayer();
+        renderLevel();
         drawPlayer();
         drawEnemies();
-        batch.end();
+        gameDrawer.end();
     }
 
-    private void renderMapLayer() {
-        gameObjectProvider.getLevel().ifPresent(level1 -> renderMapLayer(level1.getMapLayer()));
+    private void renderLevel() {
+        gameObjectProvider.getLevel().ifPresent(this::renderLevel);
+    }
+
+    private void renderLevel(Level level) {
+        level.setMapOffset(0, -getTileHeight());
+        super.renderMapLayer(level.getMapLayer());
     }
 
     private void drawPlayer() {
@@ -92,7 +100,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     private void drawEnemy(Enemy enemy) {
         drawActor(enemy);
-        drawWithAlpha(ROUTE_ALPHA, () -> drawEnemyRoutes(enemy));
+        gameDrawer.drawWithAlpha(ROUTE_ALPHA, () -> drawEnemyRoutes(enemy));
     }
 
     private void drawEnemyRoutes(Enemy enemy) {
@@ -102,51 +110,46 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     private void drawEnemyRoute(Route route) {
         BitmapFont percentageFont = assetManager.getPercentageFont();
         Step lastStep = route.getSteps().get(route.getSteps().size() - 1);
-        float percentageX = lastStep.getX() * getTileWidth();
+        float percentageX = lastStep.getX() * getScaledTileWidth();
         float percentageY = StepNames.ENDING_BOTTOM.equals(lastStep.getName()) ? underneathStep(percentageFont, lastStep) : aboveStep(percentageFont, lastStep);
         percentageFont.setColor(percentageFont.getColor().r, percentageFont.getColor().g, percentageFont.getColor().b, ROUTE_ALPHA);
-        percentageFont.draw(batch, route.getPercentage() + "%", percentageX, percentageY, getTileWidth(), Align.center, false);
+        gameDrawer.drawTextInMapRegion(percentageFont, route.getPercentage() + "%", percentageX, percentageY, getScaledTileWidth(), Align.center);
         percentageFont.setColor(percentageFont.getColor().r, percentageFont.getColor().g, percentageFont.getColor().b, 1f);
         route.getSteps().forEach(this::drawActor);
     }
 
     private float underneathStep(BitmapFont percentageFont, Step lastStep) {
-        return lastStep.getY() * getTileHeight() + percentageFont.getData().lineHeight;
+        return lastStep.getY() * getScaledTileHeight() + percentageFont.getData().lineHeight;
     }
 
     private float aboveStep(BitmapFont percentageFont, Step lastStep) {
-        return lastStep.getY() * getTileHeight() + (ENDING_HEIGHT * getUnitScale()) + percentageFont.getData().lineHeight;
-    }
-
-    private void drawWithAlpha(float alpha, Runnable runnable) {
-        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alpha);
-        runnable.run();
-        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1f);
+        return lastStep.getY() * getScaledTileHeight() + (ENDING_HEIGHT * getUnitScale()) + percentageFont.getData().lineHeight;
     }
 
     private void drawActor(Actor actor) {
-        batch.draw(assetManager.getTextureForActor(actor), actor.getX() * getTileWidth(), actor.getY() * getTileHeight(), getTileWidth(), getTileHeight());
+        gameDrawer.drawInMapRegion(
+                assetManager.getTextureForActor(actor),
+                actor.getX() * getScaledTileWidth(),
+                actor.getY() * getScaledTileHeight(),
+                getScaledTileWidth(),
+                getScaledTileHeight());
     }
 
-    private float getTileWidth() {
+    private float getScaledTileWidth() {
         return gameObjectProvider.getLevel().map(level -> level.getTileWidth() * getUnitScale()).orElse(0f);
     }
 
     private float getTileHeight() {
-        return gameObjectProvider.getLevel().map(level -> level.getTileHeight() * getUnitScale()).orElse(0f);
+        return gameObjectProvider.getLevel().map(Level::getTileHeight).orElse(0f);
+    }
+
+    private float getScaledTileHeight() {
+        return getTileHeight() * getUnitScale();
     }
 
     private void renderSight() {
         batch.setProjectionMatrix(batch.getProjectionMatrix().idt());
-        drawWithBlendFunction(GL20.GL_ZERO, GL20.GL_SRC_COLOR, () -> batch.draw(lightBuffer.getColorBufferTexture(), -1, 1, 2, -2));
-    }
-
-    private void drawWithBlendFunction(int srcFunc, int destFunc, Runnable runnable) {
-        batch.setBlendFunction(srcFunc, destFunc);
-        batch.begin();
-        runnable.run();
-        batch.end();
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        gameDrawer.drawWithBlendFunction(GL20.GL_ZERO, GL20.GL_SRC_COLOR, () -> batch.draw(lightBuffer.getColorBufferTexture(), -1, 1, 2, -2));
     }
 
 }

@@ -23,6 +23,11 @@ public class Level {
         throw new RuntimeException("Could not find map layer");
     }
 
+    public void setMapOffset(float x, float y) {
+        getMapLayer().setOffsetX(x);
+        getMapLayer().setOffsetY(y);
+    }
+
     public float getTileWidth() {
         return getMapLayer().getTileWidth();
     }
