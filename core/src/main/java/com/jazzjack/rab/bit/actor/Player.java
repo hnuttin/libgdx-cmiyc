@@ -6,13 +6,13 @@ import java.util.function.Function;
 
 public class Player extends SimpleActor {
 
-    private static final int DEFAULT_SIGHT = 256;
+    private static final int DEFAULT_SIGHT = 3;
 
     private int maxNumberOfMoves;
     private int movements;
 
-    public Player(float startX, float startY, float size) {
-        super("player", startX, startY, size);
+    public Player(float startX, float startY) {
+        super("player", startX, startY);
 
         maxNumberOfMoves = 3;
     }

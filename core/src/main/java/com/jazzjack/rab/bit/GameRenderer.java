@@ -3,8 +3,11 @@ package com.jazzjack.rab.bit;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.jazzjack.rab.bit.actor.Actor;
 import com.jazzjack.rab.bit.actor.Player;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
@@ -16,7 +19,7 @@ import java.util.Optional;
 
 public class GameRenderer extends OrthogonalTiledMapRenderer {
 
-    private static final float FOG_OF_WAR = 0.5f;
+    private static final float FOG_OF_WAR = 1f;
 
     private final GameObjectProvider gameObjectProvider;
     private final GameAssetManager assetManager;
@@ -27,6 +30,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager) {
         super(null);
+        super.unitScale = 2f;
 
         this.gameObjectProvider = gameObjectProvider;
         this.assetManager = assetManager;
@@ -50,18 +54,18 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
             lightBuffer.begin();
             Gdx.gl.glClearColor(FOG_OF_WAR, FOG_OF_WAR, FOG_OF_WAR, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            drawWithBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE, () -> drawSight(player.get(), level.get()));
+            drawWithBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE, () -> drawSight(player.get()));
             lightBuffer.end();
         }
     }
 
-    private void drawSight(Player player, Level level) {
+    private void drawSight(Player player) {
         batch.draw(
                 assetManager.getLightAtlasRegion(),
-                player.getX() - (player.getSight() / 2) + (level.getTileWidth() / 2),
-                player.getY() - (player.getSight() / 2) + (level.getTileHeight() / 2),
-                player.getSight(),
-                player.getSight());
+                player.getX() - (player.getSight() * getTileWidth()),
+                player.getY() - (player.getSight() * getTileHeight()),
+                player.getSight() * 2 + 1,
+                player.getSight() * 2 + 1);
     }
 
     private void renderMap() {
@@ -95,11 +99,11 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     }
 
     private void drawEnemyRoute(Route route) {
+        BitmapFont percentageFont = assetManager.getPercentageFont();
         Step lastStep = route.getSteps().get(route.getSteps().size() - 1);
-        float percentageX = lastStep.getX() + 10;
-        float percentageY = lastStep.getY() + 34;
-        assetManager.getPercentageFont()
-                .draw(batch, route.getPercentage() + "%", percentageX, percentageY);
+        float percentageX = lastStep.getX() * getTileWidth();
+        float percentageY = lastStep.getY() * getTileHeight() + (22 * super.unitScale) + percentageFont.getData().lineHeight;
+        percentageFont .draw(batch, String.valueOf(route.getPercentage()), percentageX, percentageY, getTileWidth(), Align.center, false);
         route.getSteps().forEach(this::drawActor);
     }
 
@@ -110,7 +114,23 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     }
 
     private void drawActor(Actor actor) {
-        batch.draw(assetManager.getTextureForActor(actor), actor.getX(), actor.getY());
+        batch.draw(assetManager.getTextureForActor(actor), actor.getX() * getTileWidth(), actor.getY() * getTileHeight(), getTileWidth(), getTileHeight());
+    }
+
+    private float getTileWidth() {
+        if (gameObjectProvider.getLevel().isPresent()) {
+            return gameObjectProvider.getLevel().get().getTileWidth() * super.unitScale;
+        } else {
+            return 0f;
+        }
+    }
+
+    private float getTileHeight() {
+        if (gameObjectProvider.getLevel().isPresent()) {
+            return gameObjectProvider.getLevel().get().getTileHeight() * super.unitScale;
+        } else {
+            return 0f;
+        }
     }
 
     private void renderSight() {

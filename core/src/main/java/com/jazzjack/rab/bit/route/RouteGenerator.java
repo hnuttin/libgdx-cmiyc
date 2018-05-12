@@ -45,7 +45,7 @@ public class RouteGenerator {
         List<StepResult> stepsResults = new ArrayList<>(maxLength);
         for (int stepIndex = 0; stepIndex < maxLength; stepIndex++) {
             StepResult stepResult = generateStep(
-                    stepsResults.isEmpty() ? new StepResult(actor.getX(), actor.getY(), actor.getSize(), null) : stepsResults.get(stepsResults.size() - 1),
+                    stepsResults.isEmpty() ? new StepResult(actor.getX(), actor.getY(), null) : stepsResults.get(stepsResults.size() - 1),
                     copyWithoutDirection(Direction.valuesAsSet(), stepsResults.isEmpty() ? null : stepsResults.get(stepsResults.size() - 1).getDirection().getOppositeDirection()),
                     collisionDetector);
             if (stepResult != null) {
@@ -78,25 +78,25 @@ public class RouteGenerator {
         switch (direction) {
             case UP:
                 x = previousStepResult.getX();
-                y = previousStepResult.getY() + previousStepResult.getSize();
+                y = previousStepResult.getY() + 1;
                 break;
             case DOWN:
                 x = previousStepResult.getX();
-                y = previousStepResult.getY() - previousStepResult.getSize();
+                y = previousStepResult.getY() - 1;
                 break;
             case LEFT:
-                x = previousStepResult.getX() - previousStepResult.getSize();
+                x = previousStepResult.getX() - 1;
                 y = previousStepResult.getY();
                 break;
             case RIGHT:
-                x = previousStepResult.getX() + previousStepResult.getSize();
+                x = previousStepResult.getX() + 1;
                 y = previousStepResult.getY();
                 break;
             default:
                 throw new IllegalArgumentException(direction.name());
 
         }
-        return new StepResult(x, y, previousStepResult.getSize(), direction);
+        return new StepResult(x, y, direction);
     }
 
     private Set<Direction> copyWithoutDirection(Set<Direction> allowedDirections, Direction direction) {

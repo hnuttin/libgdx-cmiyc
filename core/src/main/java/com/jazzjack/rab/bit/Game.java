@@ -19,7 +19,7 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void create() {
-        Gdx.graphics.setWindowedMode(640, 320);
+        Gdx.graphics.setWindowedMode(1280, 640);
 
         initCamera();
         initGameObjects();
@@ -28,7 +28,7 @@ public class Game extends ApplicationAdapter {
 
     private void initCamera() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 640, 320);
+        camera.setToOrtho(false, 1280, 640);
         camera.update();
     }
 

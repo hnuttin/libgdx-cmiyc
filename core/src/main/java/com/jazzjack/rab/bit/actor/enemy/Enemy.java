@@ -19,8 +19,8 @@ public class Enemy extends SimpleActor {
     private final Predictability predictability;
     private final List<Route> routes;
 
-    public Enemy(RouteGenerator routeGenerator, float startX, float startY, float size) {
-        super("enemy1", startX, startY, size);
+    public Enemy(RouteGenerator routeGenerator, float startX, float startY) {
+        super("enemy1", startX, startY);
         this.routeGenerator = routeGenerator;
         this.predictability = Predictability.HIGH;
         this.routes = new ArrayList<>();

@@ -46,11 +46,11 @@ public class GameController implements GameObjectProvider, InputProcessor {
     private void startFirstLevel() {
         level = new Level(this.assetManager.getTiledMap1());
         collisionDetector = new TiledMapCollisionDetector(level);
-        player = new Player(1 * level.getTileWidth(), 2 * level.getTileHeight(), level.getTileWidth());
+        player = new Player(1, 2);
         RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(collisionDetector, this), randomizer);
-        enemies.add(new Enemy(routeGenerator, 6 * level.getTileWidth(), 7 * level.getTileHeight(), level.getTileWidth()));
-        enemies.add(new Enemy(routeGenerator, 6 * level.getTileWidth(), 1 * level.getTileHeight(), level.getTileWidth()));
-        enemies.add(new Enemy(routeGenerator, 8 * level.getTileWidth(), 4 * level.getTileHeight(), level.getTileWidth()));
+        enemies.add(new Enemy(routeGenerator, 6, 7));
+        enemies.add(new Enemy(routeGenerator, 6, 1));
+        enemies.add(new Enemy(routeGenerator, 8, 4));
         collisionDetector.addActor(enemies.toArray(new Enemy[0]));
     }
 

@@ -8,7 +8,7 @@ public class Step extends SimpleActor {
     private final Direction direction;
 
     Step(String name, StepResult stepResult) {
-        super(name, stepResult.getX(), stepResult.getY(), stepResult.getSize());
+        super(name, stepResult.getX(), stepResult.getY());
         this.direction = stepResult.getDirection();
     }
 

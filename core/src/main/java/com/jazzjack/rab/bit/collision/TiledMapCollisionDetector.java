@@ -1,20 +1,18 @@
 package com.jazzjack.rab.bit.collision;
 
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Rectangle;
 import com.jazzjack.rab.bit.Level;
 import com.jazzjack.rab.bit.actor.Actor;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.StreamSupport;
 
 import static java.util.Arrays.asList;
 
 public class TiledMapCollisionDetector implements CollisionDetector {
 
+    private static final String PROPERTY_COLLISION = "collision";
     private final Level level;
     private final Set<Actor> actors;
 
@@ -46,17 +44,22 @@ public class TiledMapCollisionDetector implements CollisionDetector {
 
     private boolean collidesWithCell(int cellX, int cellY, Collidable collidable) {
         TiledMapTileLayer.Cell cell = level.getMapLayer().getCell(cellX, cellY);
-        MapObjects objects = cell.getTile().getObjects();
-        return StreamSupport.stream(objects.getByType(RectangleMapObject.class).spliterator(), true)
-                .anyMatch(rectangleObject -> collidesWithRectangleMapObject(rectangleObject, cellX, cellY, collidable));
+        MapProperties properties = cell.getTile().getProperties();
+        Boolean tileCollides = properties.get(PROPERTY_COLLISION, Boolean.class);
+        return tileCollides != null && tileCollides && collidesWithTile(cellX, cellY, collidable);
     }
 
-    private boolean collidesWithRectangleMapObject(RectangleMapObject rectangleObject, int cellX, int cellY, Collidable collidable) {
-        TiledMapTileLayer mapLayer = level.getMapLayer();
-        Rectangle collisionRectangle = new Rectangle(rectangleObject.getRectangle());
-        collisionRectangle.setX(cellX * mapLayer.getTileWidth());
-        collisionRectangle.setY(cellY * mapLayer.getTileHeight());
-        return collidable.collides(collisionRectangle);
+    private boolean collidesWithTile(int cellX, int cellY, Collidable collidable) {
+        return collidable.collides(new Collidable() {
+            @Override
+            public float getX() {
+                return cellX;
+            }
+            @Override
+            public float getY() {
+                return cellY;
+            }
+        });
     }
 
     private boolean collidesWithAnyActor(final Collidable collidable) {

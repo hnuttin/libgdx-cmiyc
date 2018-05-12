@@ -7,14 +7,12 @@ import com.jazzjack.rab.bit.common.Direction;
 public class SimpleActor implements Actor {
 
     private final String name;
-    private final float size;
 
     private float x;
     private float y;
 
-    public SimpleActor(String name, float startX, float startY, float size) {
+    public SimpleActor(String name, float startX, float startY) {
         this.name = name;
-        this.size = size;
         this.x = startX;
         this.y = startY;
     }
@@ -32,11 +30,6 @@ public class SimpleActor implements Actor {
     @Override
     public float getY() {
         return y;
-    }
-
-    @Override
-    public float getSize() {
-        return size;
     }
 
     protected void moveToDirection(Direction direction) {
@@ -57,8 +50,7 @@ public class SimpleActor implements Actor {
     }
 
     public boolean moveRight(CollisionDetector collisionDetector) {
-        float futureX = x + getSize();
-        if (!collisionDetector.collides(futureCollidable(futureX, y))) {
+        if (!collisionDetector.collides(futureCollidable(x + 1, y))) {
             moveRight();
             return true;
         }
@@ -66,12 +58,11 @@ public class SimpleActor implements Actor {
     }
 
     private void moveRight() {
-        x += getSize();
+        x++;
     }
 
     public boolean moveLeft(CollisionDetector collisionDetector) {
-        float futureX = x - getSize();
-        if (!collisionDetector.collides(futureCollidable(futureX, y))) {
+        if (!collisionDetector.collides(futureCollidable(x - 1, y))) {
             moveLeft();
             return true;
         }
@@ -79,12 +70,11 @@ public class SimpleActor implements Actor {
     }
 
     private void moveLeft() {
-        x -= getSize();
+        x--;
     }
 
     public boolean moveUp(CollisionDetector collisionDetector) {
-        float futureY = y + getSize();
-        if (!collisionDetector.collides(futureCollidable(x, futureY))) {
+        if (!collisionDetector.collides(futureCollidable(x, y + 1))) {
             moveUp();
             return true;
         }
@@ -92,12 +82,11 @@ public class SimpleActor implements Actor {
     }
 
     private void moveUp() {
-        y += getSize();
+        y++;
     }
 
     public boolean moveDown(CollisionDetector collisionDetector) {
-        float futureY = y - getSize();
-        if (!collisionDetector.collides(futureCollidable(x, futureY))) {
+        if (!collisionDetector.collides(futureCollidable(x, y - 1))) {
             moveDown();
             return true;
         }
@@ -105,7 +94,7 @@ public class SimpleActor implements Actor {
     }
 
     private void moveDown() {
-        y -= getSize();
+        y--;
     }
 
     private Collidable futureCollidable(float x, float y) {
@@ -118,11 +107,6 @@ public class SimpleActor implements Actor {
             @Override
             public float getY() {
                 return y;
-            }
-
-            @Override
-            public float getSize() {
-                return size;
             }
         };
     }

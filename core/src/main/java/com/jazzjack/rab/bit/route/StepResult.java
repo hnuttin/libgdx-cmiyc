@@ -7,13 +7,11 @@ class StepResult implements Collidable {
 
     private final float x;
     private final float y;
-    private final float size;
     private final Direction direction;
 
-    StepResult(float x, float y, float size, Direction direction) {
+    StepResult(float x, float y, Direction direction) {
         this.x = x;
         this.y = y;
-        this.size = size;
         this.direction = direction;
     }
 
@@ -25,11 +23,6 @@ class StepResult implements Collidable {
     @Override
     public float getY() {
         return y;
-    }
-
-    @Override
-    public float getSize() {
-        return size;
     }
 
     Direction getDirection() {

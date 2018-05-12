@@ -19,11 +19,15 @@ import java.util.Map;
 public class GameAssetManager extends AssetManager {
 
     private static final String MAP1 = "pixel-art1.tmx";
+
     private static final String LIGHTS = "lights.atlas";
+    private static final String TEXTURE_ATLAS_LIGHT = "light";
 
     private static final Map<String, String> actorTextureMapping;
 
-    private static final String ROMANTICS10 = "romantics10.ttf";
+    private static final String FREE_TYPE_FONT_SUFFIX = ".ttf";
+    private static final String FONT_ROMANTICS = "fonts/romantics.ttf";
+    private static final String PERCENTAGE_FONT = "romantics10.ttf";
 
     static {
         actorTextureMapping = new HashMap<>();
@@ -55,7 +59,7 @@ public class GameAssetManager extends AssetManager {
         InternalFileHandleResolver resolver = new InternalFileHandleResolver();
         setLoader(TiledMap.class, new TmxMapLoader(resolver));
         setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
-        setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
+        setLoader(BitmapFont.class, FREE_TYPE_FONT_SUFFIX, new FreetypeFontLoader(resolver));
     }
 
     private void loadActorTextures() {
@@ -65,10 +69,11 @@ public class GameAssetManager extends AssetManager {
     }
 
     private void loadFonts() {
-        FreetypeFontLoader.FreeTypeFontLoaderParameter romantics10 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        romantics10.fontFileName = "fonts/romantics.ttf";
-        romantics10.fontParameters.size = 10;
-        load(ROMANTICS10, BitmapFont.class, romantics10);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter percentageParameters = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        percentageParameters.fontFileName = FONT_ROMANTICS;
+        percentageParameters.fontParameters.size = 11;
+        percentageParameters.fontParameters.size = 11;
+        load(PERCENTAGE_FONT, BitmapFont.class, percentageParameters);
     }
 
     public TiledMap getTiledMap1() {
@@ -76,7 +81,7 @@ public class GameAssetManager extends AssetManager {
     }
 
     public TextureAtlas.AtlasRegion getLightAtlasRegion() {
-        return get(LIGHTS, TextureAtlas.class).findRegion("light");
+        return get(LIGHTS, TextureAtlas.class).findRegion(TEXTURE_ATLAS_LIGHT);
     }
 
     public Texture getTextureForActor(Actor actor) {
@@ -84,6 +89,6 @@ public class GameAssetManager extends AssetManager {
     }
 
     public BitmapFont getPercentageFont() {
-        return get(ROMANTICS10, BitmapFont.class);
+        return get(PERCENTAGE_FONT, BitmapFont.class);
     }
 }
