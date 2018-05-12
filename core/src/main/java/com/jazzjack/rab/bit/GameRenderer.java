@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Align;
@@ -14,12 +13,15 @@ import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.game.GameObjectProvider;
 import com.jazzjack.rab.bit.route.Route;
 import com.jazzjack.rab.bit.route.Step;
+import com.jazzjack.rab.bit.route.StepNames;
 
 import java.util.Optional;
 
 public class GameRenderer extends OrthogonalTiledMapRenderer {
 
-    private static final float FOG_OF_WAR = 1f;
+    private static final float FOG_OF_WAR = 0f;
+    private static final int ENDING_HEIGHT = 22;
+    private static final float ROUTE_ALPHA = 0.7f;
 
     private final GameObjectProvider gameObjectProvider;
     private final GameAssetManager assetManager;
@@ -28,9 +30,8 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     private boolean rebufferPlayer = true;
 
-    GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager) {
-        super(null);
-        super.unitScale = 2f;
+    GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager, float scale) {
+        super(null, scale);
 
         this.gameObjectProvider = gameObjectProvider;
         this.assetManager = assetManager;
@@ -62,10 +63,10 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     private void drawSight(Player player) {
         batch.draw(
                 assetManager.getLightAtlasRegion(),
-                player.getX() - (player.getSight() * getTileWidth()),
-                player.getY() - (player.getSight() * getTileHeight()),
-                player.getSight() * 2 + 1,
-                player.getSight() * 2 + 1);
+                (player.getX() * getTileWidth()) - (player.getSight() * getTileWidth()),
+                (player.getY() * getTileHeight()) - (player.getSight() * getTileHeight()),
+                (player.getSight() * 2 + 1) * getTileWidth(),
+                (player.getSight() * 2 + 1) * getTileHeight());
     }
 
     private void renderMap() {
@@ -91,7 +92,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     private void drawEnemy(Enemy enemy) {
         drawActor(enemy);
-        drawWithAlpha(0.5f, () -> drawEnemyRoutes(enemy));
+        drawWithAlpha(ROUTE_ALPHA, () -> drawEnemyRoutes(enemy));
     }
 
     private void drawEnemyRoutes(Enemy enemy) {
@@ -102,9 +103,19 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
         BitmapFont percentageFont = assetManager.getPercentageFont();
         Step lastStep = route.getSteps().get(route.getSteps().size() - 1);
         float percentageX = lastStep.getX() * getTileWidth();
-        float percentageY = lastStep.getY() * getTileHeight() + (22 * super.unitScale) + percentageFont.getData().lineHeight;
-        percentageFont .draw(batch, String.valueOf(route.getPercentage()), percentageX, percentageY, getTileWidth(), Align.center, false);
+        float percentageY = StepNames.ENDING_BOTTOM.equals(lastStep.getName()) ? underneathStep(percentageFont, lastStep) : aboveStep(percentageFont, lastStep);
+        percentageFont.setColor(percentageFont.getColor().r, percentageFont.getColor().g, percentageFont.getColor().b, ROUTE_ALPHA);
+        percentageFont.draw(batch, route.getPercentage() + "%", percentageX, percentageY, getTileWidth(), Align.center, false);
+        percentageFont.setColor(percentageFont.getColor().r, percentageFont.getColor().g, percentageFont.getColor().b, 1f);
         route.getSteps().forEach(this::drawActor);
+    }
+
+    private float underneathStep(BitmapFont percentageFont, Step lastStep) {
+        return lastStep.getY() * getTileHeight() + percentageFont.getData().lineHeight;
+    }
+
+    private float aboveStep(BitmapFont percentageFont, Step lastStep) {
+        return lastStep.getY() * getTileHeight() + (ENDING_HEIGHT * getUnitScale()) + percentageFont.getData().lineHeight;
     }
 
     private void drawWithAlpha(float alpha, Runnable runnable) {
@@ -119,7 +130,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     private float getTileWidth() {
         if (gameObjectProvider.getLevel().isPresent()) {
-            return gameObjectProvider.getLevel().get().getTileWidth() * super.unitScale;
+            return gameObjectProvider.getLevel().get().getTileWidth() * getUnitScale();
         } else {
             return 0f;
         }
@@ -127,7 +138,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     private float getTileHeight() {
         if (gameObjectProvider.getLevel().isPresent()) {
-            return gameObjectProvider.getLevel().get().getTileHeight() * super.unitScale;
+            return gameObjectProvider.getLevel().get().getTileHeight() * getUnitScale();
         } else {
             return 0f;
         }

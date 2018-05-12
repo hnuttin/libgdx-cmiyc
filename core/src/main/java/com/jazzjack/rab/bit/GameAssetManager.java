@@ -27,6 +27,8 @@ public class GameAssetManager extends AssetManager {
 
     private static final String FREE_TYPE_FONT_SUFFIX = ".ttf";
     private static final String FONT_ROMANTICS = "fonts/romantics.ttf";
+    private static final String FONT_MINECRAFT = "fonts/minecraft.ttf";
+    private static final String FONT_VCR_OSD_MONO = "fonts/VCR_OSD_MONO_1.001.ttf";
     private static final String PERCENTAGE_FONT = "romantics10.ttf";
 
     static {
@@ -70,9 +72,8 @@ public class GameAssetManager extends AssetManager {
 
     private void loadFonts() {
         FreetypeFontLoader.FreeTypeFontLoaderParameter percentageParameters = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        percentageParameters.fontFileName = FONT_ROMANTICS;
-        percentageParameters.fontParameters.size = 11;
-        percentageParameters.fontParameters.size = 11;
+        percentageParameters.fontFileName = FONT_VCR_OSD_MONO;
+        percentageParameters.fontParameters.size = 14;
         load(PERCENTAGE_FONT, BitmapFont.class, percentageParameters);
     }
 

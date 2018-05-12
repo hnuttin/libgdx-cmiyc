@@ -10,6 +10,10 @@ import com.jazzjack.rab.bit.game.GameController;
 
 public class Game extends ApplicationAdapter {
 
+    private static final int WIDTH = 640;
+    private static final int HEIGHT = 320;
+    private static final int SCALE = 2;
+
     private OrthographicCamera camera;
 
     private GameRenderer gameRenderer;
@@ -19,7 +23,7 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void create() {
-        Gdx.graphics.setWindowedMode(1280, 640);
+        Gdx.graphics.setWindowedMode(WIDTH * SCALE, HEIGHT * SCALE);
 
         initCamera();
         initGameObjects();
@@ -28,7 +32,7 @@ public class Game extends ApplicationAdapter {
 
     private void initCamera() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 640);
+        camera.setToOrtho(false, WIDTH * SCALE, HEIGHT * SCALE);
         camera.update();
     }
 
@@ -36,7 +40,7 @@ public class Game extends ApplicationAdapter {
         assetManager = new GameAssetManager();
         animationHandler = new AnimationHandler();
         gameController = new GameController(assetManager, animationHandler, new Randomizer(new RandomInteger()));
-        gameRenderer = new GameRenderer(gameController, assetManager);
+        gameRenderer = new GameRenderer(gameController, assetManager, SCALE);
     }
 
     private void startNewGame() {

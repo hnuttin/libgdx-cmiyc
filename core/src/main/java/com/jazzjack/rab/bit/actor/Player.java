@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public class Player extends SimpleActor {
 
-    private static final int DEFAULT_SIGHT = 3;
+    private static final int DEFAULT_SIGHT = 4;
 
     private int maxNumberOfMoves;
     private int movements;
