@@ -3,6 +3,7 @@ package com.jazzjack.rab.bit.actor.enemy;
 import com.jazzjack.rab.bit.actor.SimpleActor;
 import com.jazzjack.rab.bit.animation.Animation;
 import com.jazzjack.rab.bit.animation.EmptyAnimation;
+import com.jazzjack.rab.bit.common.Predictability;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.route.Route;
 import com.jazzjack.rab.bit.route.RouteGenerator;
@@ -10,26 +11,32 @@ import com.jazzjack.rab.bit.route.Step;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Enemy extends SimpleActor {
 
     private final RouteGenerator routeGenerator;
 
-    private List<Route> routes;
+    private final Predictability predictability;
+    private final List<Route> routes;
 
     public Enemy(RouteGenerator routeGenerator, float startX, float startY, float size) {
         super("enemy1", startX, startY, size);
         this.routeGenerator = routeGenerator;
-        routes = new ArrayList<>();
+        this.predictability = Predictability.HIGH;
+        this.routes = new ArrayList<>();
     }
 
     public List<Route> getRoutes() {
         return routes;
     }
 
+    public Predictability getPredictability() {
+        return predictability;
+    }
+
     public void generateRoutes() {
-        routes = routeGenerator.generateRoutes(this, 2, 4);
+        routes.clear();
+        routes.addAll(routeGenerator.generateRoutes(this, 2, 4));
     }
 
     public Animation createAnimation(Randomizer randomizer) {
@@ -44,7 +51,7 @@ public class Enemy extends SimpleActor {
     }
 
     private Route chooseRoute(Randomizer randomizer) {
-        return routes.get(randomizer.randomInteger(routes.size()));
+        return randomizer.chooseRandomChance(routes);
     }
 
     void moveToStep(Step step) {

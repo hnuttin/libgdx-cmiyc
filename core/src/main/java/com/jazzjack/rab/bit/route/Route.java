@@ -1,12 +1,16 @@
 package com.jazzjack.rab.bit.route;
 
+import com.jazzjack.rab.bit.common.Chance;
+
 import java.util.List;
 
-public class Route {
+public class Route implements Chance {
 
+    private final int percentage;
     private final List<Step> steps;
 
-    Route(List<Step> steps) {
+    Route(int percentage, List<Step> steps) {
+        this.percentage = percentage;
         this.steps = steps;
     }
 
@@ -14,4 +18,8 @@ public class Route {
         return steps;
     }
 
+    @Override
+    public int getPercentage() {
+        return percentage;
+    }
 }

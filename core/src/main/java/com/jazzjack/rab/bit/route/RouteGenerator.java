@@ -1,6 +1,8 @@
 package com.jazzjack.rab.bit.route;
 
+import com.google.common.collect.Streams;
 import com.jazzjack.rab.bit.actor.Actor;
+import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.common.Direction;
 import com.jazzjack.rab.bit.common.Randomizer;
@@ -24,22 +26,20 @@ public class RouteGenerator {
         this.randomizer = randomizer;
     }
 
-    public List<Route> generateRoutes(Actor actor, int amount, int maxLength) {
+    public List<Route> generateRoutes(Enemy enemy, int amount, int maxLength) {
         StepResultCollisionDetector routeCollisionDetector = new StepResultCollisionDetector(collisionDetector);
-        return IntStream.range(0, amount)
+        List<RouteResult> routeResults = IntStream.range(0, amount)
                 .boxed()
-                .map(i -> generateRoute(actor, maxLength, routeCollisionDetector))
-                .filter(route -> {
-                    if (route.getSteps().isEmpty()) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                })
+                .map(i -> generateRoute(enemy, maxLength, routeCollisionDetector))
+                .filter(route -> !route.getSteps().isEmpty())
+                .collect(toList());
+        List<Integer> percentages = randomizer.randomPercentages(enemy.getPredictability(), routeResults.size());
+        return Streams
+                .zip(percentages.stream(), routeResults.stream(), (percentage, routeResult) -> new Route(percentage, routeResult.getSteps()))
                 .collect(toList());
     }
 
-    private Route generateRoute(Actor actor, int maxLength, StepResultCollisionDetector collisionDetector) {
+    private RouteResult generateRoute(Actor actor, int maxLength, StepResultCollisionDetector collisionDetector) {
         List<StepResult> stepsResults = new ArrayList<>(maxLength);
         for (int stepIndex = 0; stepIndex < maxLength; stepIndex++) {
             StepResult stepResult = generateStep(
@@ -54,7 +54,7 @@ public class RouteGenerator {
             }
         }
         List<Step> steps = convertToSteps(stepsResults);
-        return new Route(steps);
+        return new RouteResult(steps);
     }
 
     private StepResult generateStep(StepResult previousStep, Set<Direction> allowedDirections, StepResultCollisionDetector routeCollisionDetector) {

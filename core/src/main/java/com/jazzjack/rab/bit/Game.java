@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jazzjack.rab.bit.animation.AnimationHandler;
+import com.jazzjack.rab.bit.common.RandomInteger;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.game.GameController;
 
@@ -34,7 +35,7 @@ public class Game extends ApplicationAdapter {
     private void initGameObjects() {
         assetManager = new GameAssetManager();
         animationHandler = new AnimationHandler();
-        gameController = new GameController(assetManager, animationHandler, new Randomizer());
+        gameController = new GameController(assetManager, animationHandler, new Randomizer(new RandomInteger()));
         gameRenderer = new GameRenderer(gameController, assetManager);
     }
 

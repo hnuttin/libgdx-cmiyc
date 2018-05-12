@@ -123,6 +123,7 @@ project(":core") {
 
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile 'com.google.guava:guava:25.0-jre'
     }
 
     test {

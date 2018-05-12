@@ -1,12 +1,14 @@
 package com.jazzjack.rab.bit.route;
 
 import com.jazzjack.rab.bit.actor.Actor;
-import com.jazzjack.rab.bit.actor.SimpleActor;
+import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.common.Direction;
+import com.jazzjack.rab.bit.common.Predictability;
 import com.jazzjack.rab.bit.common.Randomizer;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.mockito.stubbing.Answer;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,8 +24,11 @@ import java.util.List;
 
 import static com.jazzjack.rab.bit.collision.CollidableMatcher.matchesCollidable;
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.Mockito.when;
 
@@ -37,6 +43,11 @@ class RouteGeneratorTest {
     @Mock
     private Randomizer randomizer;
 
+    @BeforeEach
+    void setup() {
+        when(randomizer.randomPercentages(any(Predictability.class), anyInt())).thenAnswer((Answer<List<Integer>>) invocation -> range(0, invocation.getArgument(1)).boxed().collect(toList()));
+    }
+
     @Test
     void expectNoCollidingSteps() {
         when(randomizer.randomFromSet(anySet())).thenReturn(
@@ -49,7 +60,7 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(0, 1, 1))).thenReturn(true);
         when(collisionDetector.collides(matchesCollidable(1, 0, 1))).thenReturn(false);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(1, 1), 1, 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(1, 1), 1, 1);
 
         assertThat(routes).hasSize(1);
         Route foute = routes.iterator().next();
@@ -73,7 +84,7 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(1, 1, 1))).thenReturn(false);
         when(collisionDetector.collides(matchesCollidable(2, 2, 1))).thenReturn(false);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(0, 1), 1, 5);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 1), 1, 5);
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -103,7 +114,7 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(1, 1, 1))).thenReturn(false);
         when(collisionDetector.collides(matchesCollidable(2, 1, 1))).thenReturn(false);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(0, 0), 2, 3);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 2, 3);
 
         assertThat(routes).hasSize(2);
         Iterator<Route> routeIterator = routes.iterator();
@@ -133,7 +144,7 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(1, 2, 1))).thenReturn(true);
         when(collisionDetector.collides(matchesCollidable(1, 0, 1))).thenReturn(true);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(0, 1), 1, 2);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 1), 1, 2);
 
         assertThat(routes).hasSize(1);
         Route foute = routes.iterator().next();
@@ -165,7 +176,7 @@ class RouteGeneratorTest {
                 Direction.DOWN);
         when(collisionDetector.collides(any(Collidable.class))).thenReturn(false);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(0, 0), 1, 18);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 1, 18);
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -196,7 +207,7 @@ class RouteGeneratorTest {
         when(randomizer.randomFromSet(anySet())).thenReturn(Direction.RIGHT);
         when(collisionDetector.collides(any(Collidable.class))).thenReturn(false);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(0, 0), 1, 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 1, 1);
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -209,7 +220,7 @@ class RouteGeneratorTest {
         when(randomizer.randomFromSet(anySet())).thenReturn(Direction.LEFT);
         when(collisionDetector.collides(any(Collidable.class))).thenReturn(false);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(1, 0), 1, 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(1, 0), 1, 1);
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -222,7 +233,7 @@ class RouteGeneratorTest {
         when(randomizer.randomFromSet(anySet())).thenReturn(Direction.UP);
         when(collisionDetector.collides(any(Collidable.class))).thenReturn(false);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(0, 0), 1, 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 1, 1);
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -239,7 +250,7 @@ class RouteGeneratorTest {
         when(randomizer.randomFromSet(new HashSet<>(asList(Direction.RIGHT, Direction.DOWN)))).thenReturn(Direction.RIGHT);
         when(collisionDetector.collides(matchesCollidable(2, 0, 1))).thenReturn(false);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(0, 0), 1, 2);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 1, 2);
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -254,7 +265,7 @@ class RouteGeneratorTest {
         when(randomizer.randomFromSet(anySet())).thenReturn(Direction.RIGHT, Direction.RIGHT, Direction.UP, Direction.DOWN, Direction.LEFT);
         when(collisionDetector.collides(any(Collidable.class))).thenReturn(false, true, true, true);
 
-        List<Route> routes = routeGenerator.generateRoutes(startActor(0, 0), 2, 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 2, 1);
 
         assertThat(routes).hasSize(1);
     }
@@ -265,8 +276,8 @@ class RouteGeneratorTest {
         assertThat(step.getName()).isEqualTo(name);
     }
 
-    private SimpleActor startActor(int startX, int startY) {
-        return new SimpleActor("start", startX, startY, 1);
+    private Enemy enemy(int startX, int startY) {
+        return new Enemy(routeGenerator, startX, startY, 1);
     }
 
 }
