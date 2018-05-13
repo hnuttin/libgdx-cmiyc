@@ -32,10 +32,12 @@ public class GameAssetManager extends AssetManager {
     private static final String PERCENTAGE_FONT = "romantics10.ttf";
 
     private static final String PLAYER = "player";
+    private static final String HP_FILLED = "pixel-art/player/hp-filled.png";
+    private static final String HP_EMPTY = "pixel-art/player/hp-empty.png";
 
     static {
         actorTextureMapping = new HashMap<>();
-        actorTextureMapping.put(PLAYER, "pixel-art/player.png");
+        actorTextureMapping.put(PLAYER, "pixel-art/player/player.png");
         actorTextureMapping.put("enemy1", "pixel-art/enemy/enemy1.png");
         actorTextureMapping.put(StepNames.HORIZONTAL, "pixel-art/enemy/route-horizontal.png");
         actorTextureMapping.put(StepNames.VERTICAL, "pixel-art/enemy/route-vertical.png");
@@ -55,6 +57,7 @@ public class GameAssetManager extends AssetManager {
         load(MAP1, TiledMap.class);
         load(LIGHTS, TextureAtlas.class);
         loadActorTextures();
+        loadHitpointTextures();
         loadFonts();
         finishLoading();
     }
@@ -70,6 +73,11 @@ public class GameAssetManager extends AssetManager {
         for (String texturePath : actorTextureMapping.values()) {
             load(texturePath, Texture.class);
         }
+    }
+
+    private void loadHitpointTextures() {
+        load(HP_FILLED, Texture.class);
+        load(HP_EMPTY, Texture.class);
     }
 
     private void loadFonts() {
@@ -91,8 +99,12 @@ public class GameAssetManager extends AssetManager {
         return get(actorTextureMapping.get(actor.getName()), Texture.class);
     }
 
-    public Texture getHitpointTexture() {
-        return get(actorTextureMapping.get(PLAYER), Texture.class);
+    public Texture getHpFilledTexture() {
+        return get(HP_FILLED, Texture.class);
+    }
+
+    public Texture getHpEmptyTexture() {
+        return get(HP_EMPTY, Texture.class);
     }
 
     public BitmapFont getPercentageFont() {

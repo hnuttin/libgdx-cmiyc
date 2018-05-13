@@ -13,11 +13,11 @@ public class Game extends ApplicationAdapter {
     private static final int BAR_HEIGHT = 32;
 
     private static final int WIDTH = 640;
-    private static final int HEIGHT = 320 + BAR_HEIGHT;
+    private static final int HEIGHT = 320;
     private static final int SCALE = 2;
 
     private static final int SCALED_WIDTH = WIDTH * SCALE;
-    private static final int SCALED_HEIGHT = HEIGHT * SCALE;
+    private static final int SCALED_HEIGHT = HEIGHT * SCALE + BAR_HEIGHT;
 
     private OrthographicCamera camera;
 
