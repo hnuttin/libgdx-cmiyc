@@ -27,8 +27,8 @@ class GameDrawer {
         batch.draw(texture, x, y + mapRegionYOffset, width, height);
     }
 
-    void drawInStatusBarRegion(Texture texture, float x, float y, float width, float height) {
-        batch.draw(texture, x, y, width, height);
+    void drawInStatusBarRegion(Texture texture, float x, float y) {
+        batch.draw(texture, x, y, texture.getWidth(), texture.getHeight());
     }
 
     void drawInMapRegion(TextureAtlas.AtlasRegion lightAtlasRegion, float x, float y, float width, float height) {

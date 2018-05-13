@@ -11,12 +11,14 @@ public class Player extends SimpleActor {
     private int maxNumberOfMoves;
     private int movements;
 
+    private int maxHp;
     private int hp;
 
     public Player(float startX, float startY) {
         super("player", startX, startY);
 
         maxNumberOfMoves = 4;
+        maxHp = 5;
         hp = 3;
     }
 
@@ -26,6 +28,10 @@ public class Player extends SimpleActor {
 
     public int getMovements() {
         return movements;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
     }
 
     public int getHp() {

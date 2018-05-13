@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Align;
 import com.jazzjack.rab.bit.actor.Actor;
 import com.jazzjack.rab.bit.actor.Player;
@@ -22,8 +22,9 @@ import java.util.Optional;
 public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     private static final int STATUS_BAR_HEIGHT = 32;
-    private static final int WIDTH = 1280;
+    private static final int MAP_WIDTH = 1280;
     private static final int MAP_HEIGHT = 640;
+    private static final int WIDTH = MAP_WIDTH;
     private static final int HEIGHT = MAP_HEIGHT + STATUS_BAR_HEIGHT;
 
     private static final float FOG_OF_WAR = 0f;
@@ -53,7 +54,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
         camera.setToOrtho(false, (float) WIDTH, (float) HEIGHT);
         camera.update();
 
-        lightBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, WIDTH, MAP_HEIGHT, false);
+        lightBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, MAP_WIDTH, MAP_HEIGHT, false);
     }
 
     private float getScaledTileWidth() {
@@ -80,6 +81,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     private void updateCamera() {
         camera.update();
         setView(camera);
+        gameDrawer.setProjectionMatrix(camera.combined);
     }
 
     private void bufferSight() {
@@ -179,13 +181,19 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
         if (optionalPlayer.isPresent()) {
             gameDrawer.clearStatusBar();
             gameDrawer.begin();
+            Texture hpFilledTexture = assetManager.getHpFilledTexture();
             for (int i = 0; i < optionalPlayer.get().getHp(); i++) {
                 gameDrawer.drawInStatusBarRegion(
-                        assetManager.getHpFilledTexture(),
-                        i * STATUS_BAR_HEIGHT,
-                        0,
-                        STATUS_BAR_HEIGHT,
-                        STATUS_BAR_HEIGHT);
+                        hpFilledTexture,
+                        i * hpFilledTexture.getWidth(),
+                        0);
+            }
+            Texture hpEmptyTexture = assetManager.getHpEmptyTexture();
+            for (int j = optionalPlayer.get().getHp(); j < optionalPlayer.get().getMaxHp(); j++) {
+                gameDrawer.drawInStatusBarRegion(
+                        hpEmptyTexture,
+                        j * hpEmptyTexture.getWidth(),
+                        0);
             }
             gameDrawer.end();
         }
