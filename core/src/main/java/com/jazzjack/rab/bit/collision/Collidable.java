@@ -6,7 +6,7 @@ public interface Collidable {
 
     float getY();
 
-    default boolean collides(Collidable collidable) {
+    default boolean collidesWith(Collidable collidable) {
         return getX() == collidable.getX() && getY() == collidable.getY();
     }
 

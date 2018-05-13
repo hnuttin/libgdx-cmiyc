@@ -5,6 +5,8 @@ import com.jazzjack.rab.bit.actor.SimpleActor;
 import com.jazzjack.rab.bit.actor.enemy.route.AnimationRoute;
 import com.jazzjack.rab.bit.animation.Animation;
 import com.jazzjack.rab.bit.animation.EmptyAnimation;
+import com.jazzjack.rab.bit.collision.CollisionDetector;
+import com.jazzjack.rab.bit.collision.CollisionResult;
 import com.jazzjack.rab.bit.common.Predictability;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.actor.enemy.route.Route;
@@ -41,14 +43,14 @@ public class Enemy extends SimpleActor {
         routes.addAll(routeGenerator.generateRoutes(this, 2, 4));
     }
 
-    public Animation createAnimation(Randomizer randomizer) {
+    public Animation createAnimation(CollisionDetector collisionDetector, Randomizer randomizer) {
         if (routes.isEmpty()) {
             return new EmptyAnimation();
         } else {
             AnimationRoute routeToAnimate = new AnimationRoute(chooseRoute(randomizer));
             routes.clear();
             routes.add(routeToAnimate);
-            return new EnemyRouteAnimation(this, routeToAnimate);
+            return new EnemyRouteAnimation(collisionDetector, this, routeToAnimate);
         }
     }
 
@@ -56,8 +58,10 @@ public class Enemy extends SimpleActor {
         return randomizer.chooseRandomChance(routes);
     }
 
-    void moveToStep(Step step) {
-        super.moveToDirection(step.getDirection());
+    CollisionResult moveToStep(CollisionDetector collisionDetector, Step step) {
+        CollisionResult collisionResult = super.moveToDirection(collisionDetector, step.getDirection());
+        // TODO do player damage on collision
+        return collisionResult;
     }
 
     void removeRoute(Route route) {

@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit;
+package com.jazzjack.rab.bit.render;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;

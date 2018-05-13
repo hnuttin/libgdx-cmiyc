@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit;
+package com.jazzjack.rab.bit.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,8 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Align;
+import com.jazzjack.rab.bit.Level;
 import com.jazzjack.rab.bit.actor.Actor;
-import com.jazzjack.rab.bit.actor.Player;
+import com.jazzjack.rab.bit.actor.player.Player;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.actor.enemy.route.Step;
@@ -41,7 +42,7 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     private boolean rebufferPlayer = true;
 
-    GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager) {
+    public GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager) {
         super(null, 2);
 
         this.gameObjectProvider = gameObjectProvider;

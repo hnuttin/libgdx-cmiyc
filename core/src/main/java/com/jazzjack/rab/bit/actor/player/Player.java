@@ -1,6 +1,8 @@
-package com.jazzjack.rab.bit.actor;
+package com.jazzjack.rab.bit.actor.player;
 
+import com.jazzjack.rab.bit.actor.SimpleActor;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
+import com.jazzjack.rab.bit.collision.CollisionResult;
 
 import java.util.function.Function;
 
@@ -47,31 +49,35 @@ public class Player extends SimpleActor {
     }
 
     @Override
-    public boolean moveRight(CollisionDetector collisionDetector) {
+    public PlayerMovementResult moveRight(CollisionDetector collisionDetector) {
         return doPlayerMove(collisionDetector, super::moveRight);
     }
 
     @Override
-    public boolean moveLeft(CollisionDetector collisionDetector) {
+    public PlayerMovementResult moveLeft(CollisionDetector collisionDetector) {
         return doPlayerMove(collisionDetector, super::moveLeft);
     }
 
     @Override
-    public boolean moveUp(CollisionDetector collisionDetector) {
+    public PlayerMovementResult moveUp(CollisionDetector collisionDetector) {
         return doPlayerMove(collisionDetector, super::moveUp);
     }
 
     @Override
-    public boolean moveDown(CollisionDetector collisionDetector) {
+    public PlayerMovementResult moveDown(CollisionDetector collisionDetector) {
         return doPlayerMove(collisionDetector, super::moveDown);
     }
 
-    private boolean doPlayerMove(CollisionDetector collisionDetector, Function<CollisionDetector, Boolean> move) {
-        if (hasMovementsLeft() && move.apply(collisionDetector)) {
-            movements++;
-            return true;
+    private PlayerMovementResult doPlayerMove(CollisionDetector collisionDetector, Function<CollisionDetector, CollisionResult> move) {
+        if (hasMovementsLeft()) {
+            CollisionResult collisionResult = move.apply(collisionDetector);
+            if (!collisionResult.isCollision()) {
+                movements++;
+            }
+            return PlayerMovementResult.fromCollisionResult(collisionResult);
+        } else {
+            return PlayerMovementResult.moMovementsLeft();
         }
-        return false;
     }
 
     public boolean hasMovementsLeft() {

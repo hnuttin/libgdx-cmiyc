@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.actor.enemy.route;
 
 import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
+import com.jazzjack.rab.bit.collision.CollisionResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +18,21 @@ class StepResultCollisionDetector implements CollisionDetector {
     }
 
     @Override
-    public boolean collides(Collidable collidable) {
-        return collidesWithStepResults(collidable) || collisionDetector.collides(collidable);
+    public CollisionResult collides(Collidable collidable) {
+        CollisionResult collisionResult = collidesWithStepResults(collidable);
+        if (collisionResult.isCollision()) {
+            return collisionResult;
+        } else {
+            return collisionDetector.collides(collidable);
+        }
     }
 
-    private boolean collidesWithStepResults(Collidable collidable) {
-        return stepResults.stream().anyMatch(collidable::collides);
+    private CollisionResult collidesWithStepResults(Collidable collidable) {
+        return stepResults.stream()
+                .filter(collidable::collidesWith)
+                .findFirst()
+                .map(CollisionResult::collision)
+                .orElse(CollisionResult.noCollision());
     }
 
     void addStepResult(StepResult stepResult) {

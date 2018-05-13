@@ -2,16 +2,16 @@ package com.jazzjack.rab.bit.game;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.jazzjack.rab.bit.GameAssetManager;
 import com.jazzjack.rab.bit.Level;
-import com.jazzjack.rab.bit.actor.Player;
+import com.jazzjack.rab.bit.actor.player.Player;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.enemy.EnemyRouteCollisionDetector;
+import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.animation.Animation;
 import com.jazzjack.rab.bit.animation.AnimationRegister;
-import com.jazzjack.rab.bit.collision.TiledMapCollisionDetector;
+import com.jazzjack.rab.bit.collision.LevelCollisionDetectorWithCollidables;
 import com.jazzjack.rab.bit.common.Randomizer;
-import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
+import com.jazzjack.rab.bit.render.GameAssetManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,8 @@ public class GameController implements GameObjectProvider, InputProcessor {
     private int enemyIndexToAnimate;
 
     private Level level;
-    private TiledMapCollisionDetector collisionDetector;
+    private LevelCollisionDetectorWithCollidables levelCollisionDetectorWithEnemies;
+    private LevelCollisionDetectorWithCollidables levelCollisionDetectorWithPlayer;
     private Player player;
 
     private GamePhase currentGamePhase;
@@ -45,13 +46,15 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     private void startFirstLevel() {
         level = new Level(this.assetManager.getTiledMap1());
-        collisionDetector = new TiledMapCollisionDetector(level);
+        levelCollisionDetectorWithEnemies = new LevelCollisionDetectorWithCollidables(level);
         player = new Player(1, 2);
-        RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(collisionDetector, this), randomizer);
+        levelCollisionDetectorWithPlayer = new LevelCollisionDetectorWithCollidables(level);
+        levelCollisionDetectorWithPlayer.addCollidable(player);
+        RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(levelCollisionDetectorWithEnemies, this), randomizer);
         enemies.add(new Enemy(routeGenerator, 6, 7));
         enemies.add(new Enemy(routeGenerator, 6, 1));
         enemies.add(new Enemy(routeGenerator, 8, 4));
-        collisionDetector.addActor(enemies.toArray(new Enemy[0]));
+        levelCollisionDetectorWithEnemies.addCollidable(enemies.toArray(new Enemy[0]));
     }
 
     private boolean isPlayerTurn() {
@@ -97,13 +100,13 @@ public class GameController implements GameObjectProvider, InputProcessor {
     private Boolean movePlayer(int keycode) {
         switch (keycode) {
             case Input.Keys.LEFT:
-                return player.moveLeft(collisionDetector);
+                return player.moveLeft(levelCollisionDetectorWithEnemies).success();
             case Input.Keys.RIGHT:
-                return player.moveRight(collisionDetector);
+                return player.moveRight(levelCollisionDetectorWithEnemies).success();
             case Input.Keys.UP:
-                return player.moveUp(collisionDetector);
+                return player.moveUp(levelCollisionDetectorWithEnemies).success();
             case Input.Keys.DOWN:
-                return player.moveDown(collisionDetector);
+                return player.moveDown(levelCollisionDetectorWithEnemies).success();
             default:
                 return false;
         }
@@ -118,7 +121,7 @@ public class GameController implements GameObjectProvider, InputProcessor {
     private void animateEnemyForIndex() {
         if (enemyIndexToAnimate < enemies.size()) {
             Enemy enemyToAnimate = enemies.get(enemyIndexToAnimate);
-            Animation animation = enemyToAnimate.createAnimation(randomizer);
+            Animation animation = enemyToAnimate.createAnimation(levelCollisionDetectorWithPlayer, randomizer);
             enemyIndexToAnimate++;
             animationRegister.registerAnimation(animation, this::animateEnemyForIndex);
         } else {

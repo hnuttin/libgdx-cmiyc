@@ -64,7 +64,7 @@ public class RouteGenerator {
         }
         Direction direction = randomizer.randomFromSet(allowedDirections);
         StepResult stepResult = createStepResultForDirection(previousStep, direction);
-        if (!routeCollisionDetector.collides(stepResult)) {
+        if (!routeCollisionDetector.collides(stepResult).isCollision()) {
             return stepResult;
         } else {
             return generateStep(previousStep, copyWithoutDirection(allowedDirections, direction), routeCollisionDetector);

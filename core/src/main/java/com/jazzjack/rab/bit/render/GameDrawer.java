@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit;
+package com.jazzjack.rab.bit.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

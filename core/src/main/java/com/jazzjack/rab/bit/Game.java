@@ -6,11 +6,13 @@ import com.jazzjack.rab.bit.animation.AnimationHandler;
 import com.jazzjack.rab.bit.common.RandomInteger;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.game.GameController;
+import com.jazzjack.rab.bit.render.GameAssetManager;
+import com.jazzjack.rab.bit.render.GameRenderer;
 
 public class Game extends ApplicationAdapter {
 
-    private GameRenderer gameRenderer;
-    private GameAssetManager assetManager;
+    private com.jazzjack.rab.bit.render.GameRenderer gameRenderer;
+    private com.jazzjack.rab.bit.render.GameAssetManager assetManager;
     private GameController gameController;
     private AnimationHandler animationHandler;
 

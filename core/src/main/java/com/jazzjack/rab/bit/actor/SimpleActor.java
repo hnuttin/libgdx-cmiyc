@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.actor;
 
 import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
+import com.jazzjack.rab.bit.collision.CollisionResult;
 import com.jazzjack.rab.bit.common.Direction;
 
 public class SimpleActor implements Actor {
@@ -32,65 +33,63 @@ public class SimpleActor implements Actor {
         return y;
     }
 
-    protected void moveToDirection(Direction direction) {
+    protected CollisionResult moveToDirection(CollisionDetector collisionDetector, Direction direction) {
         switch (direction) {
             case UP:
-                moveUp();
-                break;
+                return moveUp(collisionDetector);
             case DOWN:
-                moveDown();
-                break;
+                return moveDown(collisionDetector);
             case LEFT:
-                moveLeft();
-                break;
+                return moveLeft(collisionDetector);
             case RIGHT:
-                moveRight();
-                break;
+                return moveRight(collisionDetector);
+            default:
+                throw new IllegalArgumentException(direction.name());
         }
     }
 
-    public boolean moveRight(CollisionDetector collisionDetector) {
-        if (!collisionDetector.collides(futureCollidable(x + 1, y))) {
+    public CollisionResult moveRight(CollisionDetector collisionDetector) {
+        CollisionResult collisionResult = collisionDetector.collides(futureCollidable(x + 1, y));
+        if (!collisionResult.isCollision()) {
             moveRight();
-            return true;
         }
-        return false;
+        return collisionResult;
     }
 
     private void moveRight() {
         x++;
     }
 
-    public boolean moveLeft(CollisionDetector collisionDetector) {
-        if (!collisionDetector.collides(futureCollidable(x - 1, y))) {
+    public CollisionResult moveLeft(CollisionDetector collisionDetector) {
+        CollisionResult collisionResult = collisionDetector.collides(futureCollidable(x - 1, y));
+        if (!collisionResult.isCollision()) {
             moveLeft();
-            return true;
         }
-        return false;
+        return collisionResult;
     }
 
     private void moveLeft() {
         x--;
     }
 
-    public boolean moveUp(CollisionDetector collisionDetector) {
-        if (!collisionDetector.collides(futureCollidable(x, y + 1))) {
+    public CollisionResult moveUp(CollisionDetector collisionDetector) {
+        CollisionResult collisionResult = collisionDetector.collides(futureCollidable(x, y + 1));
+        if (!collisionResult.isCollision()) {
             moveUp();
-            return true;
         }
-        return false;
+        return collisionResult;
     }
 
     private void moveUp() {
         y++;
     }
 
-    public boolean moveDown(CollisionDetector collisionDetector) {
-        if (!collisionDetector.collides(futureCollidable(x, y - 1))) {
+    public CollisionResult moveDown(CollisionDetector collisionDetector) {
+        CollisionResult collisionResult = collisionDetector.collides(futureCollidable(x, y - 1));
+        if (!collisionResult.isCollision()) {
             moveDown();
-            return true;
         }
-        return false;
+        return collisionResult;
     }
 
     private void moveDown() {

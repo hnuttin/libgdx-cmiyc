@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.actor.enemy;
 
 import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
+import com.jazzjack.rab.bit.collision.CollisionResult;
 import com.jazzjack.rab.bit.game.GameObjectProvider;
 
 public class EnemyRouteCollisionDetector implements CollisionDetector {
@@ -15,14 +16,22 @@ public class EnemyRouteCollisionDetector implements CollisionDetector {
     }
 
     @Override
-    public boolean collides(Collidable collidable) {
-        return collidesWithEnemyRoutes(collidable) || collisionDetector.collides(collidable);
+    public CollisionResult collides(Collidable collidable) {
+        CollisionResult collisionResult = collidesWithEnemyRoutes(collidable);
+        if (collisionResult.isCollision()) {
+            return collisionResult;
+        } else {
+            return collisionDetector.collides(collidable);
+        }
     }
 
-    private boolean collidesWithEnemyRoutes(Collidable collidable) {
+    private CollisionResult collidesWithEnemyRoutes(Collidable collidable) {
         return gameObjectProvider.getEnemies().stream()
                 .flatMap(enemy -> enemy.getRoutes().stream())
                 .flatMap(route -> route.getSteps().stream())
-                .anyMatch(step -> step.collides(collidable));
+                .filter(step -> step.collidesWith(collidable))
+                .findFirst()
+                .map(CollisionResult::collision)
+                .orElse(CollisionResult.noCollision());
     }
 }
