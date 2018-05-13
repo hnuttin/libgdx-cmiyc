@@ -31,9 +31,11 @@ public class GameAssetManager extends AssetManager {
     private static final String FONT_VCR_OSD_MONO = "fonts/VCR_OSD_MONO_1.001.ttf";
     private static final String PERCENTAGE_FONT = "romantics10.ttf";
 
+    private static final String PLAYER = "player";
+
     static {
         actorTextureMapping = new HashMap<>();
-        actorTextureMapping.put("player", "pixel-art/player.png");
+        actorTextureMapping.put(PLAYER, "pixel-art/player.png");
         actorTextureMapping.put("enemy1", "pixel-art/enemy/enemy1.png");
         actorTextureMapping.put(StepNames.HORIZONTAL, "pixel-art/enemy/route-horizontal.png");
         actorTextureMapping.put(StepNames.VERTICAL, "pixel-art/enemy/route-vertical.png");
@@ -87,6 +89,10 @@ public class GameAssetManager extends AssetManager {
 
     public Texture getTextureForActor(Actor actor) {
         return get(actorTextureMapping.get(actor.getName()), Texture.class);
+    }
+
+    public Texture getHitpointTexture() {
+        return get(actorTextureMapping.get(PLAYER), Texture.class);
     }
 
     public BitmapFont getPercentageFont() {

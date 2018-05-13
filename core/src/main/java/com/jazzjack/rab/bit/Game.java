@@ -65,7 +65,7 @@ public class Game extends ApplicationAdapter {
     public void resize(int width, int height) {
         camera.viewportWidth = SCALED_WIDTH;
         camera.viewportHeight = SCALED_WIDTH * height / width;
-        gameRenderer.getBatch().setProjectionMatrix(camera.combined);
+        gameRenderer.setProjectionMatrix(camera.combined);
     }
 
     @Override
