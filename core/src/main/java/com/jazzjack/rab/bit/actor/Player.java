@@ -16,7 +16,7 @@ public class Player extends SimpleActor {
     public Player(float startX, float startY) {
         super("player", startX, startY);
 
-        maxNumberOfMoves = 100;
+        maxNumberOfMoves = 4;
         hp = 3;
     }
 

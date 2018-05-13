@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -20,10 +21,14 @@ import java.util.Optional;
 
 public class GameRenderer extends OrthogonalTiledMapRenderer {
 
+    private static final int STATUS_BAR_HEIGHT = 32;
+    private static final int WIDTH = 1280;
+    private static final int MAP_HEIGHT = 640;
+    private static final int HEIGHT = MAP_HEIGHT + STATUS_BAR_HEIGHT;
+
     private static final float FOG_OF_WAR = 0f;
     private static final int ENDING_HEIGHT = 22;
     private static final float ROUTE_ALPHA = 0.7f;
-    private static final int STATUS_BAR_HEIGHT = 32;
 
     private final GameObjectProvider gameObjectProvider;
     private final GameAssetManager assetManager;
@@ -31,21 +36,24 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
     private final GameDrawer gameDrawer;
 
     private final FrameBuffer lightBuffer;
+    private final OrthographicCamera camera;
 
     private boolean rebufferPlayer = true;
 
-    GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager, float scale) {
-        super(null, scale);
+    GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager) {
+        super(null, 2);
 
         this.gameObjectProvider = gameObjectProvider;
         this.assetManager = assetManager;
         this.gameDrawer = new GameDrawer(super.batch, STATUS_BAR_HEIGHT);
 
-        lightBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - STATUS_BAR_HEIGHT, false);
-    }
+        Gdx.graphics.setWindowedMode(WIDTH, HEIGHT);
 
-    public void setProjectionMatrix(Matrix4 projectionMatrix) {
-        gameDrawer.setProjectionMatrix(projectionMatrix);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, (float) WIDTH, (float) HEIGHT);
+        camera.update();
+
+        lightBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, WIDTH, MAP_HEIGHT, false);
     }
 
     private float getScaledTileWidth() {
@@ -62,10 +70,16 @@ public class GameRenderer extends OrthogonalTiledMapRenderer {
 
     @Override
     public void render() {
+        updateCamera();
         bufferSight();
         renderMap();
         renderSight();
         renderStatusBar();
+    }
+
+    private void updateCamera() {
+        camera.update();
+        setView(camera);
     }
 
     private void bufferSight() {
