@@ -25,8 +25,8 @@ public class GameController implements GameObjectProvider, InputProcessor {
     private Enemies enemies;
 
     private Level level;
-    private LevelCollisionDetectorWithCollidables levelCollisionDetectorWithEnemies;
-    private LevelCollisionDetectorWithCollidables levelCollisionDetectorWithPlayer;
+    private LevelCollisionDetectorWithCollidables playerMovementColissionDetector;
+    private LevelCollisionDetectorWithCollidables enemyMovementColissionDetector;
     private Player player;
 
     private GamePhase currentGamePhase;
@@ -44,16 +44,16 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     private void startFirstLevel() {
         level = new Level(this.assetManager.getTiledMap1());
-        levelCollisionDetectorWithEnemies = new LevelCollisionDetectorWithCollidables(level);
+        playerMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
         player = new Player(1, 2);
-        levelCollisionDetectorWithPlayer = new LevelCollisionDetectorWithCollidables(level);
-        levelCollisionDetectorWithPlayer.addCollidable(player);
-        RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(levelCollisionDetectorWithEnemies, this), randomizer);
-        enemies = new Enemies(randomizer, levelCollisionDetectorWithPlayer);
+        enemyMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
+        enemyMovementColissionDetector.addCollidable(player);
+        RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(playerMovementColissionDetector, this), randomizer);
+        enemies = new Enemies(randomizer, enemyMovementColissionDetector);
         enemies.add(new Enemy(routeGenerator, animationRegister, 6, 7));
         enemies.add(new Enemy(routeGenerator, animationRegister, 6, 1));
         enemies.add(new Enemy(routeGenerator, animationRegister, 8, 4));
-        levelCollisionDetectorWithEnemies.addCollidable(enemies.get());
+        playerMovementColissionDetector.addCollidable(enemies.get());
     }
 
     private boolean isPlayerTurn() {
@@ -98,13 +98,13 @@ public class GameController implements GameObjectProvider, InputProcessor {
     private Boolean movePlayer(int keycode) {
         switch (keycode) {
             case Input.Keys.LEFT:
-                return player.moveLeft(levelCollisionDetectorWithEnemies).success();
+                return player.moveLeft(playerMovementColissionDetector).success();
             case Input.Keys.RIGHT:
-                return player.moveRight(levelCollisionDetectorWithEnemies).success();
+                return player.moveRight(playerMovementColissionDetector).success();
             case Input.Keys.UP:
-                return player.moveUp(levelCollisionDetectorWithEnemies).success();
+                return player.moveUp(playerMovementColissionDetector).success();
             case Input.Keys.DOWN:
-                return player.moveDown(levelCollisionDetectorWithEnemies).success();
+                return player.moveDown(playerMovementColissionDetector).success();
             default:
                 return false;
         }

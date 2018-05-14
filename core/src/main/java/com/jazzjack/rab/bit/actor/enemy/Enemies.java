@@ -14,9 +14,6 @@ public class Enemies {
     private final Randomizer randomizer;
     private final List<Enemy> enemies;
 
-    private CompletableFuture<Void> moveAllEnemiesFuture;
-    private int enemyIndexToAnimate;
-
     public Enemies(Randomizer randomizer, CollisionDetector collisionDetector) {
         this.randomizer = randomizer;
         this.collisionDetector = collisionDetector;
@@ -36,20 +33,15 @@ public class Enemies {
     }
 
     public CompletableFuture<Void> moveAllEnemies() {
-        moveAllEnemiesFuture = new CompletableFuture<>();
-        enemyIndexToAnimate = 0;
-        animateEnemyForIndex();
+        CompletableFuture<Void> moveAllEnemiesFuture = null;
+        for (Enemy enemy : enemies) {
+            if (moveAllEnemiesFuture == null) {
+                moveAllEnemiesFuture = enemy.moveAlongRandomRoute(collisionDetector, randomizer);
+            } else {
+                moveAllEnemiesFuture = moveAllEnemiesFuture.thenCompose((r) -> enemy.moveAlongRandomRoute(collisionDetector, randomizer));
+            }
+        }
         return moveAllEnemiesFuture;
     }
 
-    private void animateEnemyForIndex() {
-        if (enemyIndexToAnimate < enemies.size()) {
-            Enemy enemyToAnimate = enemies.get(enemyIndexToAnimate);
-            enemyIndexToAnimate++;
-            enemyToAnimate.moveAlongRandomRoute(collisionDetector, randomizer)
-                    .thenRun(this::animateEnemyForIndex);
-        } else {
-            moveAllEnemiesFuture.complete(null);
-        }
-    }
 }
