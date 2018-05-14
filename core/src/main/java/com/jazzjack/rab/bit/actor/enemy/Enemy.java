@@ -3,8 +3,7 @@ package com.jazzjack.rab.bit.actor.enemy;
 import com.google.common.collect.ImmutableList;
 import com.jazzjack.rab.bit.actor.SimpleActor;
 import com.jazzjack.rab.bit.actor.enemy.route.AnimationRoute;
-import com.jazzjack.rab.bit.animation.Animation;
-import com.jazzjack.rab.bit.animation.EmptyAnimation;
+import com.jazzjack.rab.bit.animation.AnimationRegister;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.collision.CollisionResult;
 import com.jazzjack.rab.bit.common.Predictability;
@@ -15,17 +14,20 @@ import com.jazzjack.rab.bit.actor.enemy.route.Step;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class Enemy extends SimpleActor {
 
     private final RouteGenerator routeGenerator;
+    private final AnimationRegister animationRegister;
 
     private final Predictability predictability;
     private final List<Route> routes;
 
-    public Enemy(RouteGenerator routeGenerator, float startX, float startY) {
+    public Enemy(RouteGenerator routeGenerator, AnimationRegister animationRegister, float startX, float startY) {
         super("enemy1", startX, startY);
         this.routeGenerator = routeGenerator;
+        this.animationRegister = animationRegister;
         this.predictability = Predictability.HIGH;
         this.routes = new ArrayList<>();
     }
@@ -43,14 +45,15 @@ public class Enemy extends SimpleActor {
         routes.addAll(routeGenerator.generateRoutes(this, 2, 4));
     }
 
-    public Animation createAnimation(CollisionDetector collisionDetector, Randomizer randomizer) {
+    public CompletableFuture<Void> moveAlongRandomRoute(CollisionDetector collisionDetector, Randomizer randomizer) {
         if (routes.isEmpty()) {
-            return new EmptyAnimation();
+            return CompletableFuture.completedFuture(null);
         } else {
             AnimationRoute routeToAnimate = new AnimationRoute(chooseRoute(randomizer));
             routes.clear();
             routes.add(routeToAnimate);
-            return new EnemyRouteAnimation(collisionDetector, this, routeToAnimate);
+            EnemyRouteAnimation animation = new EnemyRouteAnimation(collisionDetector, this, routeToAnimate);
+            return animationRegister.registerAnimation(animation);
         }
     }
 

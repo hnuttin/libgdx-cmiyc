@@ -49,10 +49,10 @@ public class GameController implements GameObjectProvider, InputProcessor {
         levelCollisionDetectorWithPlayer = new LevelCollisionDetectorWithCollidables(level);
         levelCollisionDetectorWithPlayer.addCollidable(player);
         RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(levelCollisionDetectorWithEnemies, this), randomizer);
-        enemies = new Enemies(randomizer, levelCollisionDetectorWithPlayer, animationRegister);
-        enemies.add(new Enemy(routeGenerator, 6, 7));
-        enemies.add(new Enemy(routeGenerator, 6, 1));
-        enemies.add(new Enemy(routeGenerator, 8, 4));
+        enemies = new Enemies(randomizer, levelCollisionDetectorWithPlayer);
+        enemies.add(new Enemy(routeGenerator, animationRegister, 6, 7));
+        enemies.add(new Enemy(routeGenerator, animationRegister, 6, 1));
+        enemies.add(new Enemy(routeGenerator, animationRegister, 8, 4));
         levelCollisionDetectorWithEnemies.addCollidable(enemies.get());
     }
 
@@ -112,7 +112,7 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     private void startEnemyTurn() {
         currentGamePhase = GamePhase.ENEMY_TURN;
-        enemies.moveAllEnemies(this::startPlayerTurn);
+        enemies.moveAllEnemies().thenRun(this::startPlayerTurn);
     }
 
     private void startPlayerTurn() {

@@ -1,5 +1,7 @@
 package com.jazzjack.rab.bit.animation;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface AnimationRegister {
-    void registerAnimation(Animation animation, Runnable onAnimationFinished);
+    CompletableFuture<Void> registerAnimation(Animation animation);
 }
