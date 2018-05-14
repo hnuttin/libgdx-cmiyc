@@ -3,17 +3,16 @@ package com.jazzjack.rab.bit.game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.jazzjack.rab.bit.Level;
-import com.jazzjack.rab.bit.actor.player.Player;
+import com.jazzjack.rab.bit.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.enemy.EnemyRouteCollisionDetector;
 import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
-import com.jazzjack.rab.bit.animation.Animation;
+import com.jazzjack.rab.bit.actor.player.Player;
 import com.jazzjack.rab.bit.animation.AnimationRegister;
 import com.jazzjack.rab.bit.collision.LevelCollisionDetectorWithCollidables;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +22,7 @@ public class GameController implements GameObjectProvider, InputProcessor {
     private final AnimationRegister animationRegister;
     private final Randomizer randomizer;
 
-    private final List<Enemy> enemies = new ArrayList<>();
-    private int enemyIndexToAnimate;
+    private Enemies enemies;
 
     private Level level;
     private LevelCollisionDetectorWithCollidables levelCollisionDetectorWithEnemies;
@@ -51,10 +49,11 @@ public class GameController implements GameObjectProvider, InputProcessor {
         levelCollisionDetectorWithPlayer = new LevelCollisionDetectorWithCollidables(level);
         levelCollisionDetectorWithPlayer.addCollidable(player);
         RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(levelCollisionDetectorWithEnemies, this), randomizer);
+        enemies = new Enemies(randomizer, levelCollisionDetectorWithPlayer, animationRegister);
         enemies.add(new Enemy(routeGenerator, 6, 7));
         enemies.add(new Enemy(routeGenerator, 6, 1));
         enemies.add(new Enemy(routeGenerator, 8, 4));
-        levelCollisionDetectorWithEnemies.addCollidable(enemies.toArray(new Enemy[0]));
+        levelCollisionDetectorWithEnemies.addCollidable(enemies.get());
     }
 
     private boolean isPlayerTurn() {
@@ -68,7 +67,7 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     @Override
     public List<Enemy> getEnemies() {
-        return enemies;
+        return enemies.get();
     }
 
     @Override
@@ -78,23 +77,22 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (isPlayerTurn()) {
-            return handlePlayerKeys(keycode);
-        }
-        return false;
+        return isPlayerTurn() && handlePlayerKeys(keycode);
     }
 
     private boolean handlePlayerKeys(int keycode) {
         if (keycode == Input.Keys.E) {
             startEnemyTurn();
+            return true;
         }
         if (movePlayer(keycode)) {
             // TODO fire player moved event (rebuffer player)
             if (!player.hasMovementsLeft()) {
                 startEnemyTurn();
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     private Boolean movePlayer(int keycode) {
@@ -114,24 +112,12 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     private void startEnemyTurn() {
         currentGamePhase = GamePhase.ENEMY_TURN;
-        enemyIndexToAnimate = 0;
-        animateEnemyForIndex();
-    }
-
-    private void animateEnemyForIndex() {
-        if (enemyIndexToAnimate < enemies.size()) {
-            Enemy enemyToAnimate = enemies.get(enemyIndexToAnimate);
-            Animation animation = enemyToAnimate.createAnimation(levelCollisionDetectorWithPlayer, randomizer);
-            enemyIndexToAnimate++;
-            animationRegister.registerAnimation(animation, this::animateEnemyForIndex);
-        } else {
-            startPlayerTurn();
-        }
+        enemies.moveAllEnemies(this::startPlayerTurn);
     }
 
     private void startPlayerTurn() {
         currentGamePhase = GamePhase.PLAYER_TURN;
-        enemies.forEach(Enemy::generateRoutes);
+        enemies.generateRoutes();
         player.resetMovements();
     }
 

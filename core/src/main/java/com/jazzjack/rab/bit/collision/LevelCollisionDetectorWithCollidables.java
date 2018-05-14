@@ -3,6 +3,7 @@ package com.jazzjack.rab.bit.collision;
 import com.jazzjack.rab.bit.Level;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
@@ -18,6 +19,10 @@ public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetecto
 
     public void addCollidable(Collidable... collidables) {
         this.collidables.addAll(asList(collidables));
+    }
+
+    public void addCollidable(List<? extends Collidable> collidables) {
+        this.collidables.addAll(collidables);
     }
 
     @Override
