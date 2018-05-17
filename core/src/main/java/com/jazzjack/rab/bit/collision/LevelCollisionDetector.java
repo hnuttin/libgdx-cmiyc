@@ -2,21 +2,21 @@ package com.jazzjack.rab.bit.collision;
 
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.jazzjack.rab.bit.Level;
+import com.jazzjack.rab.bit.Map;
 
 public class LevelCollisionDetector implements CollisionDetector {
 
     private static final String PROPERTY_COLLISION = "collision";
 
-    private final Level level;
+    private final Map map;
 
-    public LevelCollisionDetector(Level level) {
-        this.level = level;
+    public LevelCollisionDetector(Map map) {
+        this.map = map;
     }
 
     @Override
     public CollisionResult collides(Collidable collidable) {
-        TiledMapTileLayer mapLayer = level.getMapLayer();
+        TiledMapTileLayer mapLayer = map.getMapLayer();
         for (int cellX = 0; cellX < mapLayer.getWidth(); cellX++) {
             for (int cellY = 0; cellY < mapLayer.getHeight(); cellY++) {
                 if (collidesWithCell(cellX, cellY, collidable)) {
@@ -28,7 +28,7 @@ public class LevelCollisionDetector implements CollisionDetector {
     }
 
     private boolean collidesWithCell(int cellX, int cellY, Collidable collidable) {
-        TiledMapTileLayer.Cell cell = level.getMapLayer().getCell(cellX, cellY);
+        TiledMapTileLayer.Cell cell = map.getMapLayer().getCell(cellX, cellY);
         MapProperties properties = cell.getTile().getProperties();
         Boolean tileCollides = properties.get(PROPERTY_COLLISION, Boolean.class);
         return tileCollides != null && tileCollides && collidesWithTile(cellX, cellY, collidable);

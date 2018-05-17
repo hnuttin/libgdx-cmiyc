@@ -42,7 +42,7 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-        // resize not supported
+        gameRenderer.resize(width, height);
     }
 
     @Override

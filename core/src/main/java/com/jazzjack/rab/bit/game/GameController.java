@@ -2,7 +2,7 @@ package com.jazzjack.rab.bit.game;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.jazzjack.rab.bit.Level;
+import com.jazzjack.rab.bit.Map;
 import com.jazzjack.rab.bit.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.enemy.EnemyRouteCollisionDetector;
@@ -24,7 +24,7 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     private Enemies enemies;
 
-    private Level level;
+    private Map map;
     private LevelCollisionDetectorWithCollidables playerMovementColissionDetector;
     private LevelCollisionDetectorWithCollidables enemyMovementColissionDetector;
     private Player player;
@@ -43,10 +43,10 @@ public class GameController implements GameObjectProvider, InputProcessor {
     }
 
     private void startFirstLevel() {
-        level = new Level(this.assetManager.getTiledMap1());
-        playerMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
+        map = new Map(this.assetManager.getTiledMap1());
+        playerMovementColissionDetector = new LevelCollisionDetectorWithCollidables(map);
         player = new Player(1, 2);
-        enemyMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
+        enemyMovementColissionDetector = new LevelCollisionDetectorWithCollidables(map);
         enemyMovementColissionDetector.addCollidable(player);
         RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(playerMovementColissionDetector, this), randomizer);
         enemies = new Enemies(randomizer, enemyMovementColissionDetector);
@@ -71,8 +71,8 @@ public class GameController implements GameObjectProvider, InputProcessor {
     }
 
     @Override
-    public Optional<Level> getLevel() {
-        return Optional.ofNullable(level);
+    public Optional<Map> getMap() {
+        return Optional.ofNullable(map);
     }
 
     @Override

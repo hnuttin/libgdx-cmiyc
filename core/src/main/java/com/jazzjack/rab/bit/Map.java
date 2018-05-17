@@ -4,13 +4,13 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
-public class Level {
+public class Map {
 
     private static final String MAP_LAYER = "map";
 
     private final TiledMap tiledMap;
 
-    public Level(TiledMap tiledMap) {
+    public Map(TiledMap tiledMap) {
         this.tiledMap = tiledMap;
     }
 

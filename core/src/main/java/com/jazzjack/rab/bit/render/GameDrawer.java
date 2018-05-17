@@ -28,7 +28,7 @@ class GameDrawer {
     }
 
     void drawInStatusBarRegion(Texture texture, float x, float y) {
-        batch.draw(texture, x, y, texture.getWidth(), texture.getHeight());
+        batch.draw(texture, x, y, 1, 1);
     }
 
     void drawInMapRegion(TextureAtlas.AtlasRegion lightAtlasRegion, float x, float y, float width, float height) {
@@ -37,6 +37,8 @@ class GameDrawer {
 
     void drawCenteredTextInMapRegion(BitmapFont font, String text, float x, float y, float targetWidth, float alpha) {
         font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
+        font.setUseIntegerPositions(false);
+        font.getData().setScale(20f / Gdx.graphics.getHeight());
         font.draw(batch, text, x, y + mapRegionYOffset, targetWidth, Align.center, false);
         font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, 1f);
     }
@@ -55,7 +57,7 @@ class GameDrawer {
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    void drawWitthFlippedY(TextureAtlas.AtlasRegion atlasRegion, float x, float y, float width, float height) {
+    void drawWithFlippedY(TextureAtlas.AtlasRegion atlasRegion, float x, float y, float width, float height) {
         batch.draw(
                 atlasRegion,
                 x,
@@ -74,8 +76,8 @@ class GameDrawer {
 
     public void clearStatusBar() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(0,0, Gdx.graphics.getWidth(), mapRegionYOffset);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(0,0, 40, 1);
         shapeRenderer.end();
     }
 

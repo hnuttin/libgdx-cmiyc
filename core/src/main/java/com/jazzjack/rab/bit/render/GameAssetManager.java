@@ -83,7 +83,7 @@ public class GameAssetManager extends AssetManager {
     private void loadFonts() {
         FreetypeFontLoader.FreeTypeFontLoaderParameter percentageParameters = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         percentageParameters.fontFileName = FONT_VCR_OSD_MONO;
-        percentageParameters.fontParameters.size = 14;
+        percentageParameters.fontParameters.size = 16;
         load(PERCENTAGE_FONT, BitmapFont.class, percentageParameters);
     }
 
