@@ -6,6 +6,7 @@ import com.jazzjack.rab.bit.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.actor.enemy.route.StepNames;
+import com.jazzjack.rab.bit.animation.AnimationHandler;
 import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.common.Direction;
@@ -293,7 +294,7 @@ class RouteGeneratorTest {
     }
 
     private Enemy enemy(int startX, int startY) {
-        return new Enemy(routeGenerator, animationRegister, startX, startY);
+        return new Enemy(null, startX, startY);
     }
 
 }
