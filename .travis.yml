@@ -1,2 +1,2 @@
 language: java
-script: ./gradlew sonarcube
+script: ./gradlew sonarqube
