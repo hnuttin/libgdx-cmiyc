@@ -13,5 +13,5 @@ public interface GameObjectProvider {
 
     List<Enemy> getEnemies();
 
-    Optional<Level> getLevel();
+    Optional<Level> getMap();
 }

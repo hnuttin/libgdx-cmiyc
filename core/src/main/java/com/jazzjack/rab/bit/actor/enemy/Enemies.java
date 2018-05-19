@@ -1,6 +1,7 @@
 package com.jazzjack.rab.bit.actor.enemy;
 
 import com.google.common.collect.ImmutableList;
+import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.common.Randomizer;
 
@@ -10,11 +11,13 @@ import java.util.concurrent.CompletableFuture;
 
 public class Enemies {
 
+    private final RouteGenerator routeGenerator;
     private final CollisionDetector collisionDetector;
     private final Randomizer randomizer;
     private final List<Enemy> enemies;
 
-    public Enemies(Randomizer randomizer, CollisionDetector collisionDetector) {
+    public Enemies(RouteGenerator routeGenerator, Randomizer randomizer, CollisionDetector collisionDetector) {
+        this.routeGenerator = routeGenerator;
         this.randomizer = randomizer;
         this.collisionDetector = collisionDetector;
         this.enemies = new ArrayList<>();
@@ -29,7 +32,7 @@ public class Enemies {
     }
 
     public void generateRoutes() {
-        enemies.forEach(Enemy::generateRoutes);
+        enemies.forEach(enemy -> enemy.generateRoutes(routeGenerator));
     }
 
     public CompletableFuture<Void> moveAllEnemies() {

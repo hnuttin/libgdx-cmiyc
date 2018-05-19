@@ -13,8 +13,11 @@ import com.jazzjack.rab.bit.collision.LevelCollisionDetectorWithCollidables;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Arrays.asList;
 
 public class GameController implements GameObjectProvider, InputProcessor {
 
@@ -43,16 +46,19 @@ public class GameController implements GameObjectProvider, InputProcessor {
     }
 
     private void startFirstLevel() {
-        level = new Level(this.assetManager.getTiledMap1());
-        playerMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
         player = new Player(1, 2);
+        Enemy enemy1 = new Enemy(animationRegister, 6, 7);
+        Enemy enemy2 = new Enemy(animationRegister, 6, 1);
+        Enemy enemy3 = new Enemy(animationRegister, 8, 4);
+        level = new Level(this.assetManager.getTiledMap1(), player, asList(enemy1, enemy2, enemy3));
+        playerMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
         enemyMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
         enemyMovementColissionDetector.addCollidable(player);
         RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(playerMovementColissionDetector, this), randomizer);
-        enemies = new Enemies(randomizer, enemyMovementColissionDetector);
-        enemies.add(new Enemy(routeGenerator, animationRegister, 6, 7));
-        enemies.add(new Enemy(routeGenerator, animationRegister, 6, 1));
-        enemies.add(new Enemy(routeGenerator, animationRegister, 8, 4));
+        enemies = new Enemies(routeGenerator, randomizer, enemyMovementColissionDetector);
+        enemies.add(enemy1);
+        enemies.add(enemy2);
+        enemies.add(enemy3);
         playerMovementColissionDetector.addCollidable(enemies.get());
     }
 
@@ -71,7 +77,7 @@ public class GameController implements GameObjectProvider, InputProcessor {
     }
 
     @Override
-    public Optional<Level> getLevel() {
+    public Optional<Level> getMap() {
         return Optional.ofNullable(level);
     }
 

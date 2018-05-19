@@ -3,7 +3,7 @@
  <tileset firstgid="1" source="pixel-art.tsx"/>
  <layer name="map" width="20" height="10">
   <data encoding="base64" compression="zlib">
-   eJytkeEKwCAIhG1ta+H7v28bGIho58Z+fFh53B3ERMTCpuAFmf1h3nqgvWQ2sPfoprPORX7FTMSXfmwy9psqRFrt9+hP54w6RX5N3ed/VMKdMn7ZPh46/w+/lf9bBnCxB3M=
+   eJydkVEOwCAIQ91kQ8P97zs/NGkaYHMfL6jU0qiVUmxyApbwpX/RWQ+0bVZ96Xt0yoxzsef5HVR3UMcvY82QQR3cdL6ysp+AFtecI8qg1MP9+o8K4F3OKM4szz96A86IWpz/x08SHfvv6h4HIQcT
   </data>
  </layer>
 </map>
