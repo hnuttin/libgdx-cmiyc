@@ -1,6 +1,6 @@
 package com.jazzjack.rab.bit.render;
 
-interface Renderer {
+public interface Renderer {
     void render();
 
     void resize(int width, int height);

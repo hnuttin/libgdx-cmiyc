@@ -2,10 +2,9 @@ package com.jazzjack.rab.bit.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jazzjack.rab.bit.Level;
 import com.jazzjack.rab.bit.game.GameObjectProvider;
+import com.jazzjack.rab.bit.render.level.LevelRenderer;
 
 import java.util.Optional;
 

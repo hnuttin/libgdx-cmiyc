@@ -8,7 +8,7 @@ import com.jazzjack.rab.bit.collision.CollisionResult;
 
 class EnemyRouteAnimation implements Animation {
 
-    private static final float ANIMATION_SPEED_IN_SECONDS = 0.5f;
+    private static final float ANIMATION_SPEED_IN_SECONDS = 0.2f;
 
     private final CollisionDetector collisionDetector;
     private final Enemy enemy;
