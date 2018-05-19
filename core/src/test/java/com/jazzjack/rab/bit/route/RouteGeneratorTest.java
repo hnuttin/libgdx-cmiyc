@@ -6,7 +6,6 @@ import com.jazzjack.rab.bit.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.actor.enemy.route.StepNames;
-import com.jazzjack.rab.bit.animation.AnimationHandler;
 import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.common.Direction;

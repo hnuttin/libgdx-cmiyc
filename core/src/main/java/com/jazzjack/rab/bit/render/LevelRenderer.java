@@ -24,8 +24,8 @@ class LevelRenderer extends OrthogonalTiledMapRenderer implements Renderer {
     private final GameAssetManager assetManager;
     private final OrthographicCamera camera;
 
-    LevelRenderer(Level level, GameAssetManager assetManager, Batch batch) {
-        super(null, determineUnitScale(level), batch);
+    LevelRenderer(Level level, GameAssetManager assetManager) {
+        super(null, determineUnitScale(level));
         this.level = level;
         this.assetManager = assetManager;
         this.camera = createCamera();
@@ -44,32 +44,13 @@ class LevelRenderer extends OrthogonalTiledMapRenderer implements Renderer {
 
     @Override
     public void resize(int width, int height) {
+        resizeCamera(width, height);
+        updateCamera();
+    }
+
+    private void resizeCamera(int width, int height) {
         camera.viewportWidth = calculateViewportWidth();
         camera.viewportHeight = calculateViewportHeight(width, height);
-        updateCameraPosition();
-        camera.update();
-    }
-
-    @Override
-    public void render() {
-        updateCamera();
-        renderMap();
-    }
-
-    public Camera getCamera() {
-        return camera;
-    }
-
-    private void updateCameraPosition() {
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-    }
-
-    private int calculateViewportWidth() {
-        return level.getWidth();
-    }
-
-    private int calculateViewportHeight(int gameWidthInPixels, int gameHeightInPixels) {
-        return level.getWidth() * gameHeightInPixels / gameWidthInPixels;
     }
 
     private void updateCamera() {
@@ -78,9 +59,26 @@ class LevelRenderer extends OrthogonalTiledMapRenderer implements Renderer {
         setView(camera);
     }
 
+    @Override
+    public void render() {
+        updateCamera();
+        renderMap();
+    }
+
+    private void updateCameraPosition() {
+        camera.position.set(level.getPlayer().getX() + 1, level.getPlayer().getY() + 1, 0);
+    }
+
+    private float calculateViewportWidth() {
+        return level.getWidth() / 1.5f;
+    }
+
+    private float calculateViewportHeight(int gameWidthInPixels, int gameHeightInPixels) {
+        return calculateViewportWidth() * gameHeightInPixels / gameWidthInPixels;
+    }
+
     private void renderMap() {
         batch.begin();
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderLevel();
         drawPlayer();
         drawEnemies();

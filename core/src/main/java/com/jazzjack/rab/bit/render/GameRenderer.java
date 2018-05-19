@@ -7,13 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jazzjack.rab.bit.Level;
 import com.jazzjack.rab.bit.game.GameObjectProvider;
 
+import java.util.Optional;
+
 public class GameRenderer implements Renderer {
 
     private static final float FOG_OF_WAR = 0f;
 
     private final GameObjectProvider gameObjectProvider;
     private final GameAssetManager assetManager;
-    private final Batch batch;
 
     private LevelRenderer levelRenderer;
     private StatusBarRenderer statusBarRenderer;
@@ -25,21 +26,20 @@ public class GameRenderer implements Renderer {
     public GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager) {
         this.gameObjectProvider = gameObjectProvider;
         this.assetManager = assetManager;
-        this.batch = new SpriteBatch();
     }
 
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (gameObjectProvider.getMap().isPresent()) {
+        Optional<Level> levelOptional = gameObjectProvider.getMap();
+        if (levelOptional.isPresent()) {
+            Level level = levelOptional.get();
             if (levelRenderer == null) {
-                Level level = gameObjectProvider.getMap().get();
-                levelRenderer = new LevelRenderer(level, assetManager, batch);
-                statusBarRenderer = new StatusBarRenderer(level.getPlayer(), assetManager, batch);
+                levelRenderer = new LevelRenderer(level, assetManager);
+                statusBarRenderer = new StatusBarRenderer(level.getPlayer(), assetManager);
                 Gdx.graphics.setWindowedMode(level.getWidth() * (int) level.getTileSize() * 2, level.getHeight() * (int) level.getTileSize() * 2);
             }
             levelRenderer.render();
-            statusBarRenderer.updateCamera(levelRenderer.getCamera());
             statusBarRenderer.render();
         }
     }
@@ -56,7 +56,9 @@ public class GameRenderer implements Renderer {
         if (levelRenderer != null) {
             levelRenderer.dispose();
         }
-        batch.dispose();
+        if (statusBarRenderer != null) {
+            statusBarRenderer.dispose();
+        }
     }
 
 //    private void bufferSight() {
