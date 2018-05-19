@@ -1,2 +1,9 @@
 language: java
-script: ./gradlew sonarqube
+jobs:
+  include:
+    - stage: sonarcube
+      if: type = cron
+      script: ./gradlew sonarqube
+    - stage: check
+      if: type != cron
+      script: ./gradlew check
