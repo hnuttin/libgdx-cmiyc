@@ -1,6 +1,6 @@
 package com.jazzjack.rab.bit.collision;
 
-import com.jazzjack.rab.bit.Map;
+import com.jazzjack.rab.bit.Level;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,8 +12,8 @@ public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetecto
 
     private final Set<Collidable> collidables;
 
-    public LevelCollisionDetectorWithCollidables(Map map) {
-        super(map);
+    public LevelCollisionDetectorWithCollidables(Level level) {
+        super(level);
         this.collidables = new HashSet<>();
     }
 
