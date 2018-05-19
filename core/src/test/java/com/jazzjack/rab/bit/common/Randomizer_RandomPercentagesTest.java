@@ -23,7 +23,7 @@ class Randomizer_RandomPercentagesTest {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.LOW, 2);
 
         assertThat(percentages).hasSize(2);
-        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Chance.HUNDRED_PERCENT);
+        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Randomizer.HUNDRED_PERCENT);
         assertThat(percentages).anyMatch(percentage -> percentage >= 55);
         assertThat(percentages).noneMatch(percentage -> percentage < 1);
     }
@@ -33,7 +33,7 @@ class Randomizer_RandomPercentagesTest {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.MEDIUM, 2);
 
         assertThat(percentages).hasSize(2);
-        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Chance.HUNDRED_PERCENT);
+        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Randomizer.HUNDRED_PERCENT);
         assertThat(percentages).anyMatch(percentage -> percentage >= 70);
         assertThat(percentages).noneMatch(percentage -> percentage < 1);
     }
@@ -43,7 +43,7 @@ class Randomizer_RandomPercentagesTest {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.HIGH, 2);
 
         assertThat(percentages).hasSize(2);
-        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Chance.HUNDRED_PERCENT);
+        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Randomizer.HUNDRED_PERCENT);
         assertThat(percentages).anyMatch(percentage -> percentage >= 85);
         assertThat(percentages).noneMatch(percentage -> percentage < 1);
     }
@@ -53,7 +53,7 @@ class Randomizer_RandomPercentagesTest {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.LOW, 3);
 
         assertThat(percentages).hasSize(3);
-        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Chance.HUNDRED_PERCENT);
+        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Randomizer.HUNDRED_PERCENT);
         assertThat(percentages).anyMatch(percentage -> percentage >= 38);
         assertThat(percentages).noneMatch(percentage -> percentage < 1);
     }
@@ -63,7 +63,7 @@ class Randomizer_RandomPercentagesTest {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.MEDIUM, 3);
 
         assertThat(percentages).hasSize(3);
-        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Chance.HUNDRED_PERCENT);
+        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Randomizer.HUNDRED_PERCENT);
         assertThat(percentages).anyMatch(percentage -> percentage >= 53);
         assertThat(percentages).noneMatch(percentage -> percentage < 1);
     }
@@ -73,7 +73,7 @@ class Randomizer_RandomPercentagesTest {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.HIGH, 3);
 
         assertThat(percentages).hasSize(3);
-        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Chance.HUNDRED_PERCENT);
+        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Randomizer.HUNDRED_PERCENT);
         assertThat(percentages).anyMatch(percentage -> percentage >= 68);
         assertThat(percentages).noneMatch(percentage -> percentage < 1);
     }
@@ -83,7 +83,7 @@ class Randomizer_RandomPercentagesTest {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.LOW, 4);
 
         assertThat(percentages).hasSize(4);
-        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Chance.HUNDRED_PERCENT);
+        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Randomizer.HUNDRED_PERCENT);
         assertThat(percentages).anyMatch(percentage -> percentage >= 30);
         assertThat(percentages).noneMatch(percentage -> percentage < 1);
     }
@@ -93,7 +93,7 @@ class Randomizer_RandomPercentagesTest {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.MEDIUM, 4);
 
         assertThat(percentages).hasSize(4);
-        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Chance.HUNDRED_PERCENT);
+        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Randomizer.HUNDRED_PERCENT);
         assertThat(percentages).anyMatch(percentage -> percentage >= 45);
         assertThat(percentages).noneMatch(percentage -> percentage < 1);
     }
@@ -103,7 +103,7 @@ class Randomizer_RandomPercentagesTest {
         List<Integer> percentages = randomizer.randomPercentages(Predictability.HIGH, 4);
 
         assertThat(percentages).hasSize(4);
-        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Chance.HUNDRED_PERCENT);
+        assertThat(percentages.stream().mapToInt(Integer::intValue).sum()).isEqualTo(Randomizer.HUNDRED_PERCENT);
         assertThat(percentages).anyMatch(percentage -> percentage >= 60);
         assertThat(percentages).noneMatch(percentage -> percentage < 1);
     }

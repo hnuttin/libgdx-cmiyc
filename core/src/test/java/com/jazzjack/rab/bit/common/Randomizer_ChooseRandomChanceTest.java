@@ -28,63 +28,63 @@ class Randomizer_ChooseRandomChanceTest {
 
     @Test
     void expectFirstChanceWhen1Percent() {
-        when(randomInteger.randomInteger(Chance.HUNDRED_PERCENT)).thenReturn(0);
+        when(randomInteger.randomInteger(Randomizer.HUNDRED_PERCENT)).thenReturn(0);
         Chance randomChance = randomizer.chooseRandomChance(CHANCES);
         assertThat(randomChance.getPercentage()).isEqualTo(FIRST_CHANCE);
     }
 
     @Test
     void expectFirstChanceWhen10Percent() {
-        when(randomInteger.randomInteger(Chance.HUNDRED_PERCENT)).thenReturn(9);
+        when(randomInteger.randomInteger(Randomizer.HUNDRED_PERCENT)).thenReturn(9);
         Chance randomChance = randomizer.chooseRandomChance(CHANCES);
         assertThat(randomChance.getPercentage()).isEqualTo(FIRST_CHANCE);
     }
 
     @Test
     void expectFirstChanceWhen25Percent() {
-        when(randomInteger.randomInteger(Chance.HUNDRED_PERCENT)).thenReturn(24);
+        when(randomInteger.randomInteger(Randomizer.HUNDRED_PERCENT)).thenReturn(24);
         Chance randomChance = randomizer.chooseRandomChance(CHANCES);
         assertThat(randomChance.getPercentage()).isEqualTo(FIRST_CHANCE);
     }
 
     @Test
     void expectSecondChanceWhen26Percent() {
-        when(randomInteger.randomInteger(Chance.HUNDRED_PERCENT)).thenReturn(25);
+        when(randomInteger.randomInteger(Randomizer.HUNDRED_PERCENT)).thenReturn(25);
         Chance randomChance = randomizer.chooseRandomChance(CHANCES);
         assertThat(randomChance.getPercentage()).isEqualTo(SECOND_CHANCE);
     }
 
     @Test
     void expectSecondChanceWhen50Percent() {
-        when(randomInteger.randomInteger(Chance.HUNDRED_PERCENT)).thenReturn(50);
+        when(randomInteger.randomInteger(Randomizer.HUNDRED_PERCENT)).thenReturn(50);
         Chance randomChance = randomizer.chooseRandomChance(CHANCES);
         assertThat(randomChance.getPercentage()).isEqualTo(SECOND_CHANCE);
     }
 
     @Test
     void expectSecondChanceWhen55Percent() {
-        when(randomInteger.randomInteger(Chance.HUNDRED_PERCENT)).thenReturn(54);
+        when(randomInteger.randomInteger(Randomizer.HUNDRED_PERCENT)).thenReturn(54);
         Chance randomChance = randomizer.chooseRandomChance(CHANCES);
         assertThat(randomChance.getPercentage()).isEqualTo(SECOND_CHANCE);
     }
 
     @Test
     void expectThirdChanceWhen56Percent() {
-        when(randomInteger.randomInteger(Chance.HUNDRED_PERCENT)).thenReturn(55);
+        when(randomInteger.randomInteger(Randomizer.HUNDRED_PERCENT)).thenReturn(55);
         Chance randomChance = randomizer.chooseRandomChance(CHANCES);
         assertThat(randomChance.getPercentage()).isEqualTo(THIRD_CHANCE);
     }
 
     @Test
     void expectThirdChanceWhen90Percent() {
-        when(randomInteger.randomInteger(Chance.HUNDRED_PERCENT)).thenReturn(89);
+        when(randomInteger.randomInteger(Randomizer.HUNDRED_PERCENT)).thenReturn(89);
         Chance randomChance = randomizer.chooseRandomChance(CHANCES);
         assertThat(randomChance.getPercentage()).isEqualTo(THIRD_CHANCE);
     }
 
     @Test
     void expectThirdChanceWhen100Percent() {
-        when(randomInteger.randomInteger(Chance.HUNDRED_PERCENT)).thenReturn(99);
+        when(randomInteger.randomInteger(Randomizer.HUNDRED_PERCENT)).thenReturn(99);
         Chance randomChance = randomizer.chooseRandomChance(CHANCES);
         assertThat(randomChance.getPercentage()).isEqualTo(THIRD_CHANCE);
     }

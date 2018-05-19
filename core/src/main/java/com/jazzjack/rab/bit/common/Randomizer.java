@@ -9,6 +9,8 @@ import static java.util.Collections.singletonList;
 
 public class Randomizer {
 
+    static final int HUNDRED_PERCENT = 100;
+
     private final RandomInteger randomInteger;
 
     public Randomizer(RandomInteger randomInteger) {
@@ -26,9 +28,9 @@ public class Randomizer {
 
     public List<Integer> randomPercentages(Predictability predictability, int amount) {
         if (amount == 1) {
-            return singletonList(Chance.HUNDRED_PERCENT);
+            return singletonList(HUNDRED_PERCENT);
         } else {
-            int percentagePart = Chance.HUNDRED_PERCENT / amount;
+            int percentagePart = HUNDRED_PERCENT / amount;
             int predictabilityDelta = randomPredictabilityDelta(predictability);
             List<Integer> percentages = new ArrayList<>();
             for (int i = 0; i < amount; i++) {
@@ -38,7 +40,7 @@ public class Randomizer {
                 } else if (i == 1 && i < amount - 1) {
                     percentage = Math.max(1, percentagePart - predictabilityDelta);
                 } else if (i == amount - 1) {
-                    percentage = Chance.HUNDRED_PERCENT - percentages.stream().mapToInt(Integer::intValue).sum();
+                    percentage = HUNDRED_PERCENT - percentages.stream().mapToInt(Integer::intValue).sum();
                 } else {
                     percentage = percentagePart;
                 }
@@ -55,7 +57,7 @@ public class Randomizer {
 
     @SuppressWarnings("unchecked")
     public <T extends Chance> T chooseRandomChance(List<T> chances) {
-        int randomPercentage = randomInteger.randomInteger(Chance.HUNDRED_PERCENT) + 1;
+        int randomPercentage = randomInteger.randomInteger(HUNDRED_PERCENT) + 1;
         List<PercentageInterval> percentageStack = createPercentageStack(chances);
         return (T) percentageStack.stream()
                 .filter(percentageInterval -> matchesPercentageInterval(randomPercentage, percentageInterval))

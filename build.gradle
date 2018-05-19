@@ -6,6 +6,7 @@ buildscript {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
     }
+
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
         classpath 'com.android.tools.build:gradle:2.2.0'
@@ -34,11 +35,50 @@ allprojects {
         mockitoVersion = '2.18.3'
     }
 
+    sonarqube {
+        properties {
+            properties["sonar.organization"] = "hnuttin-github"
+            properties["sonar.host.url"] = "https://sonarcloud.io"
+            properties["sonar.login"] = "5d9a0b8b32655b1afd71f286f5dad4fa98098217"
+        }
+    }
+
     repositories {
         mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+}
+
+project(":core") {
+    apply plugin: "java"
+
+    dependencies {
+        testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+        testCompile "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+        testCompile "org.mockito:mockito-core:$mockitoVersion"
+        testCompile "org.mockito:mockito-junit-jupiter:$mockitoVersion"
+        testCompile "org.assertj:assertj-core:3.9.1"
+        testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+
+
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile 'com.google.guava:guava:25.0-jre'
+        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    }
+
+    test {
+        useJUnitPlatform()
+
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+
+        reports {
+            html.enabled = true
+        }
     }
 }
 
@@ -109,34 +149,3 @@ project(":desktop") {
 //
 //    }
 //}
-
-project(":core") {
-    apply plugin: "java"
-
-    dependencies {
-        testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
-        testCompile "org.junit.jupiter:junit-jupiter-params:$junitVersion"
-        testCompile "org.mockito:mockito-core:$mockitoVersion"
-        testCompile "org.mockito:mockito-junit-jupiter:$mockitoVersion"
-        testCompile "org.assertj:assertj-core:3.9.1"
-        testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
-
-
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile 'com.google.guava:guava:25.0-jre'
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    }
-
-    test {
-        useJUnitPlatform()
-
-        testLogging {
-            events "passed", "skipped", "failed"
-        }
-
-        reports {
-            html.enabled = true
-        }
-    }
-}
