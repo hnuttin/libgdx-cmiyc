@@ -1,7 +1,6 @@
 package com.jazzjack.rab.bit.render;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -9,9 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -31,16 +27,11 @@ public class GameAssetManager extends AssetManager {
 
     private static final Map<String, String> actorTextureMapping;
 
-    private static final String FREE_TYPE_FONT_SUFFIX = ".ttf";
-    private static final String FONT_VCR_OSD_MONO = "fonts/VCR_OSD_MONO_1.001.ttf";
-    private static final String FONT_OPEN_SANS = "fonts/OpenSans-Regular.ttf";
-    private static final String FONT_ROBOTO = "fonts/Roboto-Regular.ttf";
-    private static final int PERCENTAGE_FONT_SIZE = 12;
-
     private static final String PLAYER = "player";
+    private static final String PLAYER_END = "pixel-art/player/end.png";
     private static final String HP_FILLED = "pixel-art/player/hp-filled.png";
     private static final String HP_EMPTY = "pixel-art/player/hp-empty.png";
-    private static final String FREE_FONT_GENERATOR_SUFFIX = ".gen";
+
     private static final String VCR_FONT_TEXTURE = "fonts/vcr-df.png";
     private static final String VCR_FONT = "fonts/vcr-df.fnt";
     private static final String FONT_SHADER = "shaders/font.vert";
@@ -67,7 +58,7 @@ public class GameAssetManager extends AssetManager {
         load(MAP1, TiledMap.class);
         load(LIGHTS, TextureAtlas.class);
         loadActorTextures();
-        loadHitpointTextures();
+        loadOtherTextures();
         loadFonts();
         finishLoading();
     }
@@ -83,9 +74,10 @@ public class GameAssetManager extends AssetManager {
         }
     }
 
-    private void loadHitpointTextures() {
+    private void loadOtherTextures() {
         load(HP_FILLED, Texture.class);
         load(HP_EMPTY, Texture.class);
+        load(PLAYER_END, Texture.class);
     }
 
     private void loadFonts() {
@@ -117,9 +109,11 @@ public class GameAssetManager extends AssetManager {
         return get(HP_EMPTY, Texture.class);
     }
 
+    public Texture getPlayerEndTexture() {
+        return get(PLAYER_END, Texture.class);
+    }
+
     public BitmapFont getPercentageFont() {
-//        Texture texture = new Texture(Gdx.files.internal("fonts/vcr-df.png"), true);
-//        texture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
         try {
             return get(VCR_FONT, BitmapFont.class);
         } catch (GdxRuntimeException e) {

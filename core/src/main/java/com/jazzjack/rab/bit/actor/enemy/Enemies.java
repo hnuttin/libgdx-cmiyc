@@ -2,29 +2,20 @@ package com.jazzjack.rab.bit.actor.enemy;
 
 import com.google.common.collect.ImmutableList;
 import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
-import com.jazzjack.rab.bit.collision.CollisionDetector;
-import com.jazzjack.rab.bit.common.Randomizer;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class Enemies {
 
     private final RouteGenerator routeGenerator;
-    private final CollisionDetector collisionDetector;
-    private final Randomizer randomizer;
+    private final EnemyMovementContext context;
     private final List<Enemy> enemies;
 
-    public Enemies(RouteGenerator routeGenerator, Randomizer randomizer, CollisionDetector collisionDetector) {
+    public Enemies(RouteGenerator routeGenerator, EnemyMovementContext context, List<Enemy> enemies) {
         this.routeGenerator = routeGenerator;
-        this.randomizer = randomizer;
-        this.collisionDetector = collisionDetector;
-        this.enemies = new ArrayList<>();
-    }
-
-    public void add(Enemy enemy) {
-        enemies.add(enemy);
+        this.context = context;
+        this.enemies = enemies;
     }
 
     public ImmutableList<Enemy> get() {
@@ -39,9 +30,9 @@ public class Enemies {
         CompletableFuture<Void> moveAllEnemiesFuture = null;
         for (Enemy enemy : enemies) {
             if (moveAllEnemiesFuture == null) {
-                moveAllEnemiesFuture = enemy.moveAlongRandomRoute(collisionDetector, randomizer);
+                moveAllEnemiesFuture = enemy.moveAlongRandomRoute(context);
             } else {
-                moveAllEnemiesFuture = moveAllEnemiesFuture.thenCompose((r) -> enemy.moveAlongRandomRoute(collisionDetector, randomizer));
+                moveAllEnemiesFuture = moveAllEnemiesFuture.thenCompose((r) -> enemy.moveAlongRandomRoute(context));
             }
         }
         return moveAllEnemiesFuture;

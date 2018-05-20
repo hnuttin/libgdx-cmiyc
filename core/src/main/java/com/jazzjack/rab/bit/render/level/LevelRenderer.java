@@ -6,6 +6,7 @@ import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.actor.enemy.route.StepNames;
+import com.jazzjack.rab.bit.common.HasPosition;
 import com.jazzjack.rab.bit.level.Level;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 import com.jazzjack.rab.bit.render.Renderer;
@@ -53,6 +54,7 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
         renderLevel();
         renderPlayer();
         renderEnemies();
+        renderEndPosition();
         batch.end();
         fogOfWarBuffer.renderSight();
     }
@@ -96,6 +98,16 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
 
     private TextDrawer.Position percentagePositionForStep(Step step) {
         return StepNames.ENDING_BOTTOM.equals(step.getName()) ? BOTTOM : TOP;
+    }
+
+    private void renderEndPosition() {
+        HasPosition endPosition = level.getEndPosition();
+        batch.draw(
+                assetManager.getPlayerEndTexture(),
+                endPosition.getX(),
+                endPosition.getY(),
+                1,
+                1);
     }
 
     private void drawActor(Actor actor) {

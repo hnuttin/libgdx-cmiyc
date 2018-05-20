@@ -9,10 +9,10 @@ public class SimpleActor implements Actor {
 
     private final String name;
 
-    private float x;
-    private float y;
+    private int x;
+    private int y;
 
-    public SimpleActor(String name, float startX, float startY) {
+    public SimpleActor(String name, int startX, int startY) {
         this.name = name;
         this.x = startX;
         this.y = startY;
@@ -24,12 +24,12 @@ public class SimpleActor implements Actor {
     }
 
     @Override
-    public float getX() {
+    public int getX() {
         return x;
     }
 
     @Override
-    public float getY() {
+    public int getY() {
         return y;
     }
 
@@ -96,15 +96,15 @@ public class SimpleActor implements Actor {
         y--;
     }
 
-    private Collidable futureCollidable(float x, float y) {
+    private Collidable futureCollidable(int x, int y) {
         return new Collidable() {
             @Override
-            public float getX() {
+            public int getX() {
                 return x;
             }
 
             @Override
-            public float getY() {
+            public int getY() {
                 return y;
             }
         };

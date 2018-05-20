@@ -293,7 +293,7 @@ class RouteGeneratorTest {
     }
 
     private Enemy enemy(int startX, int startY) {
-        return new Enemy(null, startX, startY);
+        return new Enemy(startX, startY);
     }
 
 }

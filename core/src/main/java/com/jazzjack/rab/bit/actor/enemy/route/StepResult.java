@@ -2,27 +2,15 @@ package com.jazzjack.rab.bit.actor.enemy.route;
 
 import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.common.Direction;
+import com.jazzjack.rab.bit.common.Position;
 
-class StepResult implements Collidable {
+class StepResult extends Position implements Collidable {
 
-    private final float x;
-    private final float y;
     private final Direction direction;
 
-    StepResult(float x, float y, Direction direction) {
-        this.x = x;
-        this.y = y;
+    StepResult(int x, int y, Direction direction) {
+        super(x, y);
         this.direction = direction;
-    }
-
-    @Override
-    public float getX() {
-        return x;
-    }
-
-    @Override
-    public float getY() {
-        return y;
     }
 
     Direction getDirection() {

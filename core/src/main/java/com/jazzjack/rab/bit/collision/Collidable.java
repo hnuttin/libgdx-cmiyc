@@ -1,13 +1,11 @@
 package com.jazzjack.rab.bit.collision;
 
-public interface Collidable {
+import com.jazzjack.rab.bit.common.HasPosition;
 
-    float getX();
-
-    float getY();
+public interface Collidable extends HasPosition {
 
     default boolean collidesWith(Collidable collidable) {
-        return getX() == collidable.getX() && getY() == collidable.getY();
+        return hasSamePositionAs(collidable);
     }
 
 }

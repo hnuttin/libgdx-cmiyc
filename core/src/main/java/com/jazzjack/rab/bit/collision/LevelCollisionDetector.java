@@ -41,12 +41,12 @@ public class LevelCollisionDetector implements CollisionDetector {
     private Collidable collidableFromCell(int cellX, int cellY) {
         return new Collidable() {
             @Override
-            public float getX() {
+            public int getX() {
                 return cellX;
             }
 
             @Override
-            public float getY() {
+            public int getY() {
                 return cellY;
             }
         };

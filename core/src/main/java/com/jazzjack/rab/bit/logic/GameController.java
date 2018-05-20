@@ -3,18 +3,17 @@ package com.jazzjack.rab.bit.logic;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.jazzjack.rab.bit.actor.enemy.Enemies;
-import com.jazzjack.rab.bit.actor.enemy.Enemy;
+import com.jazzjack.rab.bit.actor.enemy.EnemyMovementCollisionDetector;
+import com.jazzjack.rab.bit.actor.enemy.EnemyMovementContext;
 import com.jazzjack.rab.bit.actor.enemy.EnemyRouteCollisionDetector;
 import com.jazzjack.rab.bit.actor.enemy.route.RouteGenerator;
-import com.jazzjack.rab.bit.actor.player.Player;
+import com.jazzjack.rab.bit.actor.player.PlayerMovementCollisionDetector;
 import com.jazzjack.rab.bit.animation.AnimationRegister;
 import com.jazzjack.rab.bit.collision.LevelCollisionDetectorWithCollidables;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.game.GameEventBus;
 import com.jazzjack.rab.bit.level.Level;
 import com.jazzjack.rab.bit.render.GameAssetManager;
-
-import static java.util.Arrays.asList;
 
 public class GameController implements InputProcessor {
 
@@ -26,8 +25,6 @@ public class GameController implements InputProcessor {
 
     private Level level;
     private LevelCollisionDetectorWithCollidables playerMovementColissionDetector;
-    private LevelCollisionDetectorWithCollidables enemyMovementColissionDetector;
-    private Player player;
 
     private GamePhase currentGamePhase;
 
@@ -45,21 +42,13 @@ public class GameController implements InputProcessor {
     }
 
     private void startFirstLevel() {
-        player = new Player(1, 2);
-        Enemy enemy1 = new Enemy(animationRegister, 6, 7);
-        Enemy enemy2 = new Enemy(animationRegister, 6, 1);
-        Enemy enemy3 = new Enemy(animationRegister, 8, 4);
-        level = new Level(this.assetManager.getTiledMap1(), player, asList(enemy1, enemy2, enemy3));
-        playerMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
-        enemyMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
-        enemyMovementColissionDetector.addCollidable(player);
-        EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementColissionDetector, asList(enemy1, enemy2, enemy3));
+        level = new Level(this.assetManager.getTiledMap1());
+        playerMovementColissionDetector = new PlayerMovementCollisionDetector(level);
+        LevelCollisionDetectorWithCollidables enemyMovementColissionDetector = new EnemyMovementCollisionDetector(level);
+        EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementColissionDetector, level.getEnemies());
         RouteGenerator routeGenerator = new RouteGenerator(enemyRouteCollisionDetector, randomizer);
-        enemies = new Enemies(routeGenerator, randomizer, enemyMovementColissionDetector);
-        enemies.add(enemy1);
-        enemies.add(enemy2);
-        enemies.add(enemy3);
-        playerMovementColissionDetector.addCollidable(enemies.get());
+        EnemyMovementContext enemyMovementContext = new EnemyMovementContext(enemyMovementColissionDetector, randomizer, animationRegister);
+        enemies = new Enemies(routeGenerator, enemyMovementContext, level.getEnemies());
     }
 
     private boolean isPlayerTurn() {
@@ -78,7 +67,10 @@ public class GameController implements InputProcessor {
         }
         if (movePlayer(keycode)) {
             GameEventBus.publishPlayerMovedEvent();
-            if (!player.hasMovementsLeft()) {
+            if (level.hasPlayerReachedEnd()) {
+                startGame();
+            }
+            if (!level.getPlayer().hasMovementsLeft()) {
                 startEnemyTurn();
             }
             return true;
@@ -89,13 +81,13 @@ public class GameController implements InputProcessor {
     private Boolean movePlayer(int keycode) {
         switch (keycode) {
             case Input.Keys.LEFT:
-                return player.moveLeft(playerMovementColissionDetector).success();
+                return level.getPlayer().moveLeft(playerMovementColissionDetector).success();
             case Input.Keys.RIGHT:
-                return player.moveRight(playerMovementColissionDetector).success();
+                return level.getPlayer().moveRight(playerMovementColissionDetector).success();
             case Input.Keys.UP:
-                return player.moveUp(playerMovementColissionDetector).success();
+                return level.getPlayer().moveUp(playerMovementColissionDetector).success();
             case Input.Keys.DOWN:
-                return player.moveDown(playerMovementColissionDetector).success();
+                return level.getPlayer().moveDown(playerMovementColissionDetector).success();
             default:
                 return false;
         }
@@ -103,13 +95,21 @@ public class GameController implements InputProcessor {
 
     private void startEnemyTurn() {
         currentGamePhase = GamePhase.ENEMY_TURN;
-        enemies.moveAllEnemies().thenRun(this::startPlayerTurn);
+        enemies.moveAllEnemies().thenRun(this::endEnemyTurn);
+    }
+
+    private void endEnemyTurn() {
+        if (level.getPlayer().isDead()) {
+            startGame();
+        } else {
+            startPlayerTurn();
+        }
     }
 
     private void startPlayerTurn() {
         currentGamePhase = GamePhase.PLAYER_TURN;
         enemies.generateRoutes();
-        player.resetMovements();
+        level.getPlayer().resetMovements();
     }
 
     @Override

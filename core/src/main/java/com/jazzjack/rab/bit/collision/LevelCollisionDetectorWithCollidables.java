@@ -8,20 +8,20 @@ import java.util.Set;
 
 import static java.util.Arrays.asList;
 
-public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetector {
+public abstract class LevelCollisionDetectorWithCollidables extends LevelCollisionDetector {
 
     private final Set<Collidable> collidables;
 
-    public LevelCollisionDetectorWithCollidables(Level level) {
+    protected LevelCollisionDetectorWithCollidables(Level level) {
         super(level);
         this.collidables = new HashSet<>();
     }
 
-    public void addCollidable(Collidable... collidables) {
+    protected void addCollidable(Collidable... collidables) {
         this.collidables.addAll(asList(collidables));
     }
 
-    public void addCollidable(List<? extends Collidable> collidables) {
+    protected void addCollidable(List<? extends Collidable> collidables) {
         this.collidables.addAll(collidables);
     }
 

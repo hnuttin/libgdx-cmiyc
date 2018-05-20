@@ -72,8 +72,8 @@ public class RouteGenerator {
     }
 
     private StepResult createStepResultForDirection(StepResult previousStepResult, Direction direction) {
-        final float x;
-        final float y;
+        final int x;
+        final int y;
         switch (direction) {
             case UP:
                 x = previousStepResult.getX();
