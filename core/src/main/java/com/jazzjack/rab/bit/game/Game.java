@@ -28,7 +28,7 @@ public class Game extends ApplicationAdapter {
         animationHandler = new AnimationHandler();
         gameEventBus = new GameEventBus();
         gameController = new GameController(assetManager, animationHandler, new Randomizer(new RandomInteger()), gameEventBus);
-        gameRenderer = new GameRenderer(gameController, assetManager);
+        gameRenderer = new GameRenderer(assetManager);
 
         gameEventBus.registerNewLevelListener(gameRenderer);
     }

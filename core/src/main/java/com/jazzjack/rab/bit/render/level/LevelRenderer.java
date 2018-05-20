@@ -22,13 +22,17 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     private final GameAssetManager assetManager;
     private final LevelCamera camera;
     private final TextDrawer textDrawer;
+    private final FogOfWarBuffer fogOfWarBuffer;
+
+    //private boolean rebufferPlayer = true;
 
     public LevelRenderer(Level level, GameAssetManager assetManager) {
         super(null, 1 / level.getTilePixelSize());
         this.level = level;
         this.assetManager = assetManager;
         this.camera = new LevelCamera(level, LEVEL_CAMERA_SCALE);
-        this.textDrawer = new TextDrawer(assetManager, batch, this.camera);
+        this.textDrawer = new TextDrawer(assetManager, super.batch, this.camera);
+        this.fogOfWarBuffer = new FogOfWarBuffer(this.level, super.batch, assetManager);
     }
 
     @Override
@@ -44,22 +48,24 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     }
 
     private void renderMap() {
+        fogOfWarBuffer.bufferSight();
         batch.begin();
         renderLevel();
-        drawPlayer();
-        drawEnemies();
+        renderPlayer();
+        renderEnemies();
         batch.end();
+        fogOfWarBuffer.renderSight();
     }
 
     private void renderLevel() {
         super.renderMapLayer(level.getMapLayer());
     }
 
-    private void drawPlayer() {
+    private void renderPlayer() {
         drawActor(level.getPlayer());
     }
 
-    private void drawEnemies() {
+    private void renderEnemies() {
         level.getEnemies().forEach(this::drawEnemy);
     }
 
@@ -99,5 +105,11 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
                 actor.getY(),
                 1,
                 1);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        fogOfWarBuffer.dispose();
     }
 }

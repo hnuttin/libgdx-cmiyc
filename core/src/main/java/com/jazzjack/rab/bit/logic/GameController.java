@@ -14,12 +14,9 @@ import com.jazzjack.rab.bit.game.GameEventBus;
 import com.jazzjack.rab.bit.level.Level;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 
-import java.util.List;
-import java.util.Optional;
-
 import static java.util.Arrays.asList;
 
-public class GameController implements GameObjectProvider, InputProcessor {
+public class GameController implements InputProcessor {
 
     private final GameAssetManager assetManager;
     private final AnimationRegister animationRegister;
@@ -69,21 +66,6 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     private boolean isPlayerTurn() {
         return currentGamePhase == GamePhase.PLAYER_TURN;
-    }
-
-    @Override
-    public Optional<Player> getPlayer() {
-        return Optional.ofNullable(player);
-    }
-
-    @Override
-    public List<Enemy> getEnemies() {
-        return enemies.get();
-    }
-
-    @Override
-    public Optional<Level> getMap() {
-        return Optional.ofNullable(level);
     }
 
     @Override

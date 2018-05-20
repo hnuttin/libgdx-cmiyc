@@ -4,25 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.jazzjack.rab.bit.level.Level;
 import com.jazzjack.rab.bit.level.NewLevelListener;
-import com.jazzjack.rab.bit.logic.GameObjectProvider;
 import com.jazzjack.rab.bit.render.level.LevelRenderer;
 
 public class GameRenderer implements Renderer, NewLevelListener {
 
-    private static final float FOG_OF_WAR = 0f;
-
-    private final GameObjectProvider gameObjectProvider;
     private final GameAssetManager assetManager;
 
     private LevelRenderer levelRenderer;
     private StatusBarRenderer statusBarRenderer;
 
-//    private final LightBufferProvider lightBufferProvider;
-//
-//    private boolean rebufferPlayer = true;
-
-    public GameRenderer(GameObjectProvider gameObjectProvider, GameAssetManager assetManager) {
-        this.gameObjectProvider = gameObjectProvider;
+    public GameRenderer(GameAssetManager assetManager) {
         this.assetManager = assetManager;
     }
 
@@ -66,47 +57,4 @@ public class GameRenderer implements Renderer, NewLevelListener {
         }
     }
 
-//    private void bufferSight() {
-//        Optional<Player> player = gameObjectProvider.getPlayer();
-//        Optional<Level> level = gameObjectProvider.getMap();
-//        if (rebufferPlayer && player.isPresent() && level.isPresent()) {
-//            rebufferPlayer = true;
-//
-//            lightBufferProvider.getLightBuffer().begin();
-//            Gdx.gl.glClearColor(FOG_OF_WAR, FOG_OF_WAR, FOG_OF_WAR, 1f);
-//            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//            gameDrawer.drawWithBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE, () -> drawSight(player.get()));
-//            lightBufferProvider.getLightBuffer().end();
-//        }
-//    }
-//
-//    private void drawSight(Player player) {
-//        gameDrawer.drawWithFlippedY(
-//                assetManager.getLightAtlasRegion(),
-//                player.getX() - player.getSight(),
-//                player.getY() - player.getSight(),
-//                (player.getSight() * 2) + 1,
-//                (player.getSight() * 2) + 1);
-//    }
-//
-//    private void renderSight() {
-//        gameDrawer.drawWithBlendFunction(GL20.GL_ZERO, GL20.GL_SRC_COLOR, () -> batch.draw(lightBufferProvider.getLightBuffer().getColorBufferTexture(), 0, STATUS_BAR_HEIGHT));
-//    }
-//
-//void drawWithBlendFunction(int srcFunc, int destFunc, Runnable runnable) {
-//    batch.setBlendFunction(srcFunc, destFunc);
-//    batch.begin();
-//    runnable.run();
-//    batch.end();
-//    batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-//}
-//
-//    void drawWithFlippedY(TextureAtlas.AtlasRegion atlasRegion, float x, float y, float width, float height) {
-//        batch.draw(
-//                atlasRegion,
-//                x,
-//                Gdx.graphics.getHeight() - y - height,
-//                width,
-//                height);
-//    }
 }
