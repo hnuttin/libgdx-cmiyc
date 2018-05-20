@@ -7,10 +7,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
 import com.jazzjack.rab.bit.actor.player.Player;
+import com.jazzjack.rab.bit.actor.player.PlayerMovedSubscriber;
+import com.jazzjack.rab.bit.game.GameEventBus;
 import com.jazzjack.rab.bit.level.Level;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 
-class FogOfWarBuffer implements Disposable {
+class FogOfWarBuffer implements Disposable, PlayerMovedSubscriber {
 
     private static final float FOG_OF_WAR = 0f;
 
@@ -19,14 +21,29 @@ class FogOfWarBuffer implements Disposable {
     private final GameAssetManager assetManager;
     private final FrameBuffer lightFrameBuffer;
 
+    private boolean rebuffer = true;
+
     FogOfWarBuffer(Level level, Batch batch, GameAssetManager assetManager) {
         this.level = level;
         this.batch = batch;
         this.assetManager = assetManager;
         this.lightFrameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, this.level.getWidth(), this.level.getHeight(), false);
+        GameEventBus.registerSubscriber(this);
+    }
+
+    @Override
+    public void playerMoved() {
+        rebuffer = true;
     }
 
     void bufferSight() {
+        if (rebuffer) {
+            rebuffer = false;
+            doBufferSight();
+        }
+    }
+
+    private void doBufferSight() {
         lightFrameBuffer.begin();
         Gdx.gl.glClearColor(FOG_OF_WAR, FOG_OF_WAR, FOG_OF_WAR, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

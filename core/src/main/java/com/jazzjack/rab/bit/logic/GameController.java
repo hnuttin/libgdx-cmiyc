@@ -21,7 +21,6 @@ public class GameController implements InputProcessor {
     private final GameAssetManager assetManager;
     private final AnimationRegister animationRegister;
     private final Randomizer randomizer;
-    private final GameEventBus gameEventBus;
 
     private Enemies enemies;
 
@@ -32,18 +31,17 @@ public class GameController implements InputProcessor {
 
     private GamePhase currentGamePhase;
 
-    public GameController(GameAssetManager assetManager, AnimationRegister animationRegister, Randomizer randomizer, GameEventBus gameEventBus) {
+    public GameController(GameAssetManager assetManager, AnimationRegister animationRegister, Randomizer randomizer) {
         this.assetManager = assetManager;
         this.animationRegister = animationRegister;
         this.randomizer = randomizer;
-        this.gameEventBus = gameEventBus;
     }
 
     public void startGame() {
         startFirstLevel();
         startPlayerTurn();
 
-        gameEventBus.publishNewLevelEvent(level);
+        GameEventBus.publishNewLevelEvent(level);
     }
 
     private void startFirstLevel() {
@@ -79,7 +77,7 @@ public class GameController implements InputProcessor {
             return true;
         }
         if (movePlayer(keycode)) {
-            // TODO fire player moved event (rebuffer player)
+            GameEventBus.publishPlayerMovedEvent();
             if (!player.hasMovementsLeft()) {
                 startEnemyTurn();
             }

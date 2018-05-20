@@ -2,11 +2,12 @@ package com.jazzjack.rab.bit.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.jazzjack.rab.bit.game.GameEventBus;
 import com.jazzjack.rab.bit.level.Level;
-import com.jazzjack.rab.bit.level.NewLevelListener;
+import com.jazzjack.rab.bit.level.NewLevelSubscriber;
 import com.jazzjack.rab.bit.render.level.LevelRenderer;
 
-public class GameRenderer implements Renderer, NewLevelListener {
+public class GameRenderer implements Renderer, NewLevelSubscriber {
 
     private final GameAssetManager assetManager;
 
@@ -15,6 +16,7 @@ public class GameRenderer implements Renderer, NewLevelListener {
 
     public GameRenderer(GameAssetManager assetManager) {
         this.assetManager = assetManager;
+        GameEventBus.registerSubscriber(this);
     }
 
     @Override

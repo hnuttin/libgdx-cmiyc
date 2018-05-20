@@ -15,7 +15,6 @@ public class Game extends ApplicationAdapter {
     private com.jazzjack.rab.bit.render.GameAssetManager assetManager;
     private GameController gameController;
     private AnimationHandler animationHandler;
-    private GameEventBus gameEventBus;
 
     @Override
     public void create() {
@@ -26,11 +25,8 @@ public class Game extends ApplicationAdapter {
     private void initGameObjects() {
         assetManager = new GameAssetManager();
         animationHandler = new AnimationHandler();
-        gameEventBus = new GameEventBus();
-        gameController = new GameController(assetManager, animationHandler, new Randomizer(new RandomInteger()), gameEventBus);
+        gameController = new GameController(assetManager, animationHandler, new Randomizer(new RandomInteger()));
         gameRenderer = new GameRenderer(assetManager);
-
-        gameEventBus.registerNewLevelListener(gameRenderer);
     }
 
     private void startNewGame() {
