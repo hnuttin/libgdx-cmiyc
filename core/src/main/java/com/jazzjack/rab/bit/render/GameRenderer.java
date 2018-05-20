@@ -36,7 +36,7 @@ public class GameRenderer implements Renderer {
             if (levelRenderer == null) {
                 levelRenderer = new LevelRenderer(level, assetManager);
                 statusBarRenderer = new StatusBarRenderer(level.getPlayer(), assetManager);
-                Gdx.graphics.setWindowedMode(level.getWidth() * (int) level.getTileSize() * 2, level.getHeight() * (int) level.getTileSize() * 2);
+                Gdx.graphics.setWindowedMode(level.getWidth() * (int) level.getTilePixelSize() * 2, level.getHeight() * (int) level.getTilePixelSize() * 2);
             }
             levelRenderer.render();
             statusBarRenderer.render();

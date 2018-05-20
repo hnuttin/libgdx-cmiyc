@@ -19,6 +19,10 @@ public class Route implements Chance {
         return ImmutableList.copyOf(steps);
     }
 
+    public Step getLastStep() {
+        return steps.get(steps.size() - 1);
+    }
+
     @Override
     public int getPercentage() {
         return percentage;

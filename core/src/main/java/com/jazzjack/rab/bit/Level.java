@@ -32,7 +32,7 @@ public class Level {
         throw new RuntimeException("Could not find map layer");
     }
 
-    public float getTileSize() {
+    public float getTilePixelSize() {
         return getMapLayer().getTileWidth();
     }
 

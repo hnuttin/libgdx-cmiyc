@@ -1,10 +1,6 @@
 package com.jazzjack.rab.bit.render.level;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.Align;
 import com.jazzjack.rab.bit.Level;
 import com.jazzjack.rab.bit.actor.Actor;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
@@ -14,24 +10,24 @@ import com.jazzjack.rab.bit.actor.enemy.route.StepNames;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 import com.jazzjack.rab.bit.render.Renderer;
 
+import static com.jazzjack.rab.bit.render.level.TextDrawer.Position.*;
+
 public class LevelRenderer extends OrthogonalTiledMapRenderer implements Renderer {
 
-    private static final float ENDING_HEIGHT = 22f;
     private static final float ROUTE_ALPHA = 0.7f;
+    private static final float LEVEL_CAMERA_SCALE = 1.5f;
 
     private final Level level;
     private final GameAssetManager assetManager;
     private final LevelCamera camera;
+    private final TextDrawer textDrawer;
 
     public LevelRenderer(Level level, GameAssetManager assetManager) {
-        super(null, determineUnitScale(level));
+        super(null, 1 / level.getTilePixelSize());
         this.level = level;
         this.assetManager = assetManager;
-        this.camera = new LevelCamera(level);
-    }
-
-    private static float determineUnitScale(Level level) {
-        return 1 / level.getTileSize();
+        this.camera = new LevelCamera(level, LEVEL_CAMERA_SCALE);
+        this.textDrawer = new TextDrawer(assetManager, batch, this.camera);
     }
 
     @Override
@@ -83,27 +79,16 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     }
 
     private void drawPercentage(Route route) {
-        BitmapFont percentageFont = assetManager.getPercentageFont();
-        Step lastStep = route.getSteps().get(route.getSteps().size() - 1);
-        float percentageX = lastStep.getX();
-        float percentageY = StepNames.ENDING_BOTTOM.equals(lastStep.getName()) ? underneathStep(percentageFont, lastStep) : aboveStep(percentageFont, lastStep);
-        drawCenteredTextInMapRegion(percentageFont, route.getPercentage() + "%", percentageX, percentageY, 1, Align.center);
+        Step lastStep = route.getLastStep();
+        textDrawer.drawText(
+                route.getPercentage() + "%",
+                lastStep.getX(),
+                lastStep.getY(),
+                percentagePositionForStep(lastStep));
     }
 
-    private void drawCenteredTextInMapRegion(BitmapFont font, String text, float x, float y, float targetWidth, float alpha) {
-        font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
-        font.setUseIntegerPositions(false);
-        font.getData().setScale(20f / Gdx.graphics.getHeight());
-        font.draw(batch, text, x, y, targetWidth, Align.center, false);
-        font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, 1f);
-    }
-
-    private float underneathStep(BitmapFont percentageFont, Step lastStep) {
-        return lastStep.getY() + percentageFont.getData().lineHeight;
-    }
-
-    private float aboveStep(BitmapFont percentageFont, Step lastStep) {
-        return lastStep.getY() + (ENDING_HEIGHT / level.getTileSize()) + percentageFont.getData().lineHeight;
+    private TextDrawer.Position percentagePositionForStep(Step step) {
+        return StepNames.ENDING_BOTTOM.equals(step.getName()) ? BOTTOM : TOP;
     }
 
     private void drawActor(Actor actor) {

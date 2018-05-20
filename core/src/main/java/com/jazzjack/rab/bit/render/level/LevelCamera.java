@@ -6,13 +6,21 @@ import com.jazzjack.rab.bit.Level;
 
 class LevelCamera extends OrthographicCamera {
 
-    private static final float CAMERA_SCALE = 1.3f;
-
     private final Level level;
+    private final float cameraScale;
 
-    LevelCamera(Level level) {
+    LevelCamera(Level level, float cameraScale) {
         this.level = level;
+        this.cameraScale = cameraScale;
         setToOrtho(false, calculateViewportWidth(), calculateViewportHeight(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+    }
+
+    Level getLevel() {
+        return level;
+    }
+
+    float getCameraScale() {
+        return cameraScale;
     }
 
     void resize(int width, int height) {
@@ -72,7 +80,7 @@ class LevelCamera extends OrthographicCamera {
     }
 
     private float calculateViewportWidth() {
-        return level.getWidth() / CAMERA_SCALE;
+        return level.getWidth() / cameraScale;
     }
 
     private float calculateViewportHeight(int gameWidthInPixels, int gameHeightInPixels) {

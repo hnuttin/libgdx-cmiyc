@@ -1,15 +1,21 @@
 package com.jazzjack.rab.bit.render;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.jazzjack.rab.bit.actor.Actor;
 import com.jazzjack.rab.bit.actor.enemy.route.StepNames;
 
@@ -26,14 +32,18 @@ public class GameAssetManager extends AssetManager {
     private static final Map<String, String> actorTextureMapping;
 
     private static final String FREE_TYPE_FONT_SUFFIX = ".ttf";
-    private static final String FONT_ROMANTICS = "fonts/romantics.ttf";
-    private static final String FONT_MINECRAFT = "fonts/minecraft.ttf";
     private static final String FONT_VCR_OSD_MONO = "fonts/VCR_OSD_MONO_1.001.ttf";
-    private static final String PERCENTAGE_FONT = "romantics10.ttf";
+    private static final String FONT_OPEN_SANS = "fonts/OpenSans-Regular.ttf";
+    private static final String FONT_ROBOTO = "fonts/Roboto-Regular.ttf";
+    private static final int PERCENTAGE_FONT_SIZE = 12;
 
     private static final String PLAYER = "player";
     private static final String HP_FILLED = "pixel-art/player/hp-filled.png";
     private static final String HP_EMPTY = "pixel-art/player/hp-empty.png";
+    private static final String FREE_FONT_GENERATOR_SUFFIX = ".gen";
+    private static final String VCR_FONT_TEXTURE = "fonts/vcr-df.png";
+    private static final String VCR_FONT = "fonts/vcr-df.fnt";
+    private static final String FONT_SHADER = "shaders/font.vert";
 
     static {
         actorTextureMapping = new HashMap<>();
@@ -65,8 +75,6 @@ public class GameAssetManager extends AssetManager {
     private void configureLoaders() {
         InternalFileHandleResolver resolver = new InternalFileHandleResolver();
         setLoader(TiledMap.class, new TmxMapLoader(resolver));
-        setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
-        setLoader(BitmapFont.class, FREE_TYPE_FONT_SUFFIX, new FreetypeFontLoader(resolver));
     }
 
     private void loadActorTextures() {
@@ -81,10 +89,12 @@ public class GameAssetManager extends AssetManager {
     }
 
     private void loadFonts() {
-        FreetypeFontLoader.FreeTypeFontLoaderParameter percentageParameters = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        percentageParameters.fontFileName = FONT_VCR_OSD_MONO;
-        percentageParameters.fontParameters.size = 8;
-        load(PERCENTAGE_FONT, BitmapFont.class, percentageParameters);
+        TextureLoader.TextureParameter params = new TextureLoader.TextureParameter();
+        params.genMipMaps = true;
+        params.minFilter = Texture.TextureFilter.MipMapLinearLinear;
+        params.magFilter = Texture.TextureFilter.Linear;
+        load(VCR_FONT_TEXTURE, Texture.class, params);
+        load(FONT_SHADER, ShaderProgram.class);
     }
 
     public TiledMap getTiledMap1() {
@@ -108,6 +118,19 @@ public class GameAssetManager extends AssetManager {
     }
 
     public BitmapFont getPercentageFont() {
-        return get(PERCENTAGE_FONT, BitmapFont.class);
+//        Texture texture = new Texture(Gdx.files.internal("fonts/vcr-df.png"), true);
+//        texture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
+        try {
+            return get(VCR_FONT, BitmapFont.class);
+        } catch (GdxRuntimeException e) {
+            Texture fontTexture = get(VCR_FONT_TEXTURE, Texture.class);
+            BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal(VCR_FONT), new TextureRegion(fontTexture), false);
+            addAsset(VCR_FONT, BitmapFont.class, bitmapFont);
+            return bitmapFont;
+        }
+    }
+
+    public ShaderProgram getFontShaderProgram() {
+        return get(FONT_SHADER, ShaderProgram.class);
     }
 }
