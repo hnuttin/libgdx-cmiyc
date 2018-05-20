@@ -1,9 +1,8 @@
-package com.jazzjack.rab.bit;
+package com.jazzjack.rab.bit.level;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.jazzjack.rab.bit.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.player.Player;
 

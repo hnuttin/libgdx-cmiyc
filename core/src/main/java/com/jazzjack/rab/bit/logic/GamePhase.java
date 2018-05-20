@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.game;
+package com.jazzjack.rab.bit.logic;
 
 public enum GamePhase {
 

@@ -2,7 +2,7 @@ package com.jazzjack.rab.bit.collision;
 
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.jazzjack.rab.bit.Level;
+import com.jazzjack.rab.bit.level.Level;
 
 public class LevelCollisionDetector implements CollisionDetector {
 

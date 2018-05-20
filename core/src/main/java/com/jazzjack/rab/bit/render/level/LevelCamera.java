@@ -2,7 +2,7 @@ package com.jazzjack.rab.bit.render.level;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.jazzjack.rab.bit.Level;
+import com.jazzjack.rab.bit.level.Level;
 
 class LevelCamera extends OrthographicCamera {
 

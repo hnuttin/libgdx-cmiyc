@@ -2,13 +2,12 @@ package com.jazzjack.rab.bit.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.jazzjack.rab.bit.Level;
-import com.jazzjack.rab.bit.game.GameObjectProvider;
+import com.jazzjack.rab.bit.level.Level;
+import com.jazzjack.rab.bit.level.NewLevelListener;
+import com.jazzjack.rab.bit.logic.GameObjectProvider;
 import com.jazzjack.rab.bit.render.level.LevelRenderer;
 
-import java.util.Optional;
-
-public class GameRenderer implements Renderer {
+public class GameRenderer implements Renderer, NewLevelListener {
 
     private static final float FOG_OF_WAR = 0f;
 
@@ -28,17 +27,21 @@ public class GameRenderer implements Renderer {
     }
 
     @Override
+    public void onNewLevel(Level newLevel) {
+        levelRenderer = new LevelRenderer(newLevel, assetManager);
+        statusBarRenderer = new StatusBarRenderer(newLevel.getPlayer(), assetManager);
+        Gdx.graphics.setWindowedMode(
+                newLevel.getWidth() * (int) newLevel.getTilePixelSize() * 2,
+                newLevel.getHeight() * (int) newLevel.getTilePixelSize() * 2);
+    }
+
+    @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Optional<Level> levelOptional = gameObjectProvider.getMap();
-        if (levelOptional.isPresent()) {
-            Level level = levelOptional.get();
-            if (levelRenderer == null) {
-                levelRenderer = new LevelRenderer(level, assetManager);
-                statusBarRenderer = new StatusBarRenderer(level.getPlayer(), assetManager);
-                Gdx.graphics.setWindowedMode(level.getWidth() * (int) level.getTilePixelSize() * 2, level.getHeight() * (int) level.getTilePixelSize() * 2);
-            }
+        if (levelRenderer != null) {
             levelRenderer.render();
+        }
+        if (statusBarRenderer != null) {
             statusBarRenderer.render();
         }
     }
@@ -47,6 +50,9 @@ public class GameRenderer implements Renderer {
     public void resize(int width, int height) {
         if (levelRenderer != null) {
             levelRenderer.resize(width, height);
+        }
+        if (statusBarRenderer != null) {
+            statusBarRenderer.resize(width, height);
         }
     }
 

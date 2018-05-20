@@ -1,16 +1,17 @@
 package com.jazzjack.rab.bit.render.level;
 
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.jazzjack.rab.bit.Level;
 import com.jazzjack.rab.bit.actor.Actor;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.actor.enemy.route.StepNames;
+import com.jazzjack.rab.bit.level.Level;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 import com.jazzjack.rab.bit.render.Renderer;
 
-import static com.jazzjack.rab.bit.render.level.TextDrawer.Position.*;
+import static com.jazzjack.rab.bit.render.level.TextDrawer.Position.BOTTOM;
+import static com.jazzjack.rab.bit.render.level.TextDrawer.Position.TOP;
 
 public class LevelRenderer extends OrthogonalTiledMapRenderer implements Renderer {
 

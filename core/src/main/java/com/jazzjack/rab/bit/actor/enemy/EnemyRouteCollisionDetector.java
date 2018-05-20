@@ -3,16 +3,17 @@ package com.jazzjack.rab.bit.actor.enemy;
 import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.collision.CollisionResult;
-import com.jazzjack.rab.bit.game.GameObjectProvider;
+
+import java.util.List;
 
 public class EnemyRouteCollisionDetector implements CollisionDetector {
 
     private final CollisionDetector collisionDetector;
-    private final GameObjectProvider gameObjectProvider;
+    private final List<Enemy> enemies;
 
-    public EnemyRouteCollisionDetector(CollisionDetector collisionDetector, GameObjectProvider gameObjectProvider) {
+    public EnemyRouteCollisionDetector(CollisionDetector collisionDetector, List<Enemy> enemies) {
         this.collisionDetector = collisionDetector;
-        this.gameObjectProvider = gameObjectProvider;
+        this.enemies = enemies;
     }
 
     @Override
@@ -26,7 +27,7 @@ public class EnemyRouteCollisionDetector implements CollisionDetector {
     }
 
     private CollisionResult collidesWithEnemyRoutes(Collidable collidable) {
-        return gameObjectProvider.getEnemies().stream()
+        return enemies.stream()
                 .flatMap(enemy -> enemy.getRoutes().stream())
                 .flatMap(route -> route.getSteps().stream())
                 .filter(step -> step.collidesWith(collidable))

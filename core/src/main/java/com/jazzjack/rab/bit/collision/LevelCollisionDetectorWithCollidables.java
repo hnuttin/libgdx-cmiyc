@@ -1,6 +1,6 @@
 package com.jazzjack.rab.bit.collision;
 
-import com.jazzjack.rab.bit.Level;
+import com.jazzjack.rab.bit.level.Level;
 
 import java.util.HashSet;
 import java.util.List;

@@ -1,8 +1,7 @@
-package com.jazzjack.rab.bit.game;
+package com.jazzjack.rab.bit.logic;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.jazzjack.rab.bit.Level;
 import com.jazzjack.rab.bit.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.enemy.EnemyRouteCollisionDetector;
@@ -11,9 +10,10 @@ import com.jazzjack.rab.bit.actor.player.Player;
 import com.jazzjack.rab.bit.animation.AnimationRegister;
 import com.jazzjack.rab.bit.collision.LevelCollisionDetectorWithCollidables;
 import com.jazzjack.rab.bit.common.Randomizer;
+import com.jazzjack.rab.bit.game.GameEventBus;
+import com.jazzjack.rab.bit.level.Level;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +24,7 @@ public class GameController implements GameObjectProvider, InputProcessor {
     private final GameAssetManager assetManager;
     private final AnimationRegister animationRegister;
     private final Randomizer randomizer;
+    private final GameEventBus gameEventBus;
 
     private Enemies enemies;
 
@@ -34,15 +35,18 @@ public class GameController implements GameObjectProvider, InputProcessor {
 
     private GamePhase currentGamePhase;
 
-    public GameController(GameAssetManager assetManager, AnimationRegister animationRegister, Randomizer randomizer) {
+    public GameController(GameAssetManager assetManager, AnimationRegister animationRegister, Randomizer randomizer, GameEventBus gameEventBus) {
         this.assetManager = assetManager;
         this.animationRegister = animationRegister;
         this.randomizer = randomizer;
+        this.gameEventBus = gameEventBus;
     }
 
     public void startGame() {
         startFirstLevel();
         startPlayerTurn();
+
+        gameEventBus.publishNewLevelEvent(level);
     }
 
     private void startFirstLevel() {
@@ -54,7 +58,8 @@ public class GameController implements GameObjectProvider, InputProcessor {
         playerMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
         enemyMovementColissionDetector = new LevelCollisionDetectorWithCollidables(level);
         enemyMovementColissionDetector.addCollidable(player);
-        RouteGenerator routeGenerator = new RouteGenerator(new EnemyRouteCollisionDetector(playerMovementColissionDetector, this), randomizer);
+        EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementColissionDetector, asList(enemy1, enemy2, enemy3));
+        RouteGenerator routeGenerator = new RouteGenerator(enemyRouteCollisionDetector, randomizer);
         enemies = new Enemies(routeGenerator, randomizer, enemyMovementColissionDetector);
         enemies.add(enemy1);
         enemies.add(enemy2);

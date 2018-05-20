@@ -2,7 +2,7 @@ package com.jazzjack.rab.bit.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.jazzjack.rab.bit.Game;
+import com.jazzjack.rab.bit.game.Game;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

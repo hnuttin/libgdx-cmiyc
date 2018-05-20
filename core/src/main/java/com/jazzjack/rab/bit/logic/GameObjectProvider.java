@@ -1,8 +1,8 @@
-package com.jazzjack.rab.bit.game;
+package com.jazzjack.rab.bit.logic;
 
-import com.jazzjack.rab.bit.Level;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.player.Player;
+import com.jazzjack.rab.bit.level.Level;
 
 import java.util.List;
 import java.util.Optional;
