@@ -27,7 +27,6 @@ public class Level {
     private static final String MARKER_ENEMY = "enemy";
 
     private static final String PROPERTY_ENEMY_NAME = "type";
-    private static final String PROPERTY_ENEMY_PREDICTABILITY = "predictability";
 
     private final TiledMap tiledMap;
     private final ObjectTypeParser objectTypeParser;
