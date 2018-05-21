@@ -40,6 +40,8 @@ allprojects {
             properties["sonar.organization"] = "hnuttin-github"
             properties["sonar.host.url"] = "https://sonarcloud.io"
             properties["sonar.login"] = "5d9a0b8b32655b1afd71f286f5dad4fa98098217"
+            properties["sonar.projectKey"] = "cmiyc"
+            properties["sonar.projectName"] = "Catch me if you can"
         }
     }
 

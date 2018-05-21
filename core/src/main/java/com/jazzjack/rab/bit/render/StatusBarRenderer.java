@@ -7,18 +7,19 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.jazzjack.rab.bit.actor.player.Player;
+import com.jazzjack.rab.bit.level.Level;
 
 public class StatusBarRenderer implements Renderer {
 
-    private final Player player;
+    private static final float SCALE_TO_LEVEL = 2f;
+    private final Level level;
     private final GameAssetManager assetManager;
     private final Batch batch;
     private final ShapeRenderer shapeRenderer;
     private final Camera camera;
 
-    StatusBarRenderer(Player player, GameAssetManager assetManager) {
-        this.player = player;
+    StatusBarRenderer(Level level, GameAssetManager assetManager) {
+        this.level = level;
         this.assetManager = assetManager;
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
@@ -27,21 +28,15 @@ public class StatusBarRenderer implements Renderer {
     }
 
     private OrthographicCamera createCamera() {
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, 40f, 20f);
-        camera.update();
-        return camera;
+        OrthographicCamera orthographicCamera = new OrthographicCamera();
+        orthographicCamera.setToOrtho(false, level.getWidth() * SCALE_TO_LEVEL, level.getHeight() * SCALE_TO_LEVEL);
+        orthographicCamera.update();
+        return orthographicCamera;
     }
 
     @Override
     public void resize(int width, int height) {
-       // resizeCamera(width, height);
         updateCamera();
-    }
-
-    private void resizeCamera(int width, int height) {
-        camera.viewportWidth = 20f;
-        camera.viewportHeight = 0.5f;
     }
 
     @Override
@@ -66,18 +61,18 @@ public class StatusBarRenderer implements Renderer {
     public void clearStatusBar() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(0f, 0f, 40f, 1f);
+        shapeRenderer.rect(0f, 0f, level.getWidth() * SCALE_TO_LEVEL, 1f);
         shapeRenderer.end();
     }
 
     private void renderStatusBar() {
         batch.begin();
         TextureAtlas.AtlasRegion hpFilledTexture = assetManager.getHpFilledTexture();
-        for (float i = 0; i < player.getHp(); i++) {
+        for (float i = 0; i < level.getPlayer().getHp(); i++) {
             batch.draw(hpFilledTexture, i,0f,1f,1f);
         }
         TextureAtlas.AtlasRegion hpEmptyTexture = assetManager.getHpEmptyTexture();
-        for (float j = player.getHp(); j < player.getMaxHp(); j++) {
+        for (float j = level.getPlayer().getHp(); j < level.getPlayer().getMaxHp(); j++) {
             batch.draw(hpEmptyTexture, j,0f,1f,1f);
         }
         batch.end();

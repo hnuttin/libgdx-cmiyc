@@ -3,7 +3,6 @@ package com.jazzjack.rab.bit.render.level;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Align;
-import com.jazzjack.rab.bit.actor.enemy.route.StepNames;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 
 class TextDrawer {

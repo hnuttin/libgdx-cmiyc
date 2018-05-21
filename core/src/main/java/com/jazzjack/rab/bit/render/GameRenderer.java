@@ -22,7 +22,7 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
     @Override
     public void onNewLevel(Level newLevel) {
         levelRenderer = new LevelRenderer(newLevel, assetManager);
-        statusBarRenderer = new StatusBarRenderer(newLevel.getPlayer(), assetManager);
+        statusBarRenderer = new StatusBarRenderer(newLevel, assetManager);
         Gdx.graphics.setWindowedMode(
                 newLevel.getWidth() * (int) newLevel.getTilePixelSize() * 2,
                 newLevel.getHeight() * (int) newLevel.getTilePixelSize() * 2);

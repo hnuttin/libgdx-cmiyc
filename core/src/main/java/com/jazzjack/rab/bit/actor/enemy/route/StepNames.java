@@ -2,10 +2,15 @@ package com.jazzjack.rab.bit.actor.enemy.route;
 
 import com.jazzjack.rab.bit.common.Direction;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public class StepNames {
+
+    private StepNames() {
+        // never instantiate
+    }
 
     public static final String HORIZONTAL = "route-horizontal";
     public static final String VERTICAL = "route-vertical";
@@ -20,7 +25,7 @@ public class StepNames {
     public static final String CORNER_BOTTOM_RIGHT = "route-corner-bottom-right";
     public static final String CORNER_BOTTOM_LEFT = "route-corner-bottom-left";
 
-    private static final Map<Direction, String> DIRECTION_TO_ENDING_MAPPING = new HashMap<>();
+    private static final EnumMap<Direction, String> DIRECTION_TO_ENDING_MAPPING = new EnumMap<>(Direction.class);
     private static final Map<DirectionAndNextDirection, String> DIRECTION_AND_NEXT_DIRECTION_MAPPING = new HashMap<>();
 
     static {

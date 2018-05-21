@@ -25,8 +25,6 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     private final TextDrawer textDrawer;
     private final FogOfWarBuffer fogOfWarBuffer;
 
-    //private boolean rebufferPlayer = true;
-
     public LevelRenderer(Level level, GameAssetManager assetManager) {
         super(null, 1 / level.getTilePixelSize());
         this.level = level;

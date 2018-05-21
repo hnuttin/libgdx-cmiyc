@@ -52,10 +52,10 @@ class FogOfWarBuffer implements Disposable, PlayerMovedSubscriber {
         Player player = level.getPlayer();
         batch.draw(
                 assetManager.getLightTexture(),
-                player.getX() - player.getSight(),
-                player.getY() - player.getSight(),
-                (player.getSight() * 2) + 1,
-                (player.getSight() * 2) + 1);
+                1f * player.getX() - player.getSight(),
+                1f * player.getY() - player.getSight(),
+                (player.getSight() * 2f) + 1f,
+                (player.getSight() * 2f) + 1f);
         batch.end();
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         lightFrameBuffer.end();

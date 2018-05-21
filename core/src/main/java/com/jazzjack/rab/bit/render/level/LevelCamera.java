@@ -72,7 +72,7 @@ class LevelCamera extends OrthographicCamera {
     }
 
     private float playerCameraX() {
-        return level.getPlayer().getX() + 1;
+        return level.getPlayer().getX() + 1f;
     }
 
     private float playerCameraY() {
