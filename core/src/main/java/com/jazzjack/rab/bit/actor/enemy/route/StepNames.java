@@ -7,18 +7,18 @@ import java.util.Map;
 
 public class StepNames {
 
-    public static final String HORIZONTAL = "horizontal";
-    public static final String VERTICAL = "vertical";
+    public static final String HORIZONTAL = "route-horizontal";
+    public static final String VERTICAL = "route-vertical";
 
-    public static final String ENDING_TOP = "ending-top";
-    public static final String ENDING_BOTTOM = "ending-bottom";
-    public static final String ENDING_LEFT = "ending-left";
-    public static final String ENDING_RIGHT = "ending-right";
+    public static final String ENDING_TOP = "route-ending-top";
+    public static final String ENDING_BOTTOM = "route-ending-bottom";
+    public static final String ENDING_LEFT = "route-ending-left";
+    public static final String ENDING_RIGHT = "route-ending-right";
 
-    public static final String CORNER_TOP_RIGHT = "corner-top-right";
-    public static final String CORNER_TOP_LEFT = "corner-top-left";
-    public static final String CORNER_BOTTOM_RIGHT = "corner-bottom-right";
-    public static final String CORNER_BOTTOM_LEFT = "corner-bottom-left";
+    public static final String CORNER_TOP_RIGHT = "route-corner-top-right";
+    public static final String CORNER_TOP_LEFT = "route-corner-top-left";
+    public static final String CORNER_BOTTOM_RIGHT = "route-corner-bottom-right";
+    public static final String CORNER_BOTTOM_LEFT = "route-corner-bottom-left";
 
     private static final Map<Direction, String> DIRECTION_TO_ENDING_MAPPING = new HashMap<>();
     private static final Map<DirectionAndNextDirection, String> DIRECTION_AND_NEXT_DIRECTION_MAPPING = new HashMap<>();

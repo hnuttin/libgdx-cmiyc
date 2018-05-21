@@ -1,12 +1,11 @@
 package com.jazzjack.rab.bit.render;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.jazzjack.rab.bit.actor.player.Player;
 
@@ -73,11 +72,11 @@ public class StatusBarRenderer implements Renderer {
 
     private void renderStatusBar() {
         batch.begin();
-        Texture hpFilledTexture = assetManager.getHpFilledTexture();
+        TextureAtlas.AtlasRegion hpFilledTexture = assetManager.getHpFilledTexture();
         for (float i = 0; i < player.getHp(); i++) {
             batch.draw(hpFilledTexture, i,0f,1f,1f);
         }
-        Texture hpEmptyTexture = assetManager.getHpEmptyTexture();
+        TextureAtlas.AtlasRegion hpEmptyTexture = assetManager.getHpEmptyTexture();
         for (float j = player.getHp(); j < player.getMaxHp(); j++) {
             batch.draw(hpEmptyTexture, j,0f,1f,1f);
         }

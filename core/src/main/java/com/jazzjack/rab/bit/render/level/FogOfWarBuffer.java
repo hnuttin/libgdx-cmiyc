@@ -51,7 +51,7 @@ class FogOfWarBuffer implements Disposable, PlayerMovedSubscriber {
         batch.begin();
         Player player = level.getPlayer();
         batch.draw(
-                assetManager.getLightAtlasRegion(),
+                assetManager.getLightTexture(),
                 player.getX() - player.getSight(),
                 player.getY() - player.getSight(),
                 (player.getSight() * 2) + 1,
