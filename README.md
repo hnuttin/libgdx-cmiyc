@@ -1,5 +1,3 @@
 # Catch me if you can
 
-[![Build Status](https://travis-ci.org/hnuttin/libgdx-cmiyc.svg?branch=master)](https://travis-ci.org/hnuttin/libgdx-cmiyc)
-
-[![Sonar Gateway](https://sonarcloud.io/api/project_badges/measure?project=cmiyc&metric=alert_status)](https://sonarcloud.io/dashboard?id=cmiyce)
+[![Build Status](https://travis-ci.org/hnuttin/libgdx-cmiyc.svg?branch=master)](https://travis-ci.org/hnuttin/libgdx-cmiyc) [![Sonar lines](https://sonarcloud.io/api/project_badges/measure?project=cmiyc&metric=ncloc)](https://sonarcloud.io/dashboard?id=cmiyce) [![Sonar bugs](https://sonarcloud.io/api/project_badges/measure?project=cmiyc&metric=bugs)](https://sonarcloud.io/dashboard?id=cmiyce) [![Sonar code smells](https://sonarcloud.io/api/project_badges/measure?project=cmiyc&metric=code_smells)](https://sonarcloud.io/dashboard?id=cmiyce) [![Sonar coverage](https://sonarcloud.io/api/project_badges/measure?project=cmiyc&metric=coverage)](https://sonarcloud.io/dashboard?id=cmiyce)
