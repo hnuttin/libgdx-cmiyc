@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.jazzjack.rab.bit.cmiyc.common.Predictability;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
+import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
 
 import org.junit.jupiter.api.Test;
 

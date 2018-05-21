@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.cmiyc.level;
+package com.jazzjack.rab.bit.cmiyc.level.meta;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
