@@ -1,18 +1,23 @@
-package com.jazzjack.rab.bit.cmiyc.level;
+package com.jazzjack.rab.bit.cmiyc.level.meta;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.jazzjack.rab.bit.cmiyc.common.HasPosition;
 import com.jazzjack.rab.bit.cmiyc.common.Position;
+import com.jazzjack.rab.bit.cmiyc.level.InvalidLevelException;
 
-class MarkerObject implements HasPosition {
+import java.util.Map;
+
+public class MarkerObject implements HasPosition {
 
     private final MapObject mapObject;
+    private final Map<String, String> objectTypeDefaults;
     private final Position position;
 
-    MarkerObject(MapObject mapObject, float tilePixelSize) {
+    MarkerObject(MapObject mapObject, Map<String, String> objectTypeDefaults, float tilePixelSize) {
         this.mapObject = mapObject;
+        this.objectTypeDefaults = objectTypeDefaults;
         this.position = positionForMapObject(mapObject, tilePixelSize);
     }
 
@@ -28,12 +33,22 @@ class MarkerObject implements HasPosition {
                     (int) (rectangleMapObject.getRectangle().x / tilePixelSize),
                     (int) (rectangleMapObject.getRectangle().y / tilePixelSize));
         } else {
-            throw new InvalidLevelException("Unsupported marker map object " + mapObject.getClass().getSimpleName());
+            throw new InvalidLevelException("Unsupported marker object " + mapObject.getClass().getSimpleName());
         }
     }
 
-    public String getStringProperty(String propertyName) {
-        return mapObject.getProperties().get(propertyName, String.class);
+    protected String getStringProperty(String propertyName) {
+        String property = mapObject.getProperties().get(propertyName, String.class);
+        if (property == null) {
+            String defaultProperty = objectTypeDefaults.get(propertyName);
+            if (defaultProperty == null) {
+                throw new InvalidLevelException("Unsuppored marker object property: " + propertyName);
+            } else {
+                return defaultProperty;
+            }
+        } else {
+            return property;
+        }
     }
 
     @Override
@@ -44,5 +59,9 @@ class MarkerObject implements HasPosition {
     @Override
     public int getY() {
         return position.getY();
+    }
+
+    public String getType() {
+        return getStringProperty("type");
     }
 }

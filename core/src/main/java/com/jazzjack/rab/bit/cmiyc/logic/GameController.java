@@ -14,7 +14,9 @@ import com.jazzjack.rab.bit.cmiyc.collision.LevelCollisionDetectorWithCollidable
 import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
 import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
-import com.jazzjack.rab.bit.cmiyc.level.ObjectTypeParser;
+import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
+import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaDataFactory;
+import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 
 public class GameController implements InputProcessor {
@@ -22,7 +24,7 @@ public class GameController implements InputProcessor {
     private final GameAssetManager assetManager;
     private final AnimationRegister animationRegister;
     private final Randomizer randomizer;
-    private final ObjectTypeParser objectTypeParser;
+    private final LevelMetaDataFactory levelMetaDataFactory;
 
     private Enemies enemies;
 
@@ -35,7 +37,7 @@ public class GameController implements InputProcessor {
         this.assetManager = assetManager;
         this.animationRegister = animationRegister;
         this.randomizer = randomizer;
-        this.objectTypeParser = new ObjectTypeParser(new FileHandle("objecttypes.xml"));
+        this.levelMetaDataFactory = new LevelMetaDataFactory(new ObjectTypeParser(new FileHandle("objecttypes.xml")));
     }
 
     public void startGame() {
@@ -46,7 +48,8 @@ public class GameController implements InputProcessor {
     }
 
     private void startFirstLevel() {
-        level = new Level(this.assetManager.getTiledMap1(), objectTypeParser);
+        LevelTiledMap tiledMap = new LevelTiledMap(assetManager.getTiledMap1());
+        level = new Level(tiledMap, levelMetaDataFactory.create(tiledMap));
         playerMovementColissionDetector = new PlayerMovementCollisionDetector(level);
         LevelCollisionDetectorWithCollidables enemyMovementColissionDetector = new EnemyMovementCollisionDetector(level);
         EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementColissionDetector, level.getEnemies());

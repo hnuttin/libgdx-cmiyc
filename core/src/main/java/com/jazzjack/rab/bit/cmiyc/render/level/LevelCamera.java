@@ -56,7 +56,7 @@ class LevelCamera extends OrthographicCamera {
     }
 
     private float topCameraLimit() {
-        return level.getHeight() - viewportHeight / 2f;
+        return level.getTiledMap().getHeight() - viewportHeight / 2f;
     }
 
     private float bottomCameraLimit() {
@@ -64,7 +64,7 @@ class LevelCamera extends OrthographicCamera {
     }
 
     private float rightCameraLimit() {
-        return level.getWidth() - viewportWidth / 2f;
+        return level.getTiledMap().getWidth() - viewportWidth / 2f;
     }
 
     private float leftCameraLimit() {
@@ -80,7 +80,7 @@ class LevelCamera extends OrthographicCamera {
     }
 
     private float calculateViewportWidth() {
-        return level.getWidth() / cameraScale;
+        return level.getTiledMap().getWidth() / cameraScale;
     }
 
     private float calculateViewportHeight(int gameWidthInPixels, int gameHeightInPixels) {
