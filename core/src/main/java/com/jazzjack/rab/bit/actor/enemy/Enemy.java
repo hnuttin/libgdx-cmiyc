@@ -9,6 +9,7 @@ import com.jazzjack.rab.bit.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.actor.player.Player;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.collision.CollisionResult;
+import com.jazzjack.rab.bit.common.HasPosition;
 import com.jazzjack.rab.bit.common.Predictability;
 import com.jazzjack.rab.bit.common.Randomizer;
 
@@ -23,9 +24,9 @@ public class Enemy extends SimpleActor {
 
     private final int damageOutput;
 
-    public Enemy(int startX, int startY) {
-        super("enemy1", startX, startY);
-        this.predictability = Predictability.HIGH;
+    public Enemy(String name, Predictability predictability, HasPosition hasPosition) {
+        super(name, hasPosition);
+        this.predictability = predictability;
         this.routes = new ArrayList<>();
         this.damageOutput = 1;
     }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttypes>
+ <objecttype name="end" color="#0000ff"/>
+ <objecttype name="enemy1" color="#fd8008">
+  <property name="predictability" type="string" default="HIGH"/>
+ </objecttype>
+ <objecttype name="enemy2" color="#800080">
+  <property name="predictability" type="string" default="MEDIUM"/>
+ </objecttype>
+ <objecttype name="enemy3" color="#fc0107">
+  <property name="predictability" type="string" default="LOW"/>
+ </objecttype>
+ <objecttype name="start" color="#21ff06"/>
+</objecttypes>

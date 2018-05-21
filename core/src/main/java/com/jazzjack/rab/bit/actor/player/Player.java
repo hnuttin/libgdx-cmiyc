@@ -4,6 +4,7 @@ import com.jazzjack.rab.bit.actor.SimpleActor;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.collision.CollisionResult;
+import com.jazzjack.rab.bit.common.HasPosition;
 
 import java.util.function.Function;
 
@@ -17,8 +18,8 @@ public class Player extends SimpleActor {
     private int maxHp;
     private int hp;
 
-    public Player(int startX, int startY) {
-        super("player", startX, startY);
+    public Player(HasPosition hasPosition) {
+        super("player", hasPosition);
 
         maxNumberOfMoves = 4;
         maxHp = 5;

@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.logic;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.files.FileHandle;
 import com.jazzjack.rab.bit.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.actor.enemy.EnemyMovementCollisionDetector;
 import com.jazzjack.rab.bit.actor.enemy.EnemyMovementContext;
@@ -13,6 +14,7 @@ import com.jazzjack.rab.bit.collision.LevelCollisionDetectorWithCollidables;
 import com.jazzjack.rab.bit.common.Randomizer;
 import com.jazzjack.rab.bit.game.GameEventBus;
 import com.jazzjack.rab.bit.level.Level;
+import com.jazzjack.rab.bit.level.ObjectTypeParser;
 import com.jazzjack.rab.bit.render.GameAssetManager;
 
 public class GameController implements InputProcessor {
@@ -20,6 +22,7 @@ public class GameController implements InputProcessor {
     private final GameAssetManager assetManager;
     private final AnimationRegister animationRegister;
     private final Randomizer randomizer;
+    private final ObjectTypeParser objectTypeParser;
 
     private Enemies enemies;
 
@@ -32,6 +35,7 @@ public class GameController implements InputProcessor {
         this.assetManager = assetManager;
         this.animationRegister = animationRegister;
         this.randomizer = randomizer;
+        this.objectTypeParser = new ObjectTypeParser(new FileHandle("objecttypes.xml"));
     }
 
     public void startGame() {
@@ -42,7 +46,7 @@ public class GameController implements InputProcessor {
     }
 
     private void startFirstLevel() {
-        level = new Level(this.assetManager.getTiledMap1());
+        level = new Level(this.assetManager.getTiledMap1(), objectTypeParser);
         playerMovementColissionDetector = new PlayerMovementCollisionDetector(level);
         LevelCollisionDetectorWithCollidables enemyMovementColissionDetector = new EnemyMovementCollisionDetector(level);
         EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementColissionDetector, level.getEnemies());

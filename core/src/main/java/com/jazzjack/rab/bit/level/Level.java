@@ -1,15 +1,15 @@
 package com.jazzjack.rab.bit.level;
 
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Ellipse;
 import com.jazzjack.rab.bit.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.actor.player.Player;
 import com.jazzjack.rab.bit.common.HasPosition;
 import com.jazzjack.rab.bit.common.Position;
+import com.jazzjack.rab.bit.common.Predictability;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -24,13 +24,19 @@ public class Level {
 
     private static final String MARKER_END = "end";
     private static final String MARKER_START = "start";
+    private static final String MARKER_ENEMY = "enemy";
+
+    private static final String PROPERTY_ENEMY_NAME = "type";
+    private static final String PROPERTY_ENEMY_PREDICTABILITY = "predictability";
 
     private final TiledMap tiledMap;
+    private final ObjectTypeParser objectTypeParser;
     private final Player player;
     private final List<Enemy> enemies;
 
-    public Level(TiledMap tiledMap) {
+    public Level(TiledMap tiledMap, ObjectTypeParser objectTypeParser) {
         this.tiledMap = tiledMap;
+        this.objectTypeParser = objectTypeParser;
         this.player = createPlayer();
         this.enemies = createEnemies();
     }
@@ -38,22 +44,31 @@ public class Level {
     private Player createPlayer() {
         return getMarkerObjectsByType(MARKER_START)
                 .findFirst()
-                .map(ellipse -> new Player(objectXToTileX(ellipse), objectYToTileY(ellipse)))
+                .map(Player::new)
                 .orElseThrow(() -> new InvalidLevelException("Could not find player start position"));
     }
 
     private List<Enemy> createEnemies() {
-        return getMarkerObjectsByType("enemy1")
-                .map(ellipse -> new Enemy(objectXToTileX(ellipse), objectYToTileY(ellipse)))
+        return getMarkerObjectsByType(MARKER_ENEMY)
+                .map(this::enemyFromMarkerObject)
                 .collect(toList());
     }
 
-    private Stream<Ellipse> getMarkerObjectsByType(String type) {
+    private Enemy enemyFromMarkerObject(MarkerObject markerObject) {
+        String name = markerObject.getStringProperty(PROPERTY_ENEMY_NAME);
+        Predictability predictability = objectTypeParser.getEnemyPredictability(name);
+        return new Enemy(name, predictability, markerObject);
+    }
+
+    private Stream<MarkerObject> getMarkerObjectsByType(String type) {
         return StreamSupport.stream(getMarkerObjects().spliterator(), false)
-                .filter(mapObject -> mapObject instanceof EllipseMapObject)
-                .map(mapObject -> (EllipseMapObject) mapObject)
-                .filter(ellipseMapObject -> type.equals(ellipseMapObject.getProperties().get("type")))
-                .map(EllipseMapObject::getEllipse);
+                .filter(mapObject -> matchesType(mapObject, type))
+                .map(mapObject -> new MarkerObject(mapObject, getTilePixelSize()));
+    }
+
+    private boolean matchesType(MapObject mapObject, String type) {
+        String objectType = mapObject.getProperties().get("type", String.class);
+        return objectType != null && objectType.startsWith(type);
     }
 
     private MapObjects getMarkerObjects() {
@@ -63,14 +78,6 @@ public class Level {
             }
         }
         throw new InvalidLevelException("Could not find markers layer");
-    }
-
-    private int objectYToTileY(Ellipse ellipse) {
-        return (int) (ellipse.y / getTilePixelSize());
-    }
-
-    private int objectXToTileX(Ellipse ellipse) {
-        return (int) (ellipse.x / getTilePixelSize());
     }
 
     public TiledMapTileLayer getMapLayer() {
@@ -89,7 +96,7 @@ public class Level {
     public HasPosition getEndPosition() {
         return getMarkerObjectsByType(MARKER_END)
                 .findFirst()
-                .map(ellipse -> new Position(objectXToTileX(ellipse), objectYToTileY(ellipse)))
+                .map(Position::new)
                 .orElseThrow(() -> new InvalidLevelException("Could not find end position"));
     }
 

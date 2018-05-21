@@ -4,6 +4,7 @@ import com.jazzjack.rab.bit.collision.Collidable;
 import com.jazzjack.rab.bit.collision.CollisionDetector;
 import com.jazzjack.rab.bit.collision.CollisionResult;
 import com.jazzjack.rab.bit.common.Direction;
+import com.jazzjack.rab.bit.common.HasPosition;
 
 public class SimpleActor implements Actor {
 
@@ -12,10 +13,10 @@ public class SimpleActor implements Actor {
     private int x;
     private int y;
 
-    public SimpleActor(String name, int startX, int startY) {
+    public SimpleActor(String name, HasPosition hasPosition) {
         this.name = name;
-        this.x = startX;
-        this.y = startY;
+        this.x = hasPosition.getX();
+        this.y = hasPosition.getY();
     }
 
     @Override
