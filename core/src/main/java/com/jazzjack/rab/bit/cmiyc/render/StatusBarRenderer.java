@@ -29,7 +29,7 @@ public class StatusBarRenderer implements Renderer {
 
     private OrthographicCamera createCamera() {
         OrthographicCamera orthographicCamera = new OrthographicCamera();
-        orthographicCamera.setToOrtho(false, level.getWidth() * SCALE_TO_LEVEL, level.getHeight() * SCALE_TO_LEVEL);
+        orthographicCamera.setToOrtho(false, level.getTiledMap().getWidth() * SCALE_TO_LEVEL, level.getTiledMap().getHeight() * SCALE_TO_LEVEL);
         orthographicCamera.update();
         return orthographicCamera;
     }
@@ -61,7 +61,7 @@ public class StatusBarRenderer implements Renderer {
     public void clearStatusBar() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(0f, 0f, level.getWidth() * SCALE_TO_LEVEL, 1f);
+        shapeRenderer.rect(0f, 0f, level.getTiledMap().getWidth() * SCALE_TO_LEVEL, 1f);
         shapeRenderer.end();
     }
 
@@ -69,11 +69,11 @@ public class StatusBarRenderer implements Renderer {
         batch.begin();
         TextureAtlas.AtlasRegion hpFilledTexture = assetManager.getHpFilledTexture();
         for (float i = 0; i < level.getPlayer().getHp(); i++) {
-            batch.draw(hpFilledTexture, i,0f,1f,1f);
+            batch.draw(hpFilledTexture, i, 0f, 1f, 1f);
         }
         TextureAtlas.AtlasRegion hpEmptyTexture = assetManager.getHpEmptyTexture();
         for (float j = level.getPlayer().getHp(); j < level.getPlayer().getMaxHp(); j++) {
-            batch.draw(hpEmptyTexture, j,0f,1f,1f);
+            batch.draw(hpEmptyTexture, j, 0f, 1f, 1f);
         }
         batch.end();
     }

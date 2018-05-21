@@ -14,6 +14,7 @@ import com.jazzjack.rab.bit.cmiyc.collision.LevelCollisionDetectorWithCollidable
 import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
 import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
+import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaDataFactory;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
@@ -47,7 +48,8 @@ public class GameController implements InputProcessor {
     }
 
     private void startFirstLevel() {
-        level = new Level(assetManager.getTiledMap1(), levelMetaDataFactory.create(assetManager.getTiledMap1()));
+        LevelTiledMap tiledMap = new LevelTiledMap(assetManager.getTiledMap1());
+        level = new Level(tiledMap, levelMetaDataFactory.create(tiledMap));
         playerMovementColissionDetector = new PlayerMovementCollisionDetector(level);
         LevelCollisionDetectorWithCollidables enemyMovementColissionDetector = new EnemyMovementCollisionDetector(level);
         EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementColissionDetector, level.getEnemies());

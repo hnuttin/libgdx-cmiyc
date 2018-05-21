@@ -26,7 +26,7 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     private final FogOfWarBuffer fogOfWarBuffer;
 
     public LevelRenderer(Level level, GameAssetManager assetManager) {
-        super(null, 1 / level.getTilePixelSize());
+        super(null, 1 / level.getTiledMap().getTilePixelSize());
         this.level = level;
         this.assetManager = assetManager;
         this.camera = new LevelCamera(level, LEVEL_CAMERA_SCALE);
@@ -58,7 +58,7 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     }
 
     private void renderLevel() {
-        super.renderMapLayer(level.getMapLayer());
+        super.renderMapLayer(level.getTiledMap().getMapLayer());
     }
 
     private void renderPlayer() {
@@ -99,7 +99,7 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     }
 
     private void renderEndPosition() {
-        HasPosition endPosition = level.getEndPosition();
+        HasPosition endPosition = level.getLevelMetaData().getEndPosition();
         batch.draw(
                 assetManager.getPlayerEndTexture(),
                 endPosition.getX(),

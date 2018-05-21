@@ -23,7 +23,7 @@ class TextDrawer {
         float percentageY = calculateFontY(tileY, percentageFont, position);
         percentageFont.setColor(percentageFont.getColor().r, percentageFont.getColor().g, percentageFont.getColor().b, 1f);
         percentageFont.setUseIntegerPositions(false);
-        percentageFont.getData().setScale(1f / levelCamera.getLevel().getTilePixelSize() / levelCamera.getCameraScale() / 3);
+        percentageFont.getData().setScale(1f / levelCamera.getLevel().getTiledMap().getTilePixelSize() / levelCamera.getCameraScale() / 3);
         batch.setShader(assetManager.getFontShaderProgram());
         percentageFont.draw(batch, text, percentageX, percentageY, (float) 1, Align.center, false);
         batch.setShader(null);
@@ -34,7 +34,7 @@ class TextDrawer {
     }
 
     private float calculateFontX(float tileX) {
-        return tileX + 1f / levelCamera.getLevel().getTilePixelSize() / levelCamera.getCameraScale();
+        return tileX + 1f / levelCamera.getLevel().getTiledMap().getTilePixelSize() / levelCamera.getCameraScale();
     }
 
     private float underneathStep(float tileY, BitmapFont percentageFont) {
@@ -42,7 +42,7 @@ class TextDrawer {
     }
 
     private float aboveStep(float tileY) {
-        return tileY  + 1f - (5f / levelCamera.getLevel().getTilePixelSize() / levelCamera.getCameraScale());
+        return tileY  + 1f - (5f / levelCamera.getLevel().getTiledMap().getTilePixelSize() / levelCamera.getCameraScale());
     }
 
     enum Position {

@@ -3,8 +3,9 @@ package com.jazzjack.rab.bit.cmiyc.level.meta;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
-import com.jazzjack.rab.bit.cmiyc.common.Predictability;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -15,7 +16,6 @@ public class ObjectTypeParser {
     private static final String ELEMENT_PROPERTY = "property";
 
     private static final String ATTRIBUTE_NAME = "name";
-    private static final String ATTRIBUTE_PREDICTABILITY = "predictability";
     private static final String ATTRIBUTE_DEFAULT = "default";
 
     private final XmlReader.Element objectTypes;
@@ -25,15 +25,14 @@ public class ObjectTypeParser {
         this.objectTypes = xmlReader.parse(fileHandle);
     }
 
-    public Predictability getEnemyPredictability(String enemyName) {
-        XmlReader.Element objectType = getObjectType(enemyName);
-        String predictability = getProperty(objectType, ATTRIBUTE_PREDICTABILITY);
-        return Predictability.valueOf(predictability);
-    }
-
-    private String getProperty(XmlReader.Element objectType, String attribute) {
-        XmlReader.Element property = getChildElementWithAttribute(objectType, ELEMENT_PROPERTY, ATTRIBUTE_NAME, attribute);
-        return property.getAttribute(ATTRIBUTE_DEFAULT);
+    public Map<String, String> getDefaultProperties(String objectType) {
+        XmlReader.Element objectTypeElement = getObjectType(objectType);
+        Array<XmlReader.Element> objectTypeProperties = objectTypeElement.getChildrenByName(ELEMENT_PROPERTY);
+        Map<String, String> defaultProperties = new HashMap<>(objectTypeProperties.size);
+        for (XmlReader.Element propertyElement : objectTypeProperties) {
+            defaultProperties.put(propertyElement.getAttribute(ATTRIBUTE_NAME), propertyElement.getAttribute(ATTRIBUTE_DEFAULT));
+        }
+        return defaultProperties;
     }
 
     private XmlReader.Element getObjectType(String name) {

@@ -27,7 +27,7 @@ class FogOfWarBuffer implements Disposable, PlayerMovedSubscriber {
         this.level = level;
         this.batch = batch;
         this.assetManager = assetManager;
-        this.lightFrameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, this.level.getWidth(), this.level.getHeight(), false);
+        this.lightFrameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, this.level.getTiledMap().getWidth(), this.level.getTiledMap().getHeight(), false);
         GameEventBus.registerSubscriber(this);
     }
 

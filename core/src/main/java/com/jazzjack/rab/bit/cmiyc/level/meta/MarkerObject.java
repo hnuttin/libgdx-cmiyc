@@ -61,7 +61,7 @@ public class MarkerObject implements HasPosition {
         return position.getY();
     }
 
-    public String getName() {
-        return getStringProperty("name");
+    public String getType() {
+        return getStringProperty("type");
     }
 }
