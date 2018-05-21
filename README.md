@@ -1,5 +1,5 @@
-# libgdx-tryout
+# Catch me if you can
 
-[![Build Status](https://travis-ci.org/hnuttin/libgdx-tryout.svg?branch=master)](https://travis-ci.org/hnuttin/libgdx-tryout)
+[![Build Status](https://travis-ci.org/hnuttin/libgdx-cmiyc.svg?branch=master)](https://travis-ci.org/hnuttin/libgdx-cmiyc)
 
-[![Sonar Gateway](https://sonarcloud.io/api/project_badges/measure?project=my-first-game&metric=alert_status)](https://sonarcloud.io/dashboard?id=my-first-game)
+[![Sonar Gateway](https://sonarcloud.io/api/project_badges/measure?project=cmiyce&metric=alert_status)](https://sonarcloud.io/dashboard?id=cmiyce)
