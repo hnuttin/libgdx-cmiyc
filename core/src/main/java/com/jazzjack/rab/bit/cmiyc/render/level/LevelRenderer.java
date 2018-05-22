@@ -91,7 +91,8 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
                 route.getPercentage() + "%",
                 lastStep.getX(),
                 lastStep.getY(),
-                percentagePositionForStep(lastStep));
+                percentagePositionForStep(lastStep),
+                level.getTiledMap().getTilePixelSize());
     }
 
     private TextDrawer.Position percentagePositionForStep(Step step) {

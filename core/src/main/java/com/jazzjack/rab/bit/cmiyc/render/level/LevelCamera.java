@@ -15,10 +15,6 @@ class LevelCamera extends OrthographicCamera {
         setToOrtho(false, calculateViewportWidth(), calculateViewportHeight(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 
-    Level getLevel() {
-        return level;
-    }
-
     float getCameraScale() {
         return cameraScale;
     }

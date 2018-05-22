@@ -17,32 +17,32 @@ class TextDrawer {
         this.levelCamera = levelCamera;
     }
 
-    public void drawText(String text, float tileX, float tileY, Position position) {
+    void drawText(String text, float tileX, float tileY, Position positionOnTile, float tilePixelSize) {
         BitmapFont percentageFont = assetManager.getPercentageFont();
-        float percentageX = calculateFontX(tileX);
-        float percentageY = calculateFontY(tileY, percentageFont, position);
+        float percentageX = calculateFontX(tileX, tilePixelSize);
+        float percentageY = calculateFontY(tileY, percentageFont, positionOnTile, tilePixelSize);
         percentageFont.setColor(percentageFont.getColor().r, percentageFont.getColor().g, percentageFont.getColor().b, 1f);
         percentageFont.setUseIntegerPositions(false);
-        percentageFont.getData().setScale(1f / levelCamera.getLevel().getTiledMap().getTilePixelSize() / levelCamera.getCameraScale() / 3);
+        percentageFont.getData().setScale(1f / tilePixelSize / levelCamera.getCameraScale() / 3);
         batch.setShader(assetManager.getFontShaderProgram());
         percentageFont.draw(batch, text, percentageX, percentageY, (float) 1, Align.center, false);
         batch.setShader(null);
     }
 
-    private float calculateFontY(float tileY, BitmapFont percentageFont, Position position) {
-        return position == Position.BOTTOM ? underneathStep(tileY, percentageFont) : aboveStep(tileY);
+    private float calculateFontY(float tileY, BitmapFont percentageFont, Position position, float tilePixelSize) {
+        return position == Position.BOTTOM ? underneathStep(tileY, percentageFont) : aboveStep(tileY, tilePixelSize);
     }
 
-    private float calculateFontX(float tileX) {
-        return tileX + 1f / levelCamera.getLevel().getTiledMap().getTilePixelSize() / levelCamera.getCameraScale();
+    private float calculateFontX(float tileX, float tilePixelSize) {
+        return tileX + 1f / tilePixelSize / levelCamera.getCameraScale();
     }
 
     private float underneathStep(float tileY, BitmapFont percentageFont) {
         return tileY + percentageFont.getData().lineHeight;
     }
 
-    private float aboveStep(float tileY) {
-        return tileY  + 1f - (5f / levelCamera.getLevel().getTiledMap().getTilePixelSize() / levelCamera.getCameraScale());
+    private float aboveStep(float tileY, float tilePixelSize) {
+        return tileY  + 1f - (5f / tilePixelSize / levelCamera.getCameraScale());
     }
 
     enum Position {
