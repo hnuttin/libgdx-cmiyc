@@ -25,11 +25,11 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     private final TextDrawer textDrawer;
     private final FogOfWarBuffer fogOfWarBuffer;
 
-    public LevelRenderer(Level level, GameAssetManager assetManager) {
+    public LevelRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
         super(null, 1 / level.getTiledMap().getTilePixelSize());
         this.level = level;
         this.assetManager = assetManager;
-        this.camera = new LevelCamera(level, LEVEL_CAMERA_SCALE);
+        this.camera = new LevelCamera(level, numberOfHorizontalTilesToRender, LEVEL_CAMERA_SCALE);
         this.textDrawer = new TextDrawer(assetManager, super.batch, this.camera);
         this.fogOfWarBuffer = new FogOfWarBuffer(this.level, super.batch, assetManager);
     }

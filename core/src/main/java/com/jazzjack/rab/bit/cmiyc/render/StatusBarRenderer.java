@@ -1,5 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.render;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,15 +13,18 @@ import com.jazzjack.rab.bit.cmiyc.level.Level;
 public class StatusBarRenderer implements Renderer {
 
     private static final float SCALE_TO_LEVEL = 2f;
+
     private final Level level;
     private final GameAssetManager assetManager;
+    private final int numberOfHorizontalTilesToRender;
     private final Batch batch;
     private final ShapeRenderer shapeRenderer;
     private final Camera camera;
 
-    StatusBarRenderer(Level level, GameAssetManager assetManager) {
+    StatusBarRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
         this.level = level;
         this.assetManager = assetManager;
+        this.numberOfHorizontalTilesToRender = numberOfHorizontalTilesToRender;
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
         this.camera = createCamera();
@@ -29,14 +33,23 @@ public class StatusBarRenderer implements Renderer {
 
     private OrthographicCamera createCamera() {
         OrthographicCamera orthographicCamera = new OrthographicCamera();
-        orthographicCamera.setToOrtho(false, level.getTiledMap().getWidth() * SCALE_TO_LEVEL, level.getTiledMap().getHeight() * SCALE_TO_LEVEL);
-        orthographicCamera.update();
+        orthographicCamera.setToOrtho(false, calculateViewportWidth(), calculateViewportHeight(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         return orthographicCamera;
+    }
+
+    private float calculateViewportWidth() {
+        return numberOfHorizontalTilesToRender * SCALE_TO_LEVEL;
+    }
+
+    private float calculateViewportHeight(int screenWidthInPixels, int screenHeightInPixels) {
+        return calculateViewportWidth() * screenHeightInPixels / screenWidthInPixels;
     }
 
     @Override
     public void resize(int width, int height) {
-        updateCamera();
+        camera.viewportWidth = calculateViewportWidth();
+        camera.viewportHeight = calculateViewportHeight(width, height);
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0f);
     }
 
     @Override
@@ -61,7 +74,7 @@ public class StatusBarRenderer implements Renderer {
     public void clearStatusBar() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(0f, 0f, level.getTiledMap().getWidth() * SCALE_TO_LEVEL, 1f);
+        shapeRenderer.rect(0f, 0f, numberOfHorizontalTilesToRender * SCALE_TO_LEVEL, 1f);
         shapeRenderer.end();
     }
 

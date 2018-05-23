@@ -3,6 +3,7 @@ package com.jazzjack.rab.bit.cmiyc.logic;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementContext;
@@ -41,15 +42,18 @@ public class GameController implements InputProcessor {
     }
 
     public void startGame() {
-        startFirstLevel();
-        startPlayerTurn();
+        startLevel(assetManager.getTiledMap1());
+    }
 
+    private void startLevel(TiledMap tiledMap) {
+        initializeLevel(tiledMap);
+        startPlayerTurn();
         GameEventBus.publishNewLevelEvent(level);
     }
 
-    private void startFirstLevel() {
-        LevelTiledMap tiledMap = new LevelTiledMap(assetManager.getTiledMap1());
-        level = new Level(tiledMap, levelMetaDataFactory.create(tiledMap));
+    private void initializeLevel(TiledMap tiledMap) {
+        LevelTiledMap levelTiledMap = new LevelTiledMap(tiledMap);
+        level = new Level(levelTiledMap, levelMetaDataFactory.create(levelTiledMap));
         playerMovementColissionDetector = new PlayerMovementCollisionDetector(level);
         LevelCollisionDetectorWithCollidables enemyMovementColissionDetector = new EnemyMovementCollisionDetector(level);
         EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementColissionDetector, level.getEnemies());
@@ -75,7 +79,7 @@ public class GameController implements InputProcessor {
         if (movePlayer(keycode)) {
             GameEventBus.publishPlayerMovedEvent();
             if (level.hasPlayerReachedEnd()) {
-                startGame();
+                startLevel(assetManager.getTiledMap2());
             }
             if (!level.getPlayer().hasMovementsLeft()) {
                 startEnemyTurn();
@@ -107,7 +111,7 @@ public class GameController implements InputProcessor {
 
     private void endEnemyTurn() {
         if (level.getPlayer().isDead()) {
-            startGame();
+            startLevel(assetManager.getTiledMap1());
         } else {
             startPlayerTurn();
         }

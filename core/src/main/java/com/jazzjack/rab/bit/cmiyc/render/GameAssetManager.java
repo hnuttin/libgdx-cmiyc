@@ -13,6 +13,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 public class GameAssetManager extends AssetManager {
 
     private static final String MAP1 = "pixel-art1.tmx";
+    private static final String MAP2 = "cmiyc2.tmx";
 
     private static final String ATLAS_LIGHTS = "lights.atlas";
     private static final String ATLAS_CMIYC_FONTS = "atlas/cmiyc_fonts.atlas";
@@ -30,10 +31,8 @@ public class GameAssetManager extends AssetManager {
     public GameAssetManager() {
         super();
         configureLoaders();
-        load(MAP1, TiledMap.class);
-        load(ATLAS_LIGHTS, TextureAtlas.class);
-        load(ATLAS_CMIYC_FONTS, TextureAtlas.class);
-        load(ATLAS_CMIYC_ACTORS, TextureAtlas.class);
+        loadMaps();
+        loadTextures();
         loadFonts();
         finishLoading();
     }
@@ -41,6 +40,17 @@ public class GameAssetManager extends AssetManager {
     private void configureLoaders() {
         InternalFileHandleResolver resolver = new InternalFileHandleResolver();
         setLoader(TiledMap.class, new TmxMapLoader(resolver));
+    }
+
+    private void loadMaps() {
+        load(MAP1, TiledMap.class);
+        load(MAP2, TiledMap.class);
+    }
+
+    private void loadTextures() {
+        load(ATLAS_LIGHTS, TextureAtlas.class);
+        load(ATLAS_CMIYC_FONTS, TextureAtlas.class);
+        load(ATLAS_CMIYC_ACTORS, TextureAtlas.class);
     }
 
     private void loadFonts() {
@@ -52,6 +62,10 @@ public class GameAssetManager extends AssetManager {
 
     public TiledMap getTiledMap1() {
         return get(MAP1, TiledMap.class);
+    }
+
+    public TiledMap getTiledMap2() {
+        return get(MAP2, TiledMap.class);
     }
 
     public TextureAtlas.AtlasRegion getLightTexture() {

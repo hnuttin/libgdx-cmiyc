@@ -21,7 +21,7 @@ public class Player extends SimpleActor {
     public Player(HasPosition hasPosition) {
         super("player", hasPosition);
 
-        maxNumberOfMoves = 4;
+        maxNumberOfMoves = 10;
         maxHp = 5;
         hp = 3;
     }

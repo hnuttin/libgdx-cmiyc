@@ -7,10 +7,12 @@ import com.jazzjack.rab.bit.cmiyc.level.Level;
 class LevelCamera extends OrthographicCamera {
 
     private final Level level;
+    private final int numberOfHorizontalTilesToRender;
     private final float cameraScale;
 
-    LevelCamera(Level level, float cameraScale) {
+    LevelCamera(Level level, int numberOfHorizontalTilesToRender, float cameraScale) {
         this.level = level;
+        this.numberOfHorizontalTilesToRender = numberOfHorizontalTilesToRender;
         this.cameraScale = cameraScale;
         setToOrtho(false, calculateViewportWidth(), calculateViewportHeight(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
@@ -76,7 +78,7 @@ class LevelCamera extends OrthographicCamera {
     }
 
     private float calculateViewportWidth() {
-        return level.getTiledMap().getWidth() / cameraScale;
+        return numberOfHorizontalTilesToRender;
     }
 
     private float calculateViewportHeight(int gameWidthInPixels, int gameHeightInPixels) {

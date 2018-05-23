@@ -9,6 +9,8 @@ import com.jazzjack.rab.bit.cmiyc.render.level.LevelRenderer;
 
 public class GameRenderer implements Renderer, NewLevelSubscriber {
 
+    private static final int NUMBER_OF_HORIZONTAL_TILES_TO_RENDER = 20;
+    private static final int NUMBER_OF_VERTICAL_TILES_TO_RENDER = 10;
     private final GameAssetManager assetManager;
 
     private LevelRenderer levelRenderer;
@@ -21,11 +23,11 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
 
     @Override
     public void onNewLevel(Level newLevel) {
-        levelRenderer = new LevelRenderer(newLevel, assetManager);
-        statusBarRenderer = new StatusBarRenderer(newLevel, assetManager);
+        levelRenderer = new LevelRenderer(newLevel, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
+        statusBarRenderer = new StatusBarRenderer(newLevel, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
         Gdx.graphics.setWindowedMode(
-                newLevel.getTiledMap().getWidth() * (int) newLevel.getTiledMap().getTilePixelSize() * 2,
-                newLevel.getTiledMap().getHeight() * (int) newLevel.getTiledMap().getTilePixelSize() * 2);
+                NUMBER_OF_HORIZONTAL_TILES_TO_RENDER * (int) newLevel.getTiledMap().getTilePixelSize() * 2,
+                NUMBER_OF_VERTICAL_TILES_TO_RENDER * (int) newLevel.getTiledMap().getTilePixelSize() * 2);
     }
 
     @Override
