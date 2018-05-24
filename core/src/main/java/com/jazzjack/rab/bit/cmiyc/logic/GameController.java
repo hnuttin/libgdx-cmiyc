@@ -2,8 +2,6 @@ package com.jazzjack.rab.bit.cmiyc.logic;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementContext;
@@ -15,9 +13,7 @@ import com.jazzjack.rab.bit.cmiyc.collision.LevelCollisionDetectorWithCollidable
 import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
 import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
-import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
-import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaDataFactory;
-import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
+import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 
 public class GameController implements InputProcessor {
@@ -25,7 +21,8 @@ public class GameController implements InputProcessor {
     private final GameAssetManager assetManager;
     private final AnimationRegister animationRegister;
     private final Randomizer randomizer;
-    private final LevelMetaDataFactory levelMetaDataFactory;
+
+    private final LevelFactory levelFactory;
 
     private Enemies enemies;
 
@@ -38,22 +35,31 @@ public class GameController implements InputProcessor {
         this.assetManager = assetManager;
         this.animationRegister = animationRegister;
         this.randomizer = randomizer;
-        this.levelMetaDataFactory = new LevelMetaDataFactory(new ObjectTypeParser(new FileHandle("objecttypes.xml")));
+        this.levelFactory = new LevelFactory(assetManager);
     }
 
     public void startGame() {
-        startLevel(assetManager.getTiledMap1());
+        startNextLevel();
     }
 
-    private void startLevel(TiledMap tiledMap) {
-        initializeLevel(tiledMap);
-        startPlayerTurn();
+    private void startNextLevel() {
+        startLevel(levelFactory.getNextLevel());
+    }
+
+    private void restartLevel() {
+        startLevel(this.level);
+    }
+
+    private void startLevel(Level level) {
+        this.level = level;
+
+        initializeGameObjects(level);
+
         GameEventBus.publishNewLevelEvent(level);
+        startPlayerTurn();
     }
 
-    private void initializeLevel(TiledMap tiledMap) {
-        LevelTiledMap levelTiledMap = new LevelTiledMap(tiledMap);
-        level = new Level(levelTiledMap, levelMetaDataFactory.create(levelTiledMap));
+    private void initializeGameObjects(Level level) {
         playerMovementColissionDetector = new PlayerMovementCollisionDetector(level);
         LevelCollisionDetectorWithCollidables enemyMovementColissionDetector = new EnemyMovementCollisionDetector(level);
         EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementColissionDetector, level.getEnemies());
@@ -79,7 +85,7 @@ public class GameController implements InputProcessor {
         if (movePlayer(keycode)) {
             GameEventBus.publishPlayerMovedEvent();
             if (level.hasPlayerReachedEnd()) {
-                startLevel(assetManager.getTiledMap2());
+                startNextLevel();
             }
             if (!level.getPlayer().hasMovementsLeft()) {
                 startEnemyTurn();
@@ -111,7 +117,7 @@ public class GameController implements InputProcessor {
 
     private void endEnemyTurn() {
         if (level.getPlayer().isDead()) {
-            startLevel(assetManager.getTiledMap1());
+            restartLevel();
         } else {
             startPlayerTurn();
         }

@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 public class Player extends SimpleActor {
 
-    private static final int DEFAULT_SIGHT = 10;
+    private static final int DEFAULT_SIGHT = 5;
 
     private int maxNumberOfMoves;
     private int movements;
@@ -21,7 +21,7 @@ public class Player extends SimpleActor {
     public Player(HasPosition hasPosition) {
         super("player", hasPosition);
 
-        maxNumberOfMoves = 10;
+        maxNumberOfMoves = 5;
         maxHp = 5;
         hp = 3;
     }
