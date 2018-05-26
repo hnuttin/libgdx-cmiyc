@@ -29,8 +29,8 @@ public class LevelFactory {
     }
 
     private void initializeLevelSuppliers(GameAssetManager assetManager) {
-        levelSuppliers.add(() -> assetManager.getTiledMap1());
-        levelSuppliers.add(() -> assetManager.getTiledMap2());
+        levelSuppliers.add(assetManager::getTiledMap1);
+        levelSuppliers.add(assetManager::getTiledMap2);
     }
 
     public Level getNextLevel() {

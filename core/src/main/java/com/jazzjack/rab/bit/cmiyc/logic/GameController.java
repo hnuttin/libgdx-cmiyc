@@ -14,28 +14,23 @@ import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
 import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
-import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 
 public class GameController implements InputProcessor {
 
-    private final GameAssetManager assetManager;
     private final AnimationRegister animationRegister;
     private final Randomizer randomizer;
-
     private final LevelFactory levelFactory;
 
+    private Level currentLevel;
     private Enemies enemies;
-
-    private Level level;
     private LevelCollisionDetectorWithCollidables playerMovementColissionDetector;
 
     private GamePhase currentGamePhase;
 
-    public GameController(GameAssetManager assetManager, AnimationRegister animationRegister, Randomizer randomizer) {
-        this.assetManager = assetManager;
+    public GameController(LevelFactory levelFactory, AnimationRegister animationRegister, Randomizer randomizer) {
         this.animationRegister = animationRegister;
         this.randomizer = randomizer;
-        this.levelFactory = new LevelFactory(assetManager);
+        this.levelFactory = levelFactory;
     }
 
     public void startGame() {
@@ -47,11 +42,11 @@ public class GameController implements InputProcessor {
     }
 
     private void restartLevel() {
-        startLevel(this.level);
+        startLevel(this.currentLevel);
     }
 
     private void startLevel(Level level) {
-        this.level = level;
+        this.currentLevel = level;
 
         initializeGameObjects(level);
 
@@ -84,10 +79,10 @@ public class GameController implements InputProcessor {
         }
         if (movePlayer(keycode)) {
             GameEventBus.publishPlayerMovedEvent();
-            if (level.hasPlayerReachedEnd()) {
+            if (currentLevel.hasPlayerReachedEnd()) {
                 startNextLevel();
             }
-            if (!level.getPlayer().hasMovementsLeft()) {
+            if (!currentLevel.getPlayer().hasMovementsLeft()) {
                 startEnemyTurn();
             }
             return true;
@@ -98,13 +93,13 @@ public class GameController implements InputProcessor {
     private Boolean movePlayer(int keycode) {
         switch (keycode) {
             case Input.Keys.LEFT:
-                return level.getPlayer().moveLeft(playerMovementColissionDetector).success();
+                return currentLevel.getPlayer().moveLeft(playerMovementColissionDetector).success();
             case Input.Keys.RIGHT:
-                return level.getPlayer().moveRight(playerMovementColissionDetector).success();
+                return currentLevel.getPlayer().moveRight(playerMovementColissionDetector).success();
             case Input.Keys.UP:
-                return level.getPlayer().moveUp(playerMovementColissionDetector).success();
+                return currentLevel.getPlayer().moveUp(playerMovementColissionDetector).success();
             case Input.Keys.DOWN:
-                return level.getPlayer().moveDown(playerMovementColissionDetector).success();
+                return currentLevel.getPlayer().moveDown(playerMovementColissionDetector).success();
             default:
                 return false;
         }
@@ -116,7 +111,7 @@ public class GameController implements InputProcessor {
     }
 
     private void endEnemyTurn() {
-        if (level.getPlayer().isDead()) {
+        if (currentLevel.getPlayer().isDead()) {
             restartLevel();
         } else {
             startPlayerTurn();
@@ -126,7 +121,7 @@ public class GameController implements InputProcessor {
     private void startPlayerTurn() {
         currentGamePhase = GamePhase.PLAYER_TURN;
         enemies.generateRoutes();
-        level.getPlayer().resetMovements();
+        currentLevel.getPlayer().resetMovements();
     }
 
     @Override
