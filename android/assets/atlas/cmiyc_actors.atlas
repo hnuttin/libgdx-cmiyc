@@ -1,125 +1,188 @@
 
 cmiyc_actors.png
-size: 128,256
+size: 1024,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+eight
+  rotate: false
+  xy: 68, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 end
   rotate: false
-  xy: 70, 206
+  xy: 664, 68
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 enemy1
   rotate: false
-  xy: 70, 172
+  xy: 138, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 enemy2
   rotate: false
-  xy: 2, 70
+  xy: 732, 68
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 enemy3
   rotate: false
-  xy: 36, 36
+  xy: 274, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+five
+  rotate: false
+  xy: 464, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+four
+  rotate: false
+  xy: 398, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 hp-empty
   rotate: false
-  xy: 36, 206
+  xy: 36, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 hp-filled
   rotate: false
-  xy: 2, 172
+  xy: 596, 68
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+nine
+  rotate: false
+  xy: 530, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+one
+  rotate: false
+  xy: 200, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 player
   rotate: false
-  xy: 2, 104
+  xy: 104, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-corner-bottom-left
   rotate: false
-  xy: 70, 104
+  xy: 240, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-corner-bottom-right
   rotate: false
-  xy: 70, 138
+  xy: 766, 68
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-corner-top-left
   rotate: false
-  xy: 36, 70
+  xy: 800, 68
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-corner-top-right
   rotate: false
-  xy: 2, 36
+  xy: 206, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-ending-bottom
   rotate: false
-  xy: 36, 172
+  xy: 70, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-ending-left
   rotate: false
-  xy: 2, 206
+  xy: 2, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-ending-right
   rotate: false
-  xy: 36, 104
+  xy: 172, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-ending-top
   rotate: false
-  xy: 2, 138
+  xy: 630, 68
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-horizontal
   rotate: false
-  xy: 36, 138
+  xy: 698, 68
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-vertical
   rotate: false
-  xy: 2, 2
+  xy: 834, 68
   size: 32, 32
   orig: 32, 32
+  offset: 0, 0
+  index: -1
+seven
+  rotate: false
+  xy: 134, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+six
+  rotate: false
+  xy: 332, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+three
+  rotate: false
+  xy: 266, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+two
+  rotate: false
+  xy: 2, 36
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1

@@ -10,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 
-public class StatusBarRenderer implements Renderer {
+import static com.jazzjack.rab.bit.cmiyc.render.BatchUtils.drawWithAlpha;
+
+public class HUDRenderer implements Renderer {
 
     private static final float SCALE_TO_LEVEL = 2f;
 
@@ -21,7 +23,7 @@ public class StatusBarRenderer implements Renderer {
     private final ShapeRenderer shapeRenderer;
     private final Camera camera;
 
-    StatusBarRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
+    HUDRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
         this.level = level;
         this.assetManager = assetManager;
         this.numberOfHorizontalTilesToRender = numberOfHorizontalTilesToRender;
@@ -57,6 +59,7 @@ public class StatusBarRenderer implements Renderer {
         updateCamera();
         clearStatusBar();
         renderStatusBar();
+        renderTurnCounter();
     }
 
     private void updateCamera() {
@@ -88,6 +91,13 @@ public class StatusBarRenderer implements Renderer {
         for (float j = level.getPlayer().getHp(); j < level.getPlayer().getMaxHp(); j++) {
             batch.draw(hpEmptyTexture, j, 0f, 1f, 1f);
         }
+        batch.end();
+    }
+
+    private void renderTurnCounter() {
+        batch.begin();
+        TextureAtlas.AtlasRegion turnsLeftTexture = assetManager.getTurnsLeftTexture(level.getTurnsLeft());
+        drawWithAlpha(batch, 0.7f, () -> batch.draw(turnsLeftTexture, 0, camera.viewportHeight - 2, 2, 2));
         batch.end();
     }
 }

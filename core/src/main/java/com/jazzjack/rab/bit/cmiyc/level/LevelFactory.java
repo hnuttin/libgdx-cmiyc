@@ -33,12 +33,17 @@ public class LevelFactory {
         levelSuppliers.add(assetManager::getTiledMap2);
     }
 
-    public Level getNextLevel() {
+    public Level createCurrentLevel() {
+        currentLevelIndex--;
+        return createNextLevel();
+    }
+
+    public Level createNextLevel() {
         if (currentLevelIndex >= levelSuppliers.size()) {
             throw new InvalidLevelException("No new level anymore: finished?");
         } else {
             LevelTiledMap levelTiledMap = new LevelTiledMap(levelSuppliers.get(currentLevelIndex).get());
-            Level level = new Level(levelTiledMap, levelMetaDataFactory.create(levelTiledMap));
+            Level level = new Level(levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 9);
             currentLevelIndex++;
             return level;
         }

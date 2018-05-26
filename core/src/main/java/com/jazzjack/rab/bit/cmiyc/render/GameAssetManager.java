@@ -10,6 +10,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GameAssetManager extends AssetManager {
 
     private static final String MAP1 = "pixel-art1.tmx";
@@ -27,6 +30,20 @@ public class GameAssetManager extends AssetManager {
     private static final String FONT_VCR = "fonts/vcr-df.fnt";
 
     private static final String SHADER_FONT = "shaders/font.vert";
+
+    private static final Map<Integer, String> TURN_ATLAS_REGION_MAPPING = new HashMap<>();
+
+    static {
+        TURN_ATLAS_REGION_MAPPING.put(1, "one");
+        TURN_ATLAS_REGION_MAPPING.put(2, "two");
+        TURN_ATLAS_REGION_MAPPING.put(3, "three");
+        TURN_ATLAS_REGION_MAPPING.put(4, "four");
+        TURN_ATLAS_REGION_MAPPING.put(5, "five");
+        TURN_ATLAS_REGION_MAPPING.put(6, "six");
+        TURN_ATLAS_REGION_MAPPING.put(7, "seven");
+        TURN_ATLAS_REGION_MAPPING.put(8, "eight");
+        TURN_ATLAS_REGION_MAPPING.put(9, "nine");
+    }
 
     public GameAssetManager() {
         super();
@@ -86,6 +103,10 @@ public class GameAssetManager extends AssetManager {
 
     public TextureAtlas.AtlasRegion getPlayerEndTexture() {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_PLAYER_END);
+    }
+
+    public TextureAtlas.AtlasRegion getTurnsLeftTexture(int turnsLeft) {
+        return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(TURN_ATLAS_REGION_MAPPING.get(turnsLeft));
     }
 
     public BitmapFont getPercentageFont() {

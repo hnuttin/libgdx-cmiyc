@@ -16,9 +16,13 @@ public class Level {
     private final Player player;
     private final List<Enemy> enemies;
 
-    public Level(LevelTiledMap tiledMap, LevelMetaData levelMetaData) {
+    private int turnsLeft;
+
+    public Level(LevelTiledMap tiledMap, LevelMetaData levelMetaData, int maxTurns) {
         this.tiledMap = tiledMap;
         this.levelMetaData = levelMetaData;
+        this.turnsLeft = maxTurns;
+
         this.player = createPlayer();
         this.enemies = createEnemies();
     }
@@ -55,4 +59,15 @@ public class Level {
         return enemies;
     }
 
+    public int getTurnsLeft() {
+        return turnsLeft;
+    }
+
+    public void endTurn() {
+        turnsLeft--;
+    }
+
+    public boolean noTurnsLeft() {
+        return turnsLeft < 1;
+    }
 }

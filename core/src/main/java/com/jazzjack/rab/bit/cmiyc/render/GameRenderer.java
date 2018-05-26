@@ -14,7 +14,7 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
     private final GameAssetManager assetManager;
 
     private LevelRenderer levelRenderer;
-    private StatusBarRenderer statusBarRenderer;
+    private HUDRenderer hudRenderer;
 
     public GameRenderer(GameAssetManager assetManager) {
         this.assetManager = assetManager;
@@ -24,7 +24,7 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
     @Override
     public void onNewLevel(Level newLevel) {
         levelRenderer = new LevelRenderer(newLevel, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
-        statusBarRenderer = new StatusBarRenderer(newLevel, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
+        hudRenderer = new HUDRenderer(newLevel, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
         Gdx.graphics.setWindowedMode(
                 NUMBER_OF_HORIZONTAL_TILES_TO_RENDER * (int) newLevel.getTiledMap().getTilePixelSize() * 2,
                 NUMBER_OF_VERTICAL_TILES_TO_RENDER * (int) newLevel.getTiledMap().getTilePixelSize() * 2);
@@ -36,8 +36,8 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
         if (levelRenderer != null) {
             levelRenderer.render();
         }
-        if (statusBarRenderer != null) {
-            statusBarRenderer.render();
+        if (hudRenderer != null) {
+            hudRenderer.render();
         }
     }
 
@@ -46,8 +46,8 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
         if (levelRenderer != null) {
             levelRenderer.resize(width, height);
         }
-        if (statusBarRenderer != null) {
-            statusBarRenderer.resize(width, height);
+        if (hudRenderer != null) {
+            hudRenderer.resize(width, height);
         }
     }
 
@@ -56,8 +56,8 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
         if (levelRenderer != null) {
             levelRenderer.dispose();
         }
-        if (statusBarRenderer != null) {
-            statusBarRenderer.dispose();
+        if (hudRenderer != null) {
+            hudRenderer.dispose();
         }
     }
 

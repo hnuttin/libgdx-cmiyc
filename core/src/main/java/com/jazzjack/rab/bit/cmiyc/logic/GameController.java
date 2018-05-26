@@ -38,11 +38,11 @@ public class GameController implements InputProcessor {
     }
 
     private void startNextLevel() {
-        startLevel(levelFactory.getNextLevel());
+        startLevel(levelFactory.createNextLevel());
     }
 
     private void restartLevel() {
-        startLevel(this.currentLevel);
+        startLevel(levelFactory.createCurrentLevel());
     }
 
     private void startLevel(Level level) {
@@ -74,7 +74,7 @@ public class GameController implements InputProcessor {
 
     private boolean handlePlayerKeys(int keycode) {
         if (keycode == Input.Keys.E) {
-            startEnemyTurn();
+            endPlayerTurn();
             return true;
         }
         if (movePlayer(keycode)) {
@@ -83,7 +83,7 @@ public class GameController implements InputProcessor {
                 startNextLevel();
             }
             if (!currentLevel.getPlayer().hasMovementsLeft()) {
-                startEnemyTurn();
+                endPlayerTurn();
             }
             return true;
         }
@@ -103,6 +103,14 @@ public class GameController implements InputProcessor {
             default:
                 return false;
         }
+    }
+
+    private void endPlayerTurn() {
+        currentLevel.endTurn();
+        if (currentLevel.noTurnsLeft()) {
+            restartLevel();
+        }
+        startEnemyTurn();
     }
 
     private void startEnemyTurn() {
