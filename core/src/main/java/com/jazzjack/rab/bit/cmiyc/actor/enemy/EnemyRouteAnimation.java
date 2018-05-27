@@ -3,26 +3,25 @@ package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.AnimationRoute;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.cmiyc.animation.Animation;
-import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 
 class EnemyRouteAnimation implements Animation {
 
     private static final float ANIMATION_SPEED_IN_SECONDS = 0.2f;
 
-    private final CollisionDetector collisionDetector;
     private final Enemy enemy;
     private final AnimationRoute routeToAnimate;
 
     private float timeSinceLastStep;
     private boolean inProgress;
 
-    EnemyRouteAnimation(CollisionDetector collisionDetector, Enemy enemy, AnimationRoute routeToAnimate) {
-        this.collisionDetector = collisionDetector;
+    EnemyRouteAnimation(Enemy enemy, AnimationRoute routeToAnimate) {
         this.enemy = enemy;
         this.routeToAnimate = routeToAnimate;
+
         this.timeSinceLastStep = 0;
         this.inProgress = true;
+
         moveEnemyToNextRouteStep();
     }
 
@@ -39,8 +38,8 @@ class EnemyRouteAnimation implements Animation {
 
     private void moveEnemyToNextRouteStep() {
         Step step = routeToAnimate.getSteps().get(0);
-        CollisionResult collisionResult = enemy.moveToStep(collisionDetector, step);
-        if (collisionResult.isCollision()) {
+        CollisionResult collisionResult = enemy.moveToStep(step);
+        if (collisionResult.isUnresolved()) {
             endAnimation();
         } else {
             routeToAnimate.removeStep(step);

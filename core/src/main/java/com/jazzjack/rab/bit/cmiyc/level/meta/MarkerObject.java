@@ -4,8 +4,8 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.jazzjack.rab.bit.cmiyc.level.InvalidLevelException;
-import com.jazzjack.rab.bit.cmiyc.shared.HasPosition;
-import com.jazzjack.rab.bit.cmiyc.shared.Position;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
+import com.jazzjack.rab.bit.cmiyc.shared.position.Position;
 
 import java.util.Map;
 

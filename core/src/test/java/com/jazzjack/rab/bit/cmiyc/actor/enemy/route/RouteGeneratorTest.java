@@ -5,9 +5,9 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
-import com.jazzjack.rab.bit.cmiyc.shared.Position;
 import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.position.Position;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

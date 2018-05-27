@@ -1,23 +1,20 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
+import com.jazzjack.rab.bit.cmiyc.actor.player.ActorMovementContext;
 import com.jazzjack.rab.bit.cmiyc.animation.AnimationRegister;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
+import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
 import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 
-public class EnemyMovementContext {
+public class EnemyMovementContext extends ActorMovementContext {
 
-    private final CollisionDetector collisionDetector;
     private final Randomizer randomizer;
     private final AnimationRegister animationRegister;
 
-    public EnemyMovementContext(CollisionDetector collisionDetector, Randomizer randomizer, AnimationRegister animationRegister) {
-        this.collisionDetector = collisionDetector;
+    public EnemyMovementContext(CollisionDetector collisionDetector, CollisionResolver collisionResolver, Randomizer randomizer, AnimationRegister animationRegister) {
+        super(collisionDetector, collisionResolver);
         this.randomizer = randomizer;
         this.animationRegister = animationRegister;
-    }
-
-    CollisionDetector getCollisionDetector() {
-        return collisionDetector;
     }
 
     Randomizer getRandomizer() {

@@ -1,6 +1,7 @@
 package com.jazzjack.rab.bit.cmiyc.collision;
 
 import com.jazzjack.rab.bit.cmiyc.level.Level;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,20 +27,20 @@ public abstract class LevelCollisionDetectorWithCollidables extends LevelCollisi
     }
 
     @Override
-    public CollisionResult collides(Collidable collidable) {
-        CollisionResult levelCollisionResult = super.collides(collidable);
-        if (levelCollisionResult.isCollision()) {
+    public CollisionResult collides(Collidable collidable, Direction direction) {
+        CollisionResult levelCollisionResult = super.collides(collidable, direction);
+        if (levelCollisionResult.isUnresolved()) {
             return levelCollisionResult;
         } else {
-            return collidesWithAnyCollidable(collidable);
+            return collidesWithAnyCollidable(collidable, direction);
         }
     }
 
-    private CollisionResult collidesWithAnyCollidable(final Collidable collidable) {
+    private CollisionResult collidesWithAnyCollidable(final Collidable collidable, Direction direction) {
         return collidables.stream()
                 .filter(collidableFromDetector -> collidableFromDetector.willCollideWith(collidable))
                 .findFirst()
-                .map((Collidable sourceCollidable) -> CollisionResult.unresolved(sourceCollidable, CollisionResult.direction))
+                .map((targetCollidable) -> CollisionResult.unresolved(collidable, targetCollidable, direction))
                 .orElse(CollisionResult.noCollision());
     }
 

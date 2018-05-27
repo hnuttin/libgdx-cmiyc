@@ -1,23 +1,23 @@
 package com.jazzjack.rab.bit.cmiyc.actor.player;
 
-import com.jazzjack.rab.bit.cmiyc.collision.ColissionResolver;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
+import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
 
 public class ActorMovementContext {
 
     private final CollisionDetector collisionDetector;
-    private final ColissionResolver colissionResolver;
+    private final CollisionResolver collisionResolver;
 
-    public ActorMovementContext(CollisionDetector collisionDetector, ColissionResolver colissionResolver) {
+    public ActorMovementContext(CollisionDetector collisionDetector, CollisionResolver collisionResolver) {
         this.collisionDetector = collisionDetector;
-        this.colissionResolver = colissionResolver;
+        this.collisionResolver = collisionResolver;
     }
 
     public CollisionDetector getCollisionDetector() {
         return collisionDetector;
     }
 
-    public ColissionResolver getColissionResolver() {
-        return colissionResolver;
+    public CollisionResolver getCollisionResolver() {
+        return collisionResolver;
     }
 }

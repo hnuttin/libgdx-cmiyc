@@ -8,14 +8,25 @@ public class CollisionResult {
     private final Collidable targetCollidable;
     private final Direction direction;
 
-    protected CollisionResult(Collidable sourceCollidable, Collidable targetCollidable, Direction direction) {
+    private final boolean resolved;
+
+    protected CollisionResult() {
+        this(null, null, null, true);
+    }
+
+    protected CollisionResult(Collidable sourceCollidable, Collidable targetCollidable, Direction direction, boolean resolved) {
         this.sourceCollidable = sourceCollidable;
         this.targetCollidable = targetCollidable;
         this.direction = direction;
+        this.resolved = resolved;
     }
 
-    public boolean isCollision() {
-        return targetCollidable != null;
+    public boolean isUnresolved() {
+        return targetCollidable != null && !resolved;
+    }
+
+    public boolean isResolved() {
+        return targetCollidable == null || resolved;
     }
 
     public Collidable getSourceCollidable() {
@@ -31,10 +42,14 @@ public class CollisionResult {
     }
 
     public static CollisionResult unresolved(Collidable sourceCollidable, Collidable targetCollidable, Direction direction) {
-        return new CollisionResult(sourceCollidable, targetCollidable, direction);
+        return new CollisionResult(sourceCollidable, targetCollidable, direction, false);
+    }
+
+    public static CollisionResult resolved(Collidable sourceCollidable, Collidable targetCollidable, Direction direction) {
+        return new CollisionResult(sourceCollidable, targetCollidable, direction, true);
     }
 
     public static CollisionResult noCollision() {
-        return new CollisionResult(null, null, null);
+        return new CollisionResult();
     }
 }

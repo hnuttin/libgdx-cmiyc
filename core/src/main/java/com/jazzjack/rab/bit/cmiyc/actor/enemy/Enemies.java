@@ -8,12 +8,10 @@ import java.util.concurrent.CompletableFuture;
 public class Enemies {
 
     private final RouteGenerator routeGenerator;
-    private final EnemyMovementContext context;
     private final List<Enemy> listOfEnemies;
 
-    public Enemies(RouteGenerator routeGenerator, EnemyMovementContext context, List<Enemy> listOfEnemies) {
+    public Enemies(RouteGenerator routeGenerator, List<Enemy> listOfEnemies) {
         this.routeGenerator = routeGenerator;
-        this.context = context;
         this.listOfEnemies = listOfEnemies;
     }
 
@@ -25,9 +23,9 @@ public class Enemies {
         CompletableFuture<Void> moveAllEnemiesFuture = null;
         for (Enemy enemy : listOfEnemies) {
             if (moveAllEnemiesFuture == null) {
-                moveAllEnemiesFuture = enemy.moveAlongRandomRoute(context);
+                moveAllEnemiesFuture = enemy.moveAlongRandomRoute();
             } else {
-                moveAllEnemiesFuture = moveAllEnemiesFuture.thenCompose(previousResult -> enemy.moveAlongRandomRoute(context));
+                moveAllEnemiesFuture = moveAllEnemiesFuture.thenCompose(previousResult -> enemy.moveAlongRandomRoute());
             }
         }
         return moveAllEnemiesFuture;

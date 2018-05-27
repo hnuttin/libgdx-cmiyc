@@ -1,12 +1,12 @@
 package com.jazzjack.rab.bit.cmiyc.actor.player;
 
-import com.jazzjack.rab.bit.cmiyc.actor.SimpleActor;
+import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
-import com.jazzjack.rab.bit.cmiyc.shared.HasPosition;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
-public class Player extends SimpleActor {
+public class Player extends MovableActor {
 
     private int actionPointsPerTurn;
     private int actionPointsConsumed;
@@ -17,8 +17,8 @@ public class Player extends SimpleActor {
     private int sight;
     private int power;
 
-    public Player(HasPosition hasPosition) {
-        super("player", hasPosition);
+    public Player(ActorMovementContext movementContext, HasPosition hasPosition) {
+        super(movementContext, "player", hasPosition);
 
         this.actionPointsPerTurn = 5;
         this.actionPointsConsumed = 0;
@@ -55,21 +55,19 @@ public class Player extends SimpleActor {
     }
 
     @Override
-    public PlayerMovementResult moveToDirection(ActorMovementContext context, Direction direction) {
+    public CollisionResult moveToDirection(Direction direction) {
         if (hasActionPointsLeft()) {
-            CollisionResult collisionResult = super.moveToDirection(context.getCollisionDetector(), direction);
-            if (!collisionResult.isCollision()) {
+            CollisionResult collisionResult = super.moveToDirection(direction);
+            if (collisionResult.isResolved()) {
                 actionPointsConsumed++;
-            } else {
-                collisionResult = context.getColissionResolver().resolveCollisionForPlayer(collisionResult);
             }
-            return PlayerMovementResult.fromCollisionResult(collisionResult);
+            return collisionResult;
         } else {
-            return PlayerMovementResult.noMovementsLeftResult();
+            return CollisionResult.noCollision();
         }
     }
 
-    public int getActionPointsPerTurn(){
+    public int getActionPointsPerTurn() {
         return actionPointsPerTurn;
     }
 

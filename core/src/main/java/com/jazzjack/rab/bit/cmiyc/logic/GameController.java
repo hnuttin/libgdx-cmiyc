@@ -7,8 +7,10 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementContext;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyRouteCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
+import com.jazzjack.rab.bit.cmiyc.actor.player.ActorMovementContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovementCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.animation.AnimationRegister;
+import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
 import com.jazzjack.rab.bit.cmiyc.collision.LevelCollisionDetectorWithCollidables;
 import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
@@ -36,7 +38,6 @@ public class GameController implements InputProcessor {
 
     private Level currentLevel;
     private Enemies enemies;
-    private LevelCollisionDetectorWithCollidables playerMovementColissionDetector;
 
     private GamePhase currentGamePhase;
 
@@ -68,12 +69,14 @@ public class GameController implements InputProcessor {
     }
 
     private void initializeGameObjects(Level level) {
-        playerMovementColissionDetector = new PlayerMovementCollisionDetector(level);
+        PlayerMovementCollisionDetector playerMovementCollisionDetector = new PlayerMovementCollisionDetector(level);
+        CollisionResolver collisionResolver = new CollisionResolver();
+        ActorMovementContext actorMovementContext = new ActorMovementContext(playerMovementCollisionDetector, collisionResolver);
         LevelCollisionDetectorWithCollidables enemyMovementColissionDetector = new EnemyMovementCollisionDetector(level);
-        EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementColissionDetector, level.getEnemies());
+        EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementCollisionDetector, level.getEnemies());
         RouteGenerator routeGenerator = new RouteGenerator(enemyRouteCollisionDetector, randomizer);
-        EnemyMovementContext enemyMovementContext = new EnemyMovementContext(enemyMovementColissionDetector, randomizer, animationRegister);
-        enemies = new Enemies(routeGenerator, enemyMovementContext, level.getEnemies());
+        EnemyMovementContext enemyMovementContext = new EnemyMovementContext(enemyMovementColissionDetector, collisionResolver, randomizer, animationRegister);
+        enemies = new Enemies(routeGenerator, level.getEnemies());
     }
 
     private boolean isPlayerTurn() {
@@ -106,7 +109,7 @@ public class GameController implements InputProcessor {
     private Boolean movePlayer(int keycode) {
         Direction direction = KEY_TO_DIRECTION_MAPPING.get(keycode);
         if (direction != null) {
-            return currentLevel.getPlayer().moveToDirection(playerMovementColissionDetector, direction).success();
+            return currentLevel.getPlayer().moveToDirection(direction).isResolved();
         } else {
             return false;
         }
