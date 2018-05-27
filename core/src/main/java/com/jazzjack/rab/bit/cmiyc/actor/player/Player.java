@@ -12,8 +12,8 @@ public class Player extends SimpleActor {
 
     private static final int DEFAULT_SIGHT = 5;
 
-    private int maxNumberOfMoves;
-    private int movements;
+    private int actionPointsPerTurn;
+    private int actionPointsConsumed;
 
     private int maxHp;
     private int hp;
@@ -21,17 +21,14 @@ public class Player extends SimpleActor {
     public Player(HasPosition hasPosition) {
         super("player", hasPosition);
 
-        maxNumberOfMoves = 5;
-        maxHp = 5;
-        hp = 3;
+        this.actionPointsPerTurn = 5;
+        this.actionPointsConsumed = 0;
+        this.maxHp = 5;
+        this.hp = 3;
     }
 
     public int getSight() {
         return DEFAULT_SIGHT;
-    }
-
-    public int getMovements() {
-        return movements;
     }
 
     public int getMaxHp() {
@@ -71,10 +68,10 @@ public class Player extends SimpleActor {
     }
 
     private PlayerMovementResult doPlayerMove(CollisionDetector collisionDetector, Function<CollisionDetector, CollisionResult> move) {
-        if (hasMovementsLeft()) {
+        if (hasActionPointsLeft()) {
             CollisionResult collisionResult = move.apply(collisionDetector);
             if (!collisionResult.isCollision()) {
-                movements++;
+                actionPointsConsumed++;
             }
             return PlayerMovementResult.fromCollisionResult(collisionResult);
         } else {
@@ -82,11 +79,19 @@ public class Player extends SimpleActor {
         }
     }
 
-    public boolean hasMovementsLeft() {
-        return movements < maxNumberOfMoves;
+    public int getActionPointsPerTurn(){
+        return actionPointsPerTurn;
     }
 
-    public void resetMovements() {
-        movements = 0;
+    public int getActionPointsConsumed() {
+        return actionPointsConsumed;
+    }
+
+    public boolean hasActionPointsLeft() {
+        return actionPointsConsumed < actionPointsPerTurn;
+    }
+
+    public void resetActionPoints() {
+        actionPointsConsumed = 0;
     }
 }

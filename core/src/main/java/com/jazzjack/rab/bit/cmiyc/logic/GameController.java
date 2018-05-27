@@ -82,7 +82,7 @@ public class GameController implements InputProcessor {
             if (currentLevel.hasPlayerReachedEnd()) {
                 startNextLevel();
             }
-            if (!currentLevel.getPlayer().hasMovementsLeft()) {
+            if (!currentLevel.getPlayer().hasActionPointsLeft()) {
                 endPlayerTurn();
             }
             return true;
@@ -129,7 +129,7 @@ public class GameController implements InputProcessor {
     private void startPlayerTurn() {
         currentGamePhase = GamePhase.PLAYER_TURN;
         enemies.generateRoutes();
-        currentLevel.getPlayer().resetMovements();
+        currentLevel.getPlayer().resetActionPoints();
     }
 
     @Override

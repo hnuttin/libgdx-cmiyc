@@ -14,8 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class Level_PlayerReachedEndTest {
 
-    private final NeverCollideCollisionDetector collisionDetector = new NeverCollideCollisionDetector();
-
     private Level level;
 
     @BeforeEach
@@ -34,8 +32,8 @@ class Level_PlayerReachedEndTest {
 
     @Test
     void expectPlayerReachedEndWhenOnLevelMetaDataEndPosition() {
-        level.getPlayer().moveUp(collisionDetector);
-        level.getPlayer().moveRight(collisionDetector);
+        level.getPlayer().moveUp(NeverCollideCollisionDetector.TEST_INSTANCE);
+        level.getPlayer().moveRight(NeverCollideCollisionDetector.TEST_INSTANCE);
 
         assertThat(level.hasPlayerReachedEnd()).isTrue();
     }

@@ -26,6 +26,9 @@ public class GameAssetManager extends AssetManager {
     private static final String ATLAS_REGION_PLAYER_END = "end";
     private static final String ATLAS_REGION_HP_FILLED = "hp-filled";
     private static final String ATLAS_REGION_HP_EMPTY = "hp-empty";
+    private static final String ATLAS_REGION_AP_START = "ap-ending-left";
+    private static final String ATLAS_REGION_AP_MIDDLE = "ap-horizontal";
+    private static final String ATLAS_REGION_AP_END = "ap-ending-right";
 
     private static final String FONT_VCR = "fonts/vcr-df.fnt";
 
@@ -34,6 +37,7 @@ public class GameAssetManager extends AssetManager {
     private static final Map<Integer, String> TURN_ATLAS_REGION_MAPPING = new HashMap<>();
 
     static {
+        TURN_ATLAS_REGION_MAPPING.put(0, "zero");
         TURN_ATLAS_REGION_MAPPING.put(1, "one");
         TURN_ATLAS_REGION_MAPPING.put(2, "two");
         TURN_ATLAS_REGION_MAPPING.put(3, "three");
@@ -99,6 +103,18 @@ public class GameAssetManager extends AssetManager {
 
     public TextureAtlas.AtlasRegion getHpEmptyTexture() {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_HP_EMPTY);
+    }
+
+    public TextureAtlas.AtlasRegion getApStartTexture() {
+        return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_AP_START);
+    }
+
+    public TextureAtlas.AtlasRegion getApMiddleTexture() {
+        return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_AP_MIDDLE);
+    }
+
+    public TextureAtlas.AtlasRegion getApEndTexture() {
+        return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_AP_END);
     }
 
     public TextureAtlas.AtlasRegion getPlayerEndTexture() {

@@ -1,16 +1,14 @@
 package com.jazzjack.rab.bit.cmiyc.render;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 
-import static com.jazzjack.rab.bit.cmiyc.render.BatchUtils.drawWithAlpha;
+import static com.jazzjack.rab.bit.cmiyc.render.AlphaDrawer.alphaDrawer;
 
 public class HUDRenderer implements Renderer {
 
@@ -21,7 +19,8 @@ public class HUDRenderer implements Renderer {
     private final int numberOfHorizontalTilesToRender;
     private final Batch batch;
     private final ShapeRenderer shapeRenderer;
-    private final Camera camera;
+    private final GameCamera camera;
+    private final PlayerApDrawer playerApDrawer;
 
     HUDRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
         this.level = level;
@@ -30,13 +29,13 @@ public class HUDRenderer implements Renderer {
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
         this.camera = createCamera();
-
+        this.playerApDrawer = new PlayerApDrawer(this.assetManager, this.camera, this.batch);
     }
 
-    private OrthographicCamera createCamera() {
-        OrthographicCamera orthographicCamera = new OrthographicCamera();
-        orthographicCamera.setToOrtho(false, calculateViewportWidth(), calculateViewportHeight(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        return orthographicCamera;
+    private GameCamera createCamera() {
+        GameCamera gameCamera = new GameCamera();
+        gameCamera.setToOrtho(false, calculateViewportWidth(), calculateViewportHeight(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        return gameCamera;
     }
 
     private float calculateViewportWidth() {
@@ -51,15 +50,17 @@ public class HUDRenderer implements Renderer {
     public void resize(int width, int height) {
         camera.viewportWidth = calculateViewportWidth();
         camera.viewportHeight = calculateViewportHeight(width, height);
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0f);
+        camera.position.set(camera.getViewportWidth() / 2f, camera.getViewportHeight() / 2f, 0f);
     }
 
     @Override
     public void render() {
         updateCamera();
         clearStatusBar();
+        batch.begin();
         renderStatusBar();
         renderTurnCounter();
+        batch.end();
     }
 
     private void updateCamera() {
@@ -74,7 +75,7 @@ public class HUDRenderer implements Renderer {
         batch.dispose();
     }
 
-    public void clearStatusBar() {
+    private void clearStatusBar() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.rect(0f, 0f, numberOfHorizontalTilesToRender * SCALE_TO_LEVEL, 1f);
@@ -82,7 +83,11 @@ public class HUDRenderer implements Renderer {
     }
 
     private void renderStatusBar() {
-        batch.begin();
+        renderHp();
+        playerApDrawer.draw(level.getPlayer());
+    }
+
+    private void renderHp() {
         TextureAtlas.AtlasRegion hpFilledTexture = assetManager.getHpFilledTexture();
         for (float i = 0; i < level.getPlayer().getHp(); i++) {
             batch.draw(hpFilledTexture, i, 0f, 1f, 1f);
@@ -91,13 +96,12 @@ public class HUDRenderer implements Renderer {
         for (float j = level.getPlayer().getHp(); j < level.getPlayer().getMaxHp(); j++) {
             batch.draw(hpEmptyTexture, j, 0f, 1f, 1f);
         }
-        batch.end();
     }
 
     private void renderTurnCounter() {
-        batch.begin();
         TextureAtlas.AtlasRegion turnsLeftTexture = assetManager.getTurnsLeftTexture(level.getTurnsLeft());
-        drawWithAlpha(batch, 0.7f, () -> batch.draw(turnsLeftTexture, 0, camera.viewportHeight - 2, 2, 2));
-        batch.end();
+        alphaDrawer(batch)
+                .withAlpha(0.7f)
+                .draw((batch) -> batch.draw(turnsLeftTexture, 0, camera.viewportHeight - 2, 2, 2));
     }
 }

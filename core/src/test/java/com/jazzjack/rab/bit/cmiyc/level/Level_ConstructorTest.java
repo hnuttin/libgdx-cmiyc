@@ -2,7 +2,6 @@ package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
-import com.jazzjack.rab.bit.cmiyc.collision.NeverCollideCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.common.Predictability;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandleResolver;
@@ -15,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class Level_ConstructorTest {
-
-    private final NeverCollideCollisionDetector collisionDetector = new NeverCollideCollisionDetector();
 
     private Level level;
 

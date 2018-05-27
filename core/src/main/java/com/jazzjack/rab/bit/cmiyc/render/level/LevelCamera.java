@@ -1,10 +1,10 @@
 package com.jazzjack.rab.bit.cmiyc.render.level;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
+import com.jazzjack.rab.bit.cmiyc.render.GameCamera;
 
-class LevelCamera extends OrthographicCamera {
+class LevelCamera extends GameCamera {
 
     private final Level level;
     private final int numberOfHorizontalTilesToRender;
