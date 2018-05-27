@@ -25,7 +25,7 @@ class PlayerApDrawer {
             float apX = camera.getViewportWidth() - player.getActionPointsPerTurn() + apToRender;
             alphaDrawer(batch)
                     .withAlpha(alpha)
-                    .draw((batch) -> batch.draw(apTexture, apX, 0f, 1f, 1f));
+                    .draw(() -> batch.draw(apTexture, apX, 0f, 1f, 1f));
         }
     }
 

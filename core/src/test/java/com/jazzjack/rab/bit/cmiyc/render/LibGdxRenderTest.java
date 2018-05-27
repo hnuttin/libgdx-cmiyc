@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class LibGdxRenderTest {
+public abstract class LibGdxRenderTest {
 
     @Mock
     protected Batch batch;

@@ -102,6 +102,6 @@ public class HUDRenderer implements Renderer {
         TextureAtlas.AtlasRegion turnsLeftTexture = assetManager.getTurnsLeftTexture(level.getTurnsLeft());
         alphaDrawer(batch)
                 .withAlpha(0.7f)
-                .draw((batch) -> batch.draw(turnsLeftTexture, 0, camera.viewportHeight - 2, 2, 2));
+                .draw(() -> batch.draw(turnsLeftTexture, 0, camera.viewportHeight - 2, 2, 2));
     }
 }

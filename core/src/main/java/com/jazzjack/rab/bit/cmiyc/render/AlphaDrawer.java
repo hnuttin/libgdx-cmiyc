@@ -3,8 +3,6 @@ package com.jazzjack.rab.bit.cmiyc.render;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import java.util.function.Consumer;
-
 class AlphaDrawer {
 
     private final Batch batch;
@@ -19,14 +17,14 @@ class AlphaDrawer {
         return this;
     }
 
-    void draw(Consumer<Batch> toDraw) {
+    void draw(Runnable toDraw) {
         if (alpha != 1f) {
             Color color = batch.getColor();
             batch.setColor(color.r, color.g, color.b, alpha);
-            toDraw.accept(batch);
+            toDraw.run();
             batch.setColor(color);
         } else {
-            toDraw.accept(batch);
+            toDraw.run();
         }
     }
 
