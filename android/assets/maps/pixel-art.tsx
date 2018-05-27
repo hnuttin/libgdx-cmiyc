@@ -5,7 +5,7 @@
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/box-cover.png"/>
+  <image width="32" height="32" source="sprites/box-cover.png"/>
   <objectgroup draworder="index">
    <object id="1" name="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
@@ -14,7 +14,7 @@
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/horizontal-lower.png"/>
+  <image width="32" height="32" source="sprites/horizontal-lower.png"/>
   <objectgroup draworder="index">
    <object id="1" name="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
@@ -23,7 +23,7 @@
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/horizontal-upper.png"/>
+  <image width="32" height="32" source="sprites/horizontal-upper.png"/>
   <objectgroup draworder="index">
    <object id="1" name="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
@@ -32,7 +32,7 @@
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/left-upper-outer-corner.png"/>
+  <image width="32" height="32" source="sprites/left-upper-outer-corner.png"/>
   <objectgroup draworder="index">
    <object id="1" name="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
@@ -41,7 +41,7 @@
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/right-lower-outer-corner.png"/>
+  <image width="32" height="32" source="sprites/right-lower-outer-corner.png"/>
   <objectgroup draworder="index">
    <object id="1" name="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
@@ -50,7 +50,7 @@
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/right-upper-outer-corner.png"/>
+  <image width="32" height="32" source="sprites/right-upper-outer-corner.png"/>
   <objectgroup draworder="index">
    <object id="1" name="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
@@ -59,7 +59,7 @@
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/vertical-left.png"/>
+  <image width="32" height="32" source="sprites/vertical-left.png"/>
   <objectgroup draworder="index">
    <object id="1" name="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
@@ -68,7 +68,7 @@
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/vertical-right.png"/>
+  <image width="32" height="32" source="sprites/vertical-right.png"/>
   <objectgroup draworder="index">
    <object id="1" name="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
@@ -77,7 +77,7 @@
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/left-lower-outer-corner.png"/>
+  <image width="32" height="32" source="sprites/left-lower-outer-corner.png"/>
   <objectgroup draworder="index">
    <object id="1" name="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
@@ -86,6 +86,6 @@
   <properties>
    <property name="collision" type="bool" value="false"/>
   </properties>
-  <image width="32" height="32" source="pixel-art/ground.png"/>
+  <image width="32" height="32" source="sprites/ground.png"/>
  </tile>
 </tileset>

@@ -25,7 +25,7 @@ public class LevelFactory {
     }
 
     private LevelMetaDataFactory createLevelMetaDataFactory() {
-        return new LevelMetaDataFactory(new ObjectTypeParser(new FileHandle("objecttypes.xml")));
+        return new LevelMetaDataFactory(new ObjectTypeParser(new FileHandle("maps/objecttypes.xml")));
     }
 
     private void initializeLevelSuppliers(GameAssetManager assetManager) {

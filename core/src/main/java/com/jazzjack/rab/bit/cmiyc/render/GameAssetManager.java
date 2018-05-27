@@ -15,10 +15,10 @@ import java.util.Map;
 
 public class GameAssetManager extends AssetManager {
 
-    private static final String MAP1 = "pixel-art1.tmx";
-    private static final String MAP2 = "cmiyc2.tmx";
+    private static final String MAP1 = "maps/cmiyc1.tmx";
+    private static final String MAP2 = "maps/cmiyc2.tmx";
 
-    private static final String ATLAS_LIGHTS = "lights.atlas";
+    private static final String ATLAS_LIGHTS = "atlas/lights.atlas";
     private static final String ATLAS_CMIYC_FONTS = "atlas/cmiyc_fonts.atlas";
     private static final String ATLAS_CMIYC_ACTORS = "atlas/cmiyc_actors.atlas";
 
