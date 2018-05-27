@@ -2,7 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
 import com.jazzjack.rab.bit.cmiyc.animation.AnimationRegister;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 
 public class EnemyMovementContext {
 

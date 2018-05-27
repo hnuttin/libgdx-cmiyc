@@ -3,7 +3,7 @@ package com.jazzjack.rab.bit.cmiyc.render;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.collision.NeverCollideCollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.common.Position;
+import com.jazzjack.rab.bit.cmiyc.shared.Position;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

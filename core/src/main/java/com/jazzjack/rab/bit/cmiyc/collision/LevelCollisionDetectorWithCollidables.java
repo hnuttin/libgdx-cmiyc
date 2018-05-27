@@ -37,9 +37,9 @@ public abstract class LevelCollisionDetectorWithCollidables extends LevelCollisi
 
     private CollisionResult collidesWithAnyCollidable(final Collidable collidable) {
         return collidables.stream()
-                .filter(collidableFromDetector -> collidableFromDetector.collidesWith(collidable))
+                .filter(collidableFromDetector -> collidableFromDetector.willCollideWith(collidable))
                 .findFirst()
-                .map(CollisionResult::collision)
+                .map((Collidable sourceCollidable) -> CollisionResult.unresolved(sourceCollidable, CollisionResult.direction))
                 .orElse(CollisionResult.noCollision());
     }
 

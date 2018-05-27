@@ -3,9 +3,9 @@ package com.jazzjack.rab.bit.cmiyc.level.meta;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.jazzjack.rab.bit.cmiyc.common.HasPosition;
-import com.jazzjack.rab.bit.cmiyc.common.Position;
 import com.jazzjack.rab.bit.cmiyc.level.InvalidLevelException;
+import com.jazzjack.rab.bit.cmiyc.shared.HasPosition;
+import com.jazzjack.rab.bit.cmiyc.shared.Position;
 
 import java.util.Map;
 

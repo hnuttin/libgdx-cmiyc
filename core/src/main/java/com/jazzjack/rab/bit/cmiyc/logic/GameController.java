@@ -10,12 +10,25 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovementCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.animation.AnimationRegister;
 import com.jazzjack.rab.bit.cmiyc.collision.LevelCollisionDetectorWithCollidables;
-import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
 import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameController implements InputProcessor {
+
+    private static final Map<Integer, Direction> KEY_TO_DIRECTION_MAPPING = new HashMap<>();
+
+    static {
+        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.LEFT, Direction.LEFT);
+        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.RIGHT, Direction.RIGHT);
+        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.UP, Direction.UP);
+        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.DOWN, Direction.DOWN);
+    }
 
     private final AnimationRegister animationRegister;
     private final Randomizer randomizer;
@@ -91,17 +104,11 @@ public class GameController implements InputProcessor {
     }
 
     private Boolean movePlayer(int keycode) {
-        switch (keycode) {
-            case Input.Keys.LEFT:
-                return currentLevel.getPlayer().moveLeft(playerMovementColissionDetector).success();
-            case Input.Keys.RIGHT:
-                return currentLevel.getPlayer().moveRight(playerMovementColissionDetector).success();
-            case Input.Keys.UP:
-                return currentLevel.getPlayer().moveUp(playerMovementColissionDetector).success();
-            case Input.Keys.DOWN:
-                return currentLevel.getPlayer().moveDown(playerMovementColissionDetector).success();
-            default:
-                return false;
+        Direction direction = KEY_TO_DIRECTION_MAPPING.get(keycode);
+        if (direction != null) {
+            return currentLevel.getPlayer().moveToDirection(playerMovementColissionDetector, direction).success();
+        } else {
+            return false;
         }
     }
 

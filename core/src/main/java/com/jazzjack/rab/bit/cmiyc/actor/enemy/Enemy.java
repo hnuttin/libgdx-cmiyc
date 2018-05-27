@@ -9,9 +9,10 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
-import com.jazzjack.rab.bit.cmiyc.common.HasPosition;
-import com.jazzjack.rab.bit.cmiyc.common.Predictability;
-import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.HasPosition;
+import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
+import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +67,8 @@ public class Enemy extends SimpleActor {
 
     CollisionResult moveToStep(CollisionDetector collisionDetector, Step step) {
         CollisionResult collisionResult = super.moveToDirection(collisionDetector, step.getDirection());
-        if (collisionResult.isCollision() && collisionResult.getCollidable() instanceof Player) {
-            Player player = (Player) collisionResult.getCollidable();
+        if (collisionResult.isCollision() && collisionResult.getTargetCollidable() instanceof Player) {
+            Player player = (Player) collisionResult.getTargetCollidable();
             player.damangeFromEnemy(this);
         }
         return collisionResult;
@@ -75,5 +76,9 @@ public class Enemy extends SimpleActor {
 
     void removeRoute(Route route) {
         routes.remove(route);
+    }
+
+    public void pushByPlayer(Player player, Direction direction) {
+
     }
 }

@@ -1,7 +1,7 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
 import com.google.common.collect.ImmutableList;
-import com.jazzjack.rab.bit.cmiyc.common.Chance;
+import com.jazzjack.rab.bit.cmiyc.shared.Chance;
 
 import java.util.List;
 

@@ -4,10 +4,10 @@ import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.common.Direction;
-import com.jazzjack.rab.bit.cmiyc.common.Position;
-import com.jazzjack.rab.bit.cmiyc.common.Predictability;
-import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.Position;
+import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
+import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,8 +34,8 @@ import static com.jazzjack.rab.bit.cmiyc.actor.enemy.route.StepNames.ENDING_TOP;
 import static com.jazzjack.rab.bit.cmiyc.actor.enemy.route.StepNames.HORIZONTAL;
 import static com.jazzjack.rab.bit.cmiyc.actor.enemy.route.StepNames.VERTICAL;
 import static com.jazzjack.rab.bit.cmiyc.collision.CollidableMatcher.matchesCollidable;
-import static com.jazzjack.rab.bit.cmiyc.collision.CollisionResult.collision;
 import static com.jazzjack.rab.bit.cmiyc.collision.CollisionResult.noCollision;
+import static com.jazzjack.rab.bit.cmiyc.collision.CollisionResult.unresolved;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
@@ -69,9 +69,9 @@ class RouteGeneratorTest {
                 Direction.UP,
                 Direction.LEFT,
                 Direction.DOWN);
-        when(collisionDetector.collides(matchesCollidable(2, 1))).thenReturn(collision(mock(Collidable.class)));
-        when(collisionDetector.collides(matchesCollidable(1, 2))).thenReturn(collision(mock(Collidable.class)));
-        when(collisionDetector.collides(matchesCollidable(0, 1))).thenReturn(collision(mock(Collidable.class)));
+        when(collisionDetector.collides(matchesCollidable(2, 1))).thenReturn(unresolved(mock(Collidable.class), direction));
+        when(collisionDetector.collides(matchesCollidable(1, 2))).thenReturn(unresolved(mock(Collidable.class), direction));
+        when(collisionDetector.collides(matchesCollidable(0, 1))).thenReturn(unresolved(mock(Collidable.class), direction));
         when(collisionDetector.collides(matchesCollidable(1, 0))).thenReturn(noCollision());
 
         List<com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route> routes = routeGenerator.generateRoutes(enemy(1, 1), 1, 1);
@@ -154,9 +154,9 @@ class RouteGeneratorTest {
                 Direction.UP,
                 Direction.DOWN);
         when(collisionDetector.collides(matchesCollidable(1, 1))).thenReturn(noCollision());
-        when(collisionDetector.collides(matchesCollidable(2, 1))).thenReturn(collision(mock(Collidable.class)));
-        when(collisionDetector.collides(matchesCollidable(1, 2))).thenReturn(collision(mock(Collidable.class)));
-        when(collisionDetector.collides(matchesCollidable(1, 0))).thenReturn(collision(mock(Collidable.class)));
+        when(collisionDetector.collides(matchesCollidable(2, 1))).thenReturn(unresolved(mock(Collidable.class), direction));
+        when(collisionDetector.collides(matchesCollidable(1, 2))).thenReturn(unresolved(mock(Collidable.class), direction));
+        when(collisionDetector.collides(matchesCollidable(1, 0))).thenReturn(unresolved(mock(Collidable.class), direction));
 
         List<com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route> routes = routeGenerator.generateRoutes(enemy(0, 1), 1, 2);
 
@@ -260,7 +260,7 @@ class RouteGeneratorTest {
         when(randomizer.randomFromSet(Direction.valuesAsSet())).thenReturn(Direction.RIGHT);
         when(collisionDetector.collides(matchesCollidable(1, 0))).thenReturn(noCollision());
         when(randomizer.randomFromSet(new HashSet<>(asList(Direction.RIGHT, Direction.UP, Direction.DOWN)))).thenReturn(Direction.UP);
-        when(collisionDetector.collides(matchesCollidable(1, 1))).thenReturn(collision(mock(Collidable.class)));
+        when(collisionDetector.collides(matchesCollidable(1, 1))).thenReturn(unresolved(mock(Collidable.class), direction));
         when(randomizer.randomFromSet(new HashSet<>(asList(Direction.RIGHT, Direction.DOWN)))).thenReturn(Direction.RIGHT);
         when(collisionDetector.collides(matchesCollidable(2, 0))).thenReturn(noCollision());
 
@@ -284,9 +284,9 @@ class RouteGeneratorTest {
                 Direction.LEFT);
         when(collisionDetector.collides(any(Collidable.class))).thenReturn(
                 noCollision(),
-                collision(mock(Collidable.class)),
-                collision(mock(Collidable.class)),
-                collision(mock(Collidable.class)));
+                unresolved(mock(Collidable.class), direction),
+                unresolved(mock(Collidable.class), direction),
+                unresolved(mock(Collidable.class), direction));
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 2, 1);
 

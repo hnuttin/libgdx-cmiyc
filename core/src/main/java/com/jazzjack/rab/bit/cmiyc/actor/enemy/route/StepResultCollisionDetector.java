@@ -29,9 +29,9 @@ class StepResultCollisionDetector implements CollisionDetector {
 
     private CollisionResult collidesWithStepResults(Collidable collidable) {
         return stepResults.stream()
-                .filter(collidable::collidesWith)
+                .filter(collidable::willCollideWith)
                 .findFirst()
-                .map(CollisionResult::collision)
+                .map((StepResult sourceCollidable) -> CollisionResult.unresolved(sourceCollidable, CollisionResult.direction))
                 .orElse(CollisionResult.noCollision());
     }
 

@@ -2,15 +2,11 @@ package com.jazzjack.rab.bit.cmiyc.actor.player;
 
 import com.jazzjack.rab.bit.cmiyc.actor.SimpleActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
-import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
-import com.jazzjack.rab.bit.cmiyc.common.HasPosition;
-
-import java.util.function.Function;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.HasPosition;
 
 public class Player extends SimpleActor {
-
-    private static final int DEFAULT_SIGHT = 5;
 
     private int actionPointsPerTurn;
     private int actionPointsConsumed;
@@ -18,17 +14,28 @@ public class Player extends SimpleActor {
     private int maxHp;
     private int hp;
 
+    private int sight;
+    private int power;
+
     public Player(HasPosition hasPosition) {
         super("player", hasPosition);
 
         this.actionPointsPerTurn = 5;
         this.actionPointsConsumed = 0;
+
         this.maxHp = 5;
         this.hp = 3;
+
+        this.sight = 5;
+        this.power = 1;
     }
 
     public int getSight() {
-        return DEFAULT_SIGHT;
+        return sight;
+    }
+
+    public int getPower() {
+        return power;
     }
 
     public int getMaxHp() {
@@ -48,34 +55,17 @@ public class Player extends SimpleActor {
     }
 
     @Override
-    public PlayerMovementResult moveRight(CollisionDetector collisionDetector) {
-        return doPlayerMove(collisionDetector, super::moveRight);
-    }
-
-    @Override
-    public PlayerMovementResult moveLeft(CollisionDetector collisionDetector) {
-        return doPlayerMove(collisionDetector, super::moveLeft);
-    }
-
-    @Override
-    public PlayerMovementResult moveUp(CollisionDetector collisionDetector) {
-        return doPlayerMove(collisionDetector, super::moveUp);
-    }
-
-    @Override
-    public PlayerMovementResult moveDown(CollisionDetector collisionDetector) {
-        return doPlayerMove(collisionDetector, super::moveDown);
-    }
-
-    private PlayerMovementResult doPlayerMove(CollisionDetector collisionDetector, Function<CollisionDetector, CollisionResult> move) {
+    public PlayerMovementResult moveToDirection(ActorMovementContext context, Direction direction) {
         if (hasActionPointsLeft()) {
-            CollisionResult collisionResult = move.apply(collisionDetector);
+            CollisionResult collisionResult = super.moveToDirection(context.getCollisionDetector(), direction);
             if (!collisionResult.isCollision()) {
                 actionPointsConsumed++;
+            } else {
+                collisionResult = context.getColissionResolver().resolveCollisionForPlayer(collisionResult);
             }
             return PlayerMovementResult.fromCollisionResult(collisionResult);
         } else {
-            return PlayerMovementResult.moMovementsLeft();
+            return PlayerMovementResult.noMovementsLeftResult();
         }
     }
 

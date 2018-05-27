@@ -3,12 +3,12 @@ package com.jazzjack.rab.bit.cmiyc.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.jazzjack.rab.bit.cmiyc.animation.AnimationHandler;
-import com.jazzjack.rab.bit.cmiyc.common.RandomInteger;
-import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.logic.GameController;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 import com.jazzjack.rab.bit.cmiyc.render.GameRenderer;
+import com.jazzjack.rab.bit.cmiyc.shared.RandomInteger;
+import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 
 public class Game extends ApplicationAdapter {
 

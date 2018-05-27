@@ -1,5 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
@@ -30,9 +31,9 @@ public class EnemyRouteCollisionDetector implements CollisionDetector {
         return enemies.stream()
                 .flatMap(enemy -> enemy.getRoutes().stream())
                 .flatMap(route -> route.getSteps().stream())
-                .filter(step -> step.collidesWith(collidable))
+                .filter(step -> step.willCollideWith(collidable))
                 .findFirst()
-                .map(CollisionResult::collision)
+                .map((Step sourceCollidable) -> CollisionResult.unresolved(sourceCollidable, CollisionResult.direction))
                 .orElse(CollisionResult.noCollision());
     }
 }

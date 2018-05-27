@@ -1,7 +1,7 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
 import com.jazzjack.rab.bit.cmiyc.actor.SimpleActor;
-import com.jazzjack.rab.bit.cmiyc.common.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 public class Step extends SimpleActor {
 

@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.cmiyc.common;
+package com.jazzjack.rab.bit.cmiyc.shared;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

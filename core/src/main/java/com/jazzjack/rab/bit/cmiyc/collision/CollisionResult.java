@@ -1,26 +1,40 @@
 package com.jazzjack.rab.bit.cmiyc.collision;
 
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+
 public class CollisionResult {
 
-    private final Collidable collidable;
+    private final Collidable sourceCollidable;
+    private final Collidable targetCollidable;
+    private final Direction direction;
 
-    protected CollisionResult(Collidable collidable) {
-        this.collidable = collidable;
+    protected CollisionResult(Collidable sourceCollidable, Collidable targetCollidable, Direction direction) {
+        this.sourceCollidable = sourceCollidable;
+        this.targetCollidable = targetCollidable;
+        this.direction = direction;
     }
 
     public boolean isCollision() {
-        return collidable != null;
+        return targetCollidable != null;
     }
 
-    public Collidable getCollidable() {
-        return collidable;
+    public Collidable getSourceCollidable() {
+        return sourceCollidable;
     }
 
-    public static CollisionResult collision(Collidable collidable) {
-        return new CollisionResult(collidable);
+    public Collidable getTargetCollidable() {
+        return targetCollidable;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public static CollisionResult unresolved(Collidable sourceCollidable, Collidable targetCollidable, Direction direction) {
+        return new CollisionResult(sourceCollidable, targetCollidable, direction);
     }
 
     public static CollisionResult noCollision() {
-        return new CollisionResult(null);
+        return new CollisionResult(null, null, null);
     }
 }

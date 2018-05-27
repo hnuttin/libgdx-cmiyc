@@ -2,11 +2,11 @@ package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
-import com.jazzjack.rab.bit.cmiyc.common.Predictability;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandleResolver;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaDataFactory;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
+import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

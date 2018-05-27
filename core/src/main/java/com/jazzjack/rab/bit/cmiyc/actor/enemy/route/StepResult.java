@@ -1,8 +1,8 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
 import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
-import com.jazzjack.rab.bit.cmiyc.common.Direction;
-import com.jazzjack.rab.bit.cmiyc.common.Position;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.Position;
 
 class StepResult extends Position implements Collidable {
 

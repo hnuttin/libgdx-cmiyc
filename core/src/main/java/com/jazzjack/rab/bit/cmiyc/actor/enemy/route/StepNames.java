@@ -1,6 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
-import com.jazzjack.rab.bit.cmiyc.common.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 import java.util.EnumMap;
 import java.util.HashMap;

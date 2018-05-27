@@ -1,7 +1,7 @@
 package com.jazzjack.rab.bit.cmiyc.level.meta;
 
 import com.badlogic.gdx.maps.MapObject;
-import com.jazzjack.rab.bit.cmiyc.common.Predictability;
+import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 
 import java.util.Map;
 

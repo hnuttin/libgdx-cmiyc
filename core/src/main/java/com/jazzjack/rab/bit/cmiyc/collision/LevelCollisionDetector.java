@@ -3,6 +3,7 @@ package com.jazzjack.rab.bit.cmiyc.collision;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 public class LevelCollisionDetector implements CollisionDetector {
 
@@ -15,12 +16,12 @@ public class LevelCollisionDetector implements CollisionDetector {
     }
 
     @Override
-    public CollisionResult collides(Collidable collidable) {
+    public CollisionResult collides(Collidable collidable, Direction direction) {
         TiledMapTileLayer mapLayer = level.getTiledMap().getMapLayer();
         for (int cellX = 0; cellX < mapLayer.getWidth(); cellX++) {
             for (int cellY = 0; cellY < mapLayer.getHeight(); cellY++) {
                 if (collidesWithCell(cellX, cellY, collidable)) {
-                    return CollisionResult.collision(collidableFromCell(cellX, cellY));
+                    return CollisionResult.unresolved(collidable, collidableFromCell(cellX, cellY), direction);
                 }
             }
         }
@@ -35,7 +36,7 @@ public class LevelCollisionDetector implements CollisionDetector {
     }
 
     private boolean collidesWithTile(int cellX, int cellY, Collidable collidable) {
-        return collidable.collidesWith(collidableFromCell(cellX, cellY));
+        return collidable.willCollideWith(collidableFromCell(cellX, cellY));
     }
 
     private Collidable collidableFromCell(int cellX, int cellY) {

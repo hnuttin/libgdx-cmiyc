@@ -8,7 +8,7 @@ public class PlayerMovementResult extends CollisionResult {
     private final boolean noMovementsLeft;
 
     private PlayerMovementResult(Collidable collidable, boolean noMovementsLeft) {
-        super(collidable);
+        super(sourceCollidable, collidable, direction);
         this.noMovementsLeft = noMovementsLeft;
     }
 
@@ -20,11 +20,11 @@ public class PlayerMovementResult extends CollisionResult {
         return noMovementsLeft;
     }
 
-    public static PlayerMovementResult moMovementsLeft() {
+    public static PlayerMovementResult noMovementsLeftResult() {
         return new PlayerMovementResult(null, true);
     }
 
     public static PlayerMovementResult fromCollisionResult(CollisionResult collisionResult) {
-        return new PlayerMovementResult(collisionResult.getCollidable(), false);
+        return new PlayerMovementResult(collisionResult.getTargetCollidable(), false);
     }
 }

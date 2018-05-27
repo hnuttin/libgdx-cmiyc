@@ -4,8 +4,8 @@ import com.google.common.collect.Streams;
 import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.common.Direction;
-import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
