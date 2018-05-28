@@ -25,7 +25,7 @@ public class Level {
     private final LevelCollisionDetectorWithCollidables playerMovementCollisionDetector;
     private final LevelCollisionDetectorWithCollidables enemyMovementCollisionDetector;
     private final EnemyRouteCollisionDetector enemyRouteCollisionDetector;
-    private final EnemyContext movementContext;
+    private final EnemyContext enemyContext;
 
     private final Player player;
     private final Enemies enemies;
@@ -43,7 +43,7 @@ public class Level {
         this.enemyMovementCollisionDetector = new LevelCollisionDetectorWithCollidables(tiledMap);
         this.enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementCollisionDetector);
 
-        this.movementContext = new EnemyContext(
+        this.enemyContext = new EnemyContext(
                 enemyMovementCollisionDetector,
                 context.getCollisionResolver(),
                 context.getRandomizer(),
@@ -57,8 +57,8 @@ public class Level {
     }
 
     private Player createPlayer() {
-        ActorContext movementContext = new ActorContext(playerMovementCollisionDetector, context.getCollisionResolver());
-        return new Player(movementContext, levelMetaData.getStartPosition());
+        ActorContext context = new ActorContext(playerMovementCollisionDetector, this.context.getCollisionResolver());
+        return new Player(context, levelMetaData.getStartPosition());
     }
 
     private Enemies createEnemies() {
@@ -66,7 +66,7 @@ public class Level {
     }
 
     private Enemy createEnemy(EnemyMarkerObject enemyMarkerObject) {
-        return new Enemy(movementContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject);
+        return new Enemy(enemyContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject);
     }
 
     private void initializeCollisionDetectors() {

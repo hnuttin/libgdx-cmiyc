@@ -32,7 +32,7 @@ class StepResultCollisionDetector implements CollisionDetector {
         return stepResults.stream()
                 .filter(collidable::willCollideWith)
                 .findFirst()
-                .map((stepResult) -> CollisionResult.unresolved(collidable, stepResult, direction))
+                .map(stepResult -> CollisionResult.unresolved(collidable, stepResult, direction))
                 .orElse(CollisionResult.noCollision());
     }
 

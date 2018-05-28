@@ -38,7 +38,7 @@ public class EnemyRouteCollisionDetector implements CollisionDetector {
                 .flatMap(route -> route.getSteps().stream())
                 .filter(step -> step.willCollideWith(collidable))
                 .findFirst()
-                .map((step) -> CollisionResult.unresolved(collidable, step, direction))
+                .map(step -> CollisionResult.unresolved(collidable, step, direction))
                 .orElse(CollisionResult.noCollision());
     }
 }

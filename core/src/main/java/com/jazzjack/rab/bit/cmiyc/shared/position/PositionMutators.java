@@ -2,12 +2,11 @@ package com.jazzjack.rab.bit.cmiyc.shared.position;
 
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 
 public class PositionMutators {
 
-    private static final Map<Direction, PositionMutator> POSITION_MUTATOR_MAP = new HashMap<>();
+    private static final EnumMap<Direction, PositionMutator> POSITION_MUTATOR_MAP = new EnumMap<>(Direction.class);
 
     static {
         POSITION_MUTATOR_MAP.put(Direction.LEFT, new LeftPositionMutator());
@@ -27,7 +26,7 @@ public class PositionMutators {
         int mutateY(int y);
     }
 
-    private static abstract class IdentityPositionMutator implements PositionMutator {
+    private static class IdentityPositionMutator implements PositionMutator {
 
         @Override
         public int mutateX(int x) {
