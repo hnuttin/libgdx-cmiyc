@@ -12,12 +12,14 @@ import java.util.function.Supplier;
 
 public class LevelFactory {
 
+    private final LevelContext context;
     private final LevelMetaDataFactory levelMetaDataFactory;
     private final List<Supplier<TiledMap>> levelSuppliers;
 
     private int currentLevelIndex;
 
-    public LevelFactory(GameAssetManager assetManager) {
+    public LevelFactory(LevelContext context, GameAssetManager assetManager) {
+        this.context = context;
         this.levelSuppliers = new ArrayList<>();
         this.currentLevelIndex = 0;
         this.levelMetaDataFactory = createLevelMetaDataFactory();
@@ -43,7 +45,7 @@ public class LevelFactory {
             throw new InvalidLevelException("No new level anymore: finished?");
         } else {
             LevelTiledMap levelTiledMap = new LevelTiledMap(levelSuppliers.get(currentLevelIndex).get());
-            Level level = new Level(levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 9);
+            Level level = new Level(context, levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 9);
             currentLevelIndex++;
             return level;
         }

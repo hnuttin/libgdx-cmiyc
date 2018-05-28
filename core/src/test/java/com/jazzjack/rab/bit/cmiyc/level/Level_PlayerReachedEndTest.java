@@ -1,14 +1,15 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.jazzjack.rab.bit.cmiyc.collision.NeverCollideCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandleResolver;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaDataFactory;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,7 +23,7 @@ class Level_PlayerReachedEndTest {
         LevelMetaDataFactory levelMetaDataFactory = new LevelMetaDataFactory(objectTypeParser);
         TmxMapLoader tmxMapLoader = new TmxMapLoader(new ClasspathFileHandleResolver());
         LevelTiledMap levelTiledMap = new LevelTiledMap(tmxMapLoader.load("level-reach-end.tmx"));
-        level = new Level(levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 0);
+        level = new Level(Mockito.mock(LevelContext.class), levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 0);
     }
 
     @Test
@@ -32,8 +33,8 @@ class Level_PlayerReachedEndTest {
 
     @Test
     void expectPlayerReachedEndWhenOnLevelMetaDataEndPosition() {
-        level.getPlayer().moveUp(NeverCollideCollisionDetector.TEST_INSTANCE);
-        level.getPlayer().moveRight(NeverCollideCollisionDetector.TEST_INSTANCE);
+        level.getPlayer().moveToDirection(Direction.RIGHT);
+        level.getPlayer().moveToDirection(Direction.RIGHT);
 
         assertThat(level.hasPlayerReachedEnd()).isTrue();
     }

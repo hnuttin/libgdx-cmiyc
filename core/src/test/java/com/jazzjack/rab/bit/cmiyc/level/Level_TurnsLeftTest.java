@@ -20,7 +20,7 @@ class Level_TurnsLeftTest {
     void beforeEach() {
         LevelMetaData levelMetaData = mock(LevelMetaData.class);
         when(levelMetaData.getStartPosition()).thenReturn(mock(MarkerObject.class));
-        level = new Level(mock(LevelTiledMap.class), levelMetaData, MAX_TURNS);
+        level = new Level(mock(LevelContext.class), mock(LevelTiledMap.class), levelMetaData, MAX_TURNS);
     }
 
     @Test

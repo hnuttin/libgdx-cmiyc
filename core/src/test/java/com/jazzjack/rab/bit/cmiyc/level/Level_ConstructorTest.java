@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 class Level_ConstructorTest {
 
@@ -23,7 +24,7 @@ class Level_ConstructorTest {
         LevelMetaDataFactory levelMetaDataFactory = new LevelMetaDataFactory(objectTypeParser);
         TmxMapLoader tmxMapLoader = new TmxMapLoader(new ClasspathFileHandleResolver());
         LevelTiledMap levelTiledMap = new LevelTiledMap(tmxMapLoader.load("map-with-markers.tmx"));
-        level = new Level(levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 0);
+        level = new Level(mock(LevelContext.class), levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 0);
     }
 
     @Test

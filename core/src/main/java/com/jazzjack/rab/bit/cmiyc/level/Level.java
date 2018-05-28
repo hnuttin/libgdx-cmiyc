@@ -1,42 +1,78 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyContext;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyRouteCollisionDetector;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
+import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
+import com.jazzjack.rab.bit.cmiyc.collision.LevelCollisionDetectorWithCollidables;
 import com.jazzjack.rab.bit.cmiyc.level.meta.EnemyMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaData;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static java.util.stream.Collectors.toList;
 
 public class Level {
 
+    private final LevelContext context;
     private final LevelTiledMap tiledMap;
     private final LevelMetaData levelMetaData;
+
+    private final LevelCollisionDetectorWithCollidables playerMovementCollisionDetector;
+    private final LevelCollisionDetectorWithCollidables enemyMovementCollisionDetector;
+    private final EnemyRouteCollisionDetector enemyRouteCollisionDetector;
+    private final EnemyContext movementContext;
+
     private final Player player;
-    private final List<Enemy> enemies;
+    private final Enemies enemies;
 
     private int turnsLeft;
 
-    public Level(LevelTiledMap tiledMap, LevelMetaData levelMetaData, int maxTurns) {
+    public Level(LevelContext context, LevelTiledMap tiledMap, LevelMetaData levelMetaData, int maxTurns) {
+        this.context = context;
         this.tiledMap = tiledMap;
         this.levelMetaData = levelMetaData;
+
         this.turnsLeft = maxTurns;
+
+        this.playerMovementCollisionDetector = new LevelCollisionDetectorWithCollidables(tiledMap);
+        this.enemyMovementCollisionDetector = new LevelCollisionDetectorWithCollidables(tiledMap);
+        this.enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementCollisionDetector);
+
+        this.movementContext = new EnemyContext(
+                enemyMovementCollisionDetector,
+                context.getCollisionResolver(),
+                context.getRandomizer(),
+                context.getAnimationRegister(),
+                new RouteGenerator(enemyRouteCollisionDetector, context.getRandomizer()));
 
         this.player = createPlayer();
         this.enemies = createEnemies();
+
+        initializeCollisionDetectors();
     }
 
     private Player createPlayer() {
-        return new Player(levelMetaData.getStartPosition());
+        ActorContext movementContext = new ActorContext(playerMovementCollisionDetector, context.getCollisionResolver());
+        return new Player(movementContext, levelMetaData.getStartPosition());
     }
 
-    private List<Enemy> createEnemies() {
-        return levelMetaData.getEnemies().stream().map(this::createEnemy).collect(toList());
+    private Enemies createEnemies() {
+        return new Enemies(levelMetaData.getEnemies().stream().map(this::createEnemy).collect(toList()));
     }
 
     private Enemy createEnemy(EnemyMarkerObject enemyMarkerObject) {
-        return new Enemy(enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject);
+        return new Enemy(movementContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject);
+    }
+
+    private void initializeCollisionDetectors() {
+        this.playerMovementCollisionDetector.addCollidable(enemies.get());
+        this.enemyMovementCollisionDetector.addCollidable(player);
+        this.enemyRouteCollisionDetector.addEnemies(enemies.get());
     }
 
     public LevelTiledMap getTiledMap() {
@@ -56,7 +92,7 @@ public class Level {
     }
 
     public List<Enemy> getEnemies() {
-        return enemies;
+        return enemies.get();
     }
 
     public int getTurnsLeft() {
@@ -69,5 +105,13 @@ public class Level {
 
     public boolean noTurnsLeft() {
         return turnsLeft < 1;
+    }
+
+    public CompletableFuture<Void> moveAllEnemies() {
+        return enemies.moveAllEnemies();
+    }
+
+    public void generateEnemyRoutes() {
+        enemies.generateRoutes();
     }
 }

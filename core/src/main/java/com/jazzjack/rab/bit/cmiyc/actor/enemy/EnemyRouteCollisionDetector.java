@@ -5,6 +5,7 @@ import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnemyRouteCollisionDetector implements CollisionDetector {
@@ -12,9 +13,13 @@ public class EnemyRouteCollisionDetector implements CollisionDetector {
     private final CollisionDetector collisionDetector;
     private final List<Enemy> enemies;
 
-    public EnemyRouteCollisionDetector(CollisionDetector collisionDetector, List<Enemy> enemies) {
+    public EnemyRouteCollisionDetector(CollisionDetector collisionDetector) {
         this.collisionDetector = collisionDetector;
-        this.enemies = enemies;
+        this.enemies = new ArrayList<>();
+    }
+
+    public void addEnemies(List<Enemy> enemies) {
+        enemies.addAll(enemies);
     }
 
     @Override

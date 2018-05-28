@@ -2,21 +2,10 @@ package com.jazzjack.rab.bit.cmiyc.logic;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemies;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementCollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementContext;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyRouteCollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
-import com.jazzjack.rab.bit.cmiyc.actor.player.ActorMovementContext;
-import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovementCollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.animation.AnimationRegister;
-import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
-import com.jazzjack.rab.bit.cmiyc.collision.LevelCollisionDetectorWithCollidables;
 import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
-import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,18 +21,13 @@ public class GameController implements InputProcessor {
         KEY_TO_DIRECTION_MAPPING.put(Input.Keys.DOWN, Direction.DOWN);
     }
 
-    private final AnimationRegister animationRegister;
-    private final Randomizer randomizer;
     private final LevelFactory levelFactory;
 
     private Level currentLevel;
-    private Enemies enemies;
 
     private GamePhase currentGamePhase;
 
-    public GameController(LevelFactory levelFactory, AnimationRegister animationRegister, Randomizer randomizer) {
-        this.animationRegister = animationRegister;
-        this.randomizer = randomizer;
+    public GameController(LevelFactory levelFactory) {
         this.levelFactory = levelFactory;
     }
 
@@ -60,23 +44,9 @@ public class GameController implements InputProcessor {
     }
 
     private void startLevel(Level level) {
-        this.currentLevel = level;
-
-        initializeGameObjects(level);
-
+        currentLevel = level;
         GameEventBus.publishNewLevelEvent(level);
         startPlayerTurn();
-    }
-
-    private void initializeGameObjects(Level level) {
-        PlayerMovementCollisionDetector playerMovementCollisionDetector = new PlayerMovementCollisionDetector(level);
-        CollisionResolver collisionResolver = new CollisionResolver();
-        ActorMovementContext actorMovementContext = new ActorMovementContext(playerMovementCollisionDetector, collisionResolver);
-        LevelCollisionDetectorWithCollidables enemyMovementColissionDetector = new EnemyMovementCollisionDetector(level);
-        EnemyRouteCollisionDetector enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementCollisionDetector, level.getEnemies());
-        RouteGenerator routeGenerator = new RouteGenerator(enemyRouteCollisionDetector, randomizer);
-        EnemyMovementContext enemyMovementContext = new EnemyMovementContext(enemyMovementColissionDetector, collisionResolver, randomizer, animationRegister);
-        enemies = new Enemies(routeGenerator, level.getEnemies());
     }
 
     private boolean isPlayerTurn() {
@@ -125,7 +95,7 @@ public class GameController implements InputProcessor {
 
     private void startEnemyTurn() {
         currentGamePhase = GamePhase.ENEMY_TURN;
-        enemies.moveAllEnemies().thenRun(this::endEnemyTurn);
+        currentLevel.moveAllEnemies().thenRun(this::endEnemyTurn);
     }
 
     private void endEnemyTurn() {
@@ -138,7 +108,7 @@ public class GameController implements InputProcessor {
 
     private void startPlayerTurn() {
         currentGamePhase = GamePhase.PLAYER_TURN;
-        enemies.generateRoutes();
+        currentLevel.generateEnemyRoutes();
         currentLevel.getPlayer().resetActionPoints();
     }
 

@@ -3,6 +3,8 @@ package com.jazzjack.rab.bit.cmiyc.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.jazzjack.rab.bit.cmiyc.animation.AnimationHandler;
+import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
+import com.jazzjack.rab.bit.cmiyc.level.LevelContext;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.logic.GameController;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
@@ -26,8 +28,12 @@ public class Game extends ApplicationAdapter {
     private void initGameObjects() {
         assetManager = new GameAssetManager();
         animationHandler = new AnimationHandler();
-        gameController = new GameController(new LevelFactory(assetManager), animationHandler, new Randomizer(new RandomInteger()));
+        gameController = new GameController(new LevelFactory(createLevelContext(), assetManager));
         gameRenderer = new GameRenderer(assetManager);
+    }
+
+    private LevelContext createLevelContext() {
+        return new LevelContext(new CollisionResolver(), new Randomizer(new RandomInteger()), animationHandler);
     }
 
     private void startNewGame() {

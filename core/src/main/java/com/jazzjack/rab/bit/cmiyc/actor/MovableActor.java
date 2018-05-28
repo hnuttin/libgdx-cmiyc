@@ -1,6 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.actor;
 
-import com.jazzjack.rab.bit.cmiyc.actor.player.ActorMovementContext;
+import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
@@ -10,11 +10,11 @@ import com.jazzjack.rab.bit.cmiyc.shared.position.PositionMutators.PositionMutat
 
 public class MovableActor extends SimpleActor {
 
-    private final ActorMovementContext movementContext;
+    private final ActorContext context;
 
-    public MovableActor(ActorMovementContext movementContext, String name, HasPosition hasPosition) {
+    public MovableActor(ActorContext context, String name, HasPosition hasPosition) {
         super(name, hasPosition);
-        this.movementContext = movementContext;
+        this.context = context;
     }
 
     public CollisionResult moveToDirection(Direction direction) {
@@ -22,9 +22,9 @@ public class MovableActor extends SimpleActor {
         if (positionMutator == null) {
             return CollisionResult.noCollision();
         } else {
-            CollisionResult collisionResult = movementContext.getCollisionDetector().collides(futureCollidable(positionMutator), direction);
+            CollisionResult collisionResult = context.getCollisionDetector().collides(futureCollidable(positionMutator), direction);
             if (collisionResult.isUnresolved()) {
-                return movementContext.getCollisionResolver().resolveCollision(collisionResult);
+                return context.getCollisionResolver().resolveCollision(collisionResult);
             } else {
                 setX(positionMutator.mutateX(getX()));
                 setY(positionMutator.mutateX(getY()));

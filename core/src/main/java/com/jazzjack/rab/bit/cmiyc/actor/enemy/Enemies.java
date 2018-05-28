@@ -1,22 +1,22 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class Enemies {
 
-    private final RouteGenerator routeGenerator;
     private final List<Enemy> listOfEnemies;
 
-    public Enemies(RouteGenerator routeGenerator, List<Enemy> listOfEnemies) {
-        this.routeGenerator = routeGenerator;
+    public Enemies(List<Enemy> listOfEnemies) {
         this.listOfEnemies = listOfEnemies;
     }
 
+    public List<Enemy> get() {
+        return listOfEnemies;
+    }
+
     public void generateRoutes() {
-        listOfEnemies.forEach(enemy -> enemy.generateRoutes(routeGenerator));
+        listOfEnemies.forEach(Enemy::generateRoutes);
     }
 
     public CompletableFuture<Void> moveAllEnemies() {

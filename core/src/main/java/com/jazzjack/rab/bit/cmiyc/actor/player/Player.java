@@ -17,8 +17,8 @@ public class Player extends MovableActor {
     private int sight;
     private int power;
 
-    public Player(ActorMovementContext movementContext, HasPosition hasPosition) {
-        super(movementContext, "player", hasPosition);
+    public Player(ActorContext context, HasPosition hasPosition) {
+        super(context, "player", hasPosition);
 
         this.actionPointsPerTurn = 5;
         this.actionPointsConsumed = 0;
