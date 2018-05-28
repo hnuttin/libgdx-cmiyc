@@ -27,7 +27,7 @@ public class MovableActor extends SimpleActor {
                 return context.getCollisionResolver().resolveCollision(collisionResult);
             } else {
                 setX(positionMutator.mutateX(getX()));
-                setY(positionMutator.mutateX(getY()));
+                setY(positionMutator.mutateY(getY()));
             }
             return collisionResult;
         }

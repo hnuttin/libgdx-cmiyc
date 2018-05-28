@@ -19,7 +19,7 @@ public class EnemyRouteCollisionDetector implements CollisionDetector {
     }
 
     public void addEnemies(List<Enemy> enemies) {
-        enemies.addAll(enemies);
+        this.enemies.addAll(enemies);
     }
 
     @Override
