@@ -62,8 +62,11 @@ project(":core") {
         testCompile "org.mockito:mockito-core:$mockitoVersion"
         testCompile "org.mockito:mockito-junit-jupiter:$mockitoVersion"
         testCompile "org.assertj:assertj-core:3.9.1"
-        testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
+        testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
