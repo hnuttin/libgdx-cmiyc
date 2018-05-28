@@ -1,31 +1,33 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
 import com.google.common.collect.ImmutableList;
-import com.jazzjack.rab.bit.cmiyc.actor.SimpleActor;
+import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.AnimationRoute;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
-import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
-import com.jazzjack.rab.bit.cmiyc.common.HasPosition;
-import com.jazzjack.rab.bit.cmiyc.common.Predictability;
-import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
+import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class Enemy extends SimpleActor {
+public class Enemy extends MovableActor {
+
+    private final EnemyContext context;
 
     private final Predictability predictability;
     private final List<Route> routes;
 
     private final int damageOutput;
 
-    public Enemy(String name, Predictability predictability, HasPosition hasPosition) {
-        super(name, hasPosition);
+    public Enemy(EnemyContext context, String name, Predictability predictability, HasPosition hasPosition) {
+        super(context, name, hasPosition);
+        this.context = context;
         this.predictability = predictability;
         this.routes = new ArrayList<>();
         this.damageOutput = 1;
@@ -43,19 +45,19 @@ public class Enemy extends SimpleActor {
         return damageOutput;
     }
 
-    public void generateRoutes(RouteGenerator routeGenerator) {
+    public void generateRoutes() {
         routes.clear();
-        routes.addAll(routeGenerator.generateRoutes(this, 2, 4));
+        routes.addAll(context.getRouteGenerator().generateRoutes(this, 2, 4));
     }
 
-    public CompletableFuture<Void> moveAlongRandomRoute(EnemyMovementContext context) {
+    public CompletableFuture<Void> moveAlongRandomRoute() {
         if (routes.isEmpty()) {
             return CompletableFuture.completedFuture(null);
         } else {
             AnimationRoute routeToAnimate = new AnimationRoute(chooseRoute(context.getRandomizer()));
             routes.clear();
             routes.add(routeToAnimate);
-            EnemyRouteAnimation animation = new EnemyRouteAnimation(context.getCollisionDetector(), this, routeToAnimate);
+            EnemyRouteAnimation animation = new EnemyRouteAnimation(this, routeToAnimate);
             return context.getAnimationRegister().registerAnimation(animation);
         }
     }
@@ -64,16 +66,15 @@ public class Enemy extends SimpleActor {
         return randomizer.chooseRandomChance(routes);
     }
 
-    CollisionResult moveToStep(CollisionDetector collisionDetector, Step step) {
-        CollisionResult collisionResult = super.moveToDirection(collisionDetector, step.getDirection());
-        if (collisionResult.isCollision() && collisionResult.getCollidable() instanceof Player) {
-            Player player = (Player) collisionResult.getCollidable();
-            player.damangeFromEnemy(this);
-        }
-        return collisionResult;
+    CollisionResult moveToStep(Step step) {
+        return super.moveToDirection(step.getDirection());
     }
 
     void removeRoute(Route route) {
         routes.remove(route);
+    }
+
+    public void pushByPlayer(Player player, Direction direction) {
+        // TODO
     }
 }

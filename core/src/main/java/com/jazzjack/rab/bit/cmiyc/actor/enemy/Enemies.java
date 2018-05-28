@@ -1,33 +1,31 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class Enemies {
 
-    private final RouteGenerator routeGenerator;
-    private final EnemyMovementContext context;
     private final List<Enemy> listOfEnemies;
 
-    public Enemies(RouteGenerator routeGenerator, EnemyMovementContext context, List<Enemy> listOfEnemies) {
-        this.routeGenerator = routeGenerator;
-        this.context = context;
+    public Enemies(List<Enemy> listOfEnemies) {
         this.listOfEnemies = listOfEnemies;
     }
 
+    public List<Enemy> get() {
+        return listOfEnemies;
+    }
+
     public void generateRoutes() {
-        listOfEnemies.forEach(enemy -> enemy.generateRoutes(routeGenerator));
+        listOfEnemies.forEach(Enemy::generateRoutes);
     }
 
     public CompletableFuture<Void> moveAllEnemies() {
         CompletableFuture<Void> moveAllEnemiesFuture = null;
         for (Enemy enemy : listOfEnemies) {
             if (moveAllEnemiesFuture == null) {
-                moveAllEnemiesFuture = enemy.moveAlongRandomRoute(context);
+                moveAllEnemiesFuture = enemy.moveAlongRandomRoute();
             } else {
-                moveAllEnemiesFuture = moveAllEnemiesFuture.thenCompose(previousResult -> enemy.moveAlongRandomRoute(context));
+                moveAllEnemiesFuture = moveAllEnemiesFuture.thenCompose(previousResult -> enemy.moveAlongRandomRoute());
             }
         }
         return moveAllEnemiesFuture;

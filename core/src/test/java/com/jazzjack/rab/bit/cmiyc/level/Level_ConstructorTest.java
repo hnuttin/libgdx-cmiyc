@@ -2,16 +2,17 @@ package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
-import com.jazzjack.rab.bit.cmiyc.common.Predictability;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandleResolver;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaDataFactory;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
+import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 class Level_ConstructorTest {
 
@@ -23,7 +24,7 @@ class Level_ConstructorTest {
         LevelMetaDataFactory levelMetaDataFactory = new LevelMetaDataFactory(objectTypeParser);
         TmxMapLoader tmxMapLoader = new TmxMapLoader(new ClasspathFileHandleResolver());
         LevelTiledMap levelTiledMap = new LevelTiledMap(tmxMapLoader.load("map-with-markers.tmx"));
-        level = new Level(levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 0);
+        level = new Level(mock(LevelContext.class), levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 0);
     }
 
     @Test

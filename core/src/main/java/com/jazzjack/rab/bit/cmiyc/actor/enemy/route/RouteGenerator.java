@@ -4,8 +4,8 @@ import com.google.common.collect.Streams;
 import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.common.Direction;
-import com.jazzjack.rab.bit.cmiyc.common.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -64,7 +64,7 @@ public class RouteGenerator {
         }
         Direction direction = randomizer.randomFromSet(allowedDirections);
         StepResult stepResult = createStepResultForDirection(previousStep, direction);
-        if (!routeCollisionDetector.collides(stepResult).isCollision()) {
+        if (routeCollisionDetector.collides(stepResult, direction).isResolved()) {
             return stepResult;
         } else {
             return generateStep(previousStep, copyWithoutDirection(allowedDirections, direction), routeCollisionDetector);

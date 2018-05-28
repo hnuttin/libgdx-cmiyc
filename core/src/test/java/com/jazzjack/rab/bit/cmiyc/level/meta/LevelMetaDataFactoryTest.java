@@ -1,10 +1,10 @@
 package com.jazzjack.rab.bit.cmiyc.level.meta;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.jazzjack.rab.bit.cmiyc.common.Predictability;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandleResolver;
 import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
+import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

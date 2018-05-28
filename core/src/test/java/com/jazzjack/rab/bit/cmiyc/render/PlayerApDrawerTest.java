@@ -1,9 +1,12 @@
 package com.jazzjack.rab.bit.cmiyc.render;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
+import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
 import com.jazzjack.rab.bit.cmiyc.collision.NeverCollideCollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.common.Position;
+import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.position.Position;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -42,9 +46,10 @@ class PlayerApDrawerTest extends LibGdxRenderTest {
 
     @Test
     void expectConsumedApDrawnCorrectly() {
-        Player player = new Player(new Position(0, 0));
-        player.moveRight(NeverCollideCollisionDetector.TEST_INSTANCE);
-        player.moveRight(NeverCollideCollisionDetector.TEST_INSTANCE);
+        ActorContext actorContext = new ActorContext(NeverCollideCollisionDetector.TEST_INSTANCE, mock(CollisionResolver.class));
+        Player player = new Player(actorContext, new Position(0, 0));
+        player.moveToDirection(Direction.RIGHT);
+        player.moveToDirection(Direction.RIGHT);
 
         playerApDrawer.draw(player);
 

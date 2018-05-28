@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.cmiyc.common;
+package com.jazzjack.rab.bit.cmiyc.shared.position;
 
 public class Position implements HasPosition {
 

@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.cmiyc.common;
+package com.jazzjack.rab.bit.cmiyc.shared;
 
 import java.util.Arrays;
 import java.util.HashSet;

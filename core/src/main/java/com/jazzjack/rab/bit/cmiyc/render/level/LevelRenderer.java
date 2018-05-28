@@ -6,10 +6,10 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.StepNames;
-import com.jazzjack.rab.bit.cmiyc.common.HasPosition;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 import com.jazzjack.rab.bit.cmiyc.render.Renderer;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import static com.jazzjack.rab.bit.cmiyc.render.level.TextDrawer.Position.BOTTOM;
 import static com.jazzjack.rab.bit.cmiyc.render.level.TextDrawer.Position.TOP;
