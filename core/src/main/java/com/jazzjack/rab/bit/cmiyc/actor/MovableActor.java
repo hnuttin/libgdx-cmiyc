@@ -1,7 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.actor;
 
 import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
-import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
@@ -18,33 +17,19 @@ public class MovableActor extends SimpleActor {
     }
 
     public CollisionResult moveToDirection(Direction direction) {
-        PositionMutator positionMutator = PositionMutators.forDirection(direction);
-        if (positionMutator == null) {
-            return CollisionResult.noCollision();
-        } else {
-            CollisionResult collisionResult = context.getCollisionDetector().collides(futureCollidable(positionMutator), direction);
-            if (collisionResult.isUnresolved()) {
-                return context.getCollisionResolver().resolveCollision(collisionResult);
-            } else {
-                setX(positionMutator.mutateX(getX()));
-                setY(positionMutator.mutateY(getY()));
-            }
-            return collisionResult;
+        mutatePositionForDirection(direction);
+        CollisionResult collisionResult = context.getCollisionDetector().collides(this, direction);
+        if (collisionResult.isUnresolved()) {
+            mutatePositionForDirection(direction.getOppositeDirection());
+            return context.getCollisionResolver().resolveCollision(collisionResult);
         }
+        return collisionResult;
     }
 
-    private Collidable futureCollidable(PositionMutator positionMutator) {
-        return new Collidable() {
-            @Override
-            public int getX() {
-                return positionMutator.mutateX(MovableActor.this.getX());
-            }
-
-            @Override
-            public int getY() {
-                return positionMutator.mutateY(MovableActor.this.getY());
-            }
-        };
+    private void mutatePositionForDirection(Direction direction) {
+        PositionMutator positionMutator = PositionMutators.forDirection(direction);
+        setX(positionMutator.mutateX(getX()));
+        setY(positionMutator.mutateY(getY()));
     }
 
 }
