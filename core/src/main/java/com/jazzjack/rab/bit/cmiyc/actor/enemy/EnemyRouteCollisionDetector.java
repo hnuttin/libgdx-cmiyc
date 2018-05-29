@@ -22,6 +22,10 @@ public class EnemyRouteCollisionDetector implements CollisionDetector {
         this.enemies.addAll(enemies);
     }
 
+    public void removeEnemy(Enemy enemy) {
+        this.enemies.remove(enemy);
+    }
+
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
         CollisionResult collisionResult = collidesWithEnemyRoutes(collidable, direction);

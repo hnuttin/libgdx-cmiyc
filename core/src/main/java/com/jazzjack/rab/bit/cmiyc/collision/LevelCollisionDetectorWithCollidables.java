@@ -26,6 +26,10 @@ public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetecto
         this.collidables.addAll(collidables);
     }
 
+    public void removeCollidable(Collidable collidable) {
+        collidables.remove(collidable);
+    }
+
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
         CollisionResult levelCollisionResult = super.collides(collidable, direction);

@@ -21,6 +21,10 @@ public class CollisionResult {
         this.resolved = resolved;
     }
 
+    public boolean wasCollision() {
+        return targetCollidable != null;
+    }
+
     public boolean isUnresolved() {
         return targetCollidable != null && !resolved;
     }

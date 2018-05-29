@@ -31,4 +31,7 @@ public class Enemies {
         return moveAllEnemiesFuture;
     }
 
+    public void removeEnemy(Enemy enemy) {
+        listOfEnemies.remove(enemy);
+    }
 }
