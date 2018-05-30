@@ -21,7 +21,7 @@ public class Player extends MovableActor implements HasPower {
     public Player(ActorContext context, HasPosition hasPosition) {
         super(context, "player", hasPosition);
 
-        this.actionPointsPerTurn = 50;
+        this.actionPointsPerTurn = 5;
         this.actionPointsConsumed = 0;
 
         this.maxHp = 5;

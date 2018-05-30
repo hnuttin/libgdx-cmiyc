@@ -5,6 +5,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
 import com.jazzjack.rab.bit.cmiyc.collision.NeverCollideCollisionDetector;
+import com.jazzjack.rab.bit.cmiyc.gdx.LibGdxAlphaDrawerSupport;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.Position;
 
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-class PlayerApDrawerTest extends LibGdxRenderTest {
+class PlayerApDrawerTest extends LibGdxAlphaDrawerSupport {
 
     @InjectMocks
     private PlayerApDrawer playerApDrawer;
