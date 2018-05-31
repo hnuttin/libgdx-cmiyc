@@ -24,14 +24,11 @@ public class Enemy extends MovableActor implements HasPower {
     private final Predictability predictability;
     private final List<Route> routes;
 
-    private final int power;
-
     public Enemy(EnemyContext context, String name, Predictability predictability, HasPosition hasPosition) {
         super(context, name, hasPosition);
         this.context = context;
         this.predictability = predictability;
         this.routes = new ArrayList<>();
-        this.power = 1;
     }
 
     public Predictability getPredictability() {
@@ -40,11 +37,6 @@ public class Enemy extends MovableActor implements HasPower {
 
     public ImmutableList<Route> getRoutes() {
         return ImmutableList.copyOf(routes);
-    }
-
-    @Override
-    public int getPower() {
-        return power;
     }
 
     public void generateRoutes() {
@@ -79,13 +71,14 @@ public class Enemy extends MovableActor implements HasPower {
     public boolean pushToDirection(HasPower hasPower, Direction direction) {
         CollisionResult collisionResult = moveToDirection(direction);
         if (collisionResult.isUnresolved()) {
-            if (hasPower.getPower() >= this.getPower()) {
+            if (hasPower.getPower() >= getPower()) {
                 GameEventBus.publishEvent(new EnemyDestroyedEvent(this));
                 return true;
             } else {
                 return false;
             }
         } else {
+            generateRoutes();
             return true;
         }
     }

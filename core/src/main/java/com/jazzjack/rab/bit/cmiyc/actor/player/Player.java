@@ -16,7 +16,6 @@ public class Player extends MovableActor implements HasPower {
     private int hp;
 
     private int sight;
-    private int power;
 
     public Player(ActorContext context, HasPosition hasPosition) {
         super(context, "player", hasPosition);
@@ -28,16 +27,10 @@ public class Player extends MovableActor implements HasPower {
         this.hp = 3;
 
         this.sight = 5;
-        this.power = 1;
     }
 
     public int getSight() {
         return sight;
-    }
-
-    @Override
-    public int getPower() {
-        return power;
     }
 
     public int getMaxHp() {
@@ -48,7 +41,7 @@ public class Player extends MovableActor implements HasPower {
         return hp;
     }
 
-    public void damangeFromEnemy(Enemy enemy) {
+    public void damageFromEnemy(Enemy enemy) {
         hp = Math.max(0, hp - enemy.getPower());
     }
 

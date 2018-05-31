@@ -21,11 +21,12 @@ class Level_PlayerPushEnemiesTest extends LibGdxTest {
     @Test
     void expectPlayerToPushTwoEnemies() {
         CollisionResult collisionResult = level.getPlayer().moveToDirection(Direction.UP);
-        assertThat(collisionResult.isResolved());
+        assertThat(collisionResult.wasCollision()).isFalse();
+        assertThat(collisionResult.isResolved()).isTrue();
 
         collisionResult = level.getPlayer().moveToDirection(Direction.RIGHT);
-        assertThat(collisionResult.wasCollision());
-        assertThat(collisionResult.isResolved());
+        assertThat(collisionResult.wasCollision()).isTrue();
+        assertThat(collisionResult.isResolved()).isTrue();
 
         assertThat(level.getPlayer().getX()).isEqualTo(1);
         assertThat(level.getPlayer().getY()).isEqualTo(1);
