@@ -3,6 +3,7 @@ package com.jazzjack.rab.bit.cmiyc.render;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -79,6 +80,10 @@ public class GameAssetManager extends AssetManager {
         parameter.atlasName = ATLAS_CMIYC_FONTS;
         load(FONT_VCR, BitmapFont.class, parameter);
         load(SHADER_FONT, ShaderProgram.class);
+    }
+
+    public FileHandle getObjectTypesFileHandle() {
+        return new FileHandle("maps/objecttypes.xml");
     }
 
     public TiledMap getTiledMap1() {

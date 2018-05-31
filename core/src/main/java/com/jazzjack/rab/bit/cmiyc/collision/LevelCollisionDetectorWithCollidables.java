@@ -42,6 +42,7 @@ public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetecto
 
     private CollisionResult collidesWithAnyCollidable(final Collidable collidable, Direction direction) {
         return collidables.stream()
+                .filter(collidableFromDetector -> !collidableFromDetector.equals(collidable))
                 .filter(collidableFromDetector -> collidableFromDetector.willCollideWith(collidable))
                 .findFirst()
                 .map(targetCollidable -> CollisionResult.unresolved(collidable, targetCollidable, direction))
