@@ -21,7 +21,7 @@ public class LevelCollisionDetector implements CollisionDetector {
         for (int cellX = 0; cellX < mapLayer.getWidth(); cellX++) {
             for (int cellY = 0; cellY < mapLayer.getHeight(); cellY++) {
                 if (collidesWithCell(cellX, cellY, collidable)) {
-                    return CollisionResult.unresolved(collidable, collidableFromCell(cellX, cellY), direction);
+                    return CollisionResult.collision(collidable, collidableFromCell(cellX, cellY), direction);
                 }
             }
         }

@@ -3,40 +3,39 @@ package com.jazzjack.rab.bit.cmiyc.collision;
 import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
-import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 public class CollisionResolver {
 
-    public CollisionResult resolveCollision(CollisionResult collisionResult) {
-        if (collisionResult.isUnresolved()) {
-            if (collisionResult.getSourceCollidable() instanceof MovableActor && collisionResult.getTargetCollidable() instanceof Enemy) {
+    public CollisionResolvement resolveCollision(CollisionResult collisionResult) {
+        if (collisionResult.isCollision()) {
+            if (collisionResult.getSource() instanceof MovableActor && collisionResult.getTarget() instanceof Enemy) {
                 return pushEnemy(
-                        (MovableActor) collisionResult.getSourceCollidable(),
-                        (Enemy) collisionResult.getTargetCollidable(),
-                        collisionResult.getDirection());
-            } else if (collisionResult.getSourceCollidable() instanceof Enemy && collisionResult.getTargetCollidable() instanceof Player) {
+                        (MovableActor) collisionResult.getSource(),
+                        (Enemy) collisionResult.getTarget(),
+                        collisionResult);
+            } else if (collisionResult.getSource() instanceof Enemy && collisionResult.getTarget() instanceof Player) {
                 return doDamageToPlayer(
-                        (Enemy) collisionResult.getSourceCollidable(),
-                        (Player) collisionResult.getTargetCollidable(),
-                        collisionResult.getDirection());
+                        (Enemy) collisionResult.getSource(),
+                        (Player) collisionResult.getTarget(),
+                        collisionResult);
             }
-            return collisionResult;
+            return CollisionResolvement.unresolved(collisionResult);
         } else {
-            return collisionResult;
+            return CollisionResolvement.resolvedMovementAllowed(collisionResult);
         }
     }
 
-    private CollisionResult pushEnemy(MovableActor player, Enemy enemy, Direction direction) {
-        boolean pushSucceeded = enemy.pushToDirection(player, direction);
+    private CollisionResolvement pushEnemy(MovableActor player, Enemy enemy, CollisionResult collisionResult) {
+        boolean pushSucceeded = enemy.pushToDirection(player, collisionResult.getDirection());
         if (pushSucceeded) {
-            return CollisionResult.resolved(player, enemy, direction);
+            return CollisionResolvement.resolvedMovementAllowed(collisionResult);
         } else {
-            return CollisionResult.unresolved(player, enemy, direction);
+            return CollisionResolvement.resolvedMovementNotAllowed(collisionResult);
         }
     }
 
-    private CollisionResult doDamageToPlayer(Enemy enemy, Player player, Direction direction) {
+    private CollisionResolvement doDamageToPlayer(Enemy enemy, Player player, CollisionResult collisionResult) {
         player.damageFromEnemy(enemy);
-        return CollisionResult.resolved(enemy, player, direction);
+        return CollisionResolvement.resolvedMovementNotAllowed(collisionResult);
     }
 }

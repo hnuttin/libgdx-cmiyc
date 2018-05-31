@@ -4,53 +4,42 @@ import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 public class CollisionResult {
 
-    private final Collidable sourceCollidable;
-    private final Collidable targetCollidable;
+    private final Collidable source;
+    private final Collidable target;
     private final Direction direction;
 
-    private final boolean resolved;
-
-    protected CollisionResult() {
-        this(null, null, null, true);
+    private CollisionResult() {
+        this(null, null, null);
     }
 
-    protected CollisionResult(Collidable sourceCollidable, Collidable targetCollidable, Direction direction, boolean resolved) {
-        this.sourceCollidable = sourceCollidable;
-        this.targetCollidable = targetCollidable;
+    private CollisionResult(Collidable source, Collidable target, Direction direction) {
+        this.source = source;
+        this.target = target;
         this.direction = direction;
-        this.resolved = resolved;
     }
 
-    public boolean wasCollision() {
-        return targetCollidable != null;
+    public boolean isCollision() {
+        return target != null;
     }
 
-    public boolean isUnresolved() {
-        return targetCollidable != null && !resolved;
+    public boolean isNoCollision() {
+        return !isCollision();
     }
 
-    public boolean isResolved() {
-        return targetCollidable == null || resolved;
+    public Collidable getSource() {
+        return source;
     }
 
-    public Collidable getSourceCollidable() {
-        return sourceCollidable;
-    }
-
-    public Collidable getTargetCollidable() {
-        return targetCollidable;
+    public Collidable getTarget() {
+        return target;
     }
 
     public Direction getDirection() {
         return direction;
     }
 
-    public static CollisionResult unresolved(Collidable sourceCollidable, Collidable targetCollidable, Direction direction) {
-        return new CollisionResult(sourceCollidable, targetCollidable, direction, false);
-    }
-
-    public static CollisionResult resolved(Collidable sourceCollidable, Collidable targetCollidable, Direction direction) {
-        return new CollisionResult(sourceCollidable, targetCollidable, direction, true);
+    public static CollisionResult collision(Collidable source, Collidable target, Direction direction) {
+        return new CollisionResult(source, target, direction);
     }
 
     public static CollisionResult noCollision() {

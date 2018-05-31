@@ -79,7 +79,7 @@ public class GameController implements InputProcessor {
     private Boolean movePlayer(int keycode) {
         Direction direction = KEY_TO_DIRECTION_MAPPING.get(keycode);
         if (direction != null) {
-            return currentLevel.getPlayer().moveToDirection(direction).isResolved();
+            return currentLevel.getPlayer().moveToDirection(direction).isNoCollision();
         } else {
             return false;
         }

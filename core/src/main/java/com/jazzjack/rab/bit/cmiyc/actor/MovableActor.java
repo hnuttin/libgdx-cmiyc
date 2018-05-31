@@ -1,6 +1,7 @@
 package com.jazzjack.rab.bit.cmiyc.actor;
 
 import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
+import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolvement;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
@@ -27,12 +28,17 @@ public class MovableActor extends SimpleActor implements HasPower {
     public CollisionResult moveToDirection(Direction direction) {
         mutatePositionForDirection(direction);
         CollisionResult collisionResult = context.getCollisionDetector().collides(this, direction);
-        if (collisionResult.isUnresolved()) {
-            CollisionResult collisionResultAfterResolvement = context.getCollisionResolver().resolveCollision(collisionResult);
-            if (collisionResultAfterResolvement.isUnresolved()) {
+        if (collisionResult.isCollision()) {
+            CollisionResolvement collisionResolvement = context.getCollisionResolver().resolveCollision(collisionResult);
+            if (collisionResolvement.isResolved()) {
+                if (collisionResolvement.isMovementNotAllowed()) {
+                    mutatePositionForDirection(direction.getOppositeDirection());
+                }
+                return CollisionResult.noCollision();
+            } else {
                 mutatePositionForDirection(direction.getOppositeDirection());
+                return collisionResolvement.getCollisionResult();
             }
-            return collisionResultAfterResolvement;
         }
         return collisionResult;
     }

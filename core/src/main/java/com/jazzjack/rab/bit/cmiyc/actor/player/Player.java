@@ -53,7 +53,7 @@ public class Player extends MovableActor implements HasPower {
     public CollisionResult moveToDirection(Direction direction) {
         if (hasActionPointsLeft()) {
             CollisionResult collisionResult = super.moveToDirection(direction);
-            if (collisionResult.isResolved()) {
+            if (collisionResult.isNoCollision()) {
                 actionPointsConsumed++;
             }
             return collisionResult;

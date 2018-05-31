@@ -70,7 +70,7 @@ public class Enemy extends MovableActor implements HasPower {
 
     public boolean pushToDirection(HasPower hasPower, Direction direction) {
         CollisionResult collisionResult = moveToDirection(direction);
-        if (collisionResult.isUnresolved()) {
+        if (collisionResult.isCollision()) {
             if (hasPower.getPower() >= getPower()) {
                 GameEventBus.publishEvent(new EnemyDestroyedEvent(this));
                 return true;

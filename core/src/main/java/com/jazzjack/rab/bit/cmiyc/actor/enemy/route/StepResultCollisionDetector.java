@@ -21,7 +21,7 @@ class StepResultCollisionDetector implements CollisionDetector {
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
         CollisionResult collisionResult = collidesWithStepResults(collidable, direction);
-        if (collisionResult.isUnresolved()) {
+        if (collisionResult.isCollision()) {
             return collisionResult;
         } else {
             return collisionDetector.collides(collidable, direction);
@@ -32,7 +32,7 @@ class StepResultCollisionDetector implements CollisionDetector {
         return stepResults.stream()
                 .filter(collidable::willCollideWith)
                 .findFirst()
-                .map(stepResult -> CollisionResult.unresolved(collidable, stepResult, direction))
+                .map(stepResult -> CollisionResult.collision(collidable, stepResult, direction))
                 .orElse(CollisionResult.noCollision());
     }
 

@@ -9,28 +9,29 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Level_PlayerPushEnemiesTest extends LibGdxTest {
+class Level_PlayerPushEnemyKillTest extends LibGdxTest {
 
     private Level level;
 
     @BeforeEach
     void beforeEach() {
-        level = TestLevelFactory.createLevel("player-push-enemies.tmx");
+        level = TestLevelFactory.createLevel("player-push-enemy-kill.tmx");
     }
 
     @Test
-    void expectPlayerToPushTwoEnemies() {
+    void expectPushedEnemyKilled() {
         CollisionResult collisionResult = level.getPlayer().moveToDirection(Direction.UP);
         assertThat(collisionResult.isCollision()).isFalse();
+        assertThat(level.getPlayer().getActionPointsConsumed()).isEqualTo(1);
+        assertThat(level.getPlayer().getX()).isEqualTo(0);
+        assertThat(level.getPlayer().getY()).isEqualTo(1);
 
         collisionResult = level.getPlayer().moveToDirection(Direction.RIGHT);
         assertThat(collisionResult.isCollision()).isFalse();
+        assertThat(level.getPlayer().getActionPointsConsumed()).isEqualTo(2);
 
         assertThat(level.getPlayer().getX()).isEqualTo(1);
         assertThat(level.getPlayer().getY()).isEqualTo(1);
-        assertThat(level.getEnemies().get(0).getX()).isEqualTo(2);
-        assertThat(level.getEnemies().get(0).getY()).isEqualTo(1);
-        assertThat(level.getEnemies().get(1).getX()).isEqualTo(3);
-        assertThat(level.getEnemies().get(1).getY()).isEqualTo(1);
+        assertThat(level.getEnemies()).isEmpty();
     }
 }

@@ -33,7 +33,7 @@ public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetecto
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
         CollisionResult levelCollisionResult = super.collides(collidable, direction);
-        if (levelCollisionResult.isUnresolved()) {
+        if (levelCollisionResult.isCollision()) {
             return levelCollisionResult;
         } else {
             return collidesWithAnyCollidable(collidable, direction);
@@ -45,7 +45,7 @@ public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetecto
                 .filter(collidableFromDetector -> !collidableFromDetector.equals(collidable))
                 .filter(collidableFromDetector -> collidableFromDetector.willCollideWith(collidable))
                 .findFirst()
-                .map(targetCollidable -> CollisionResult.unresolved(collidable, targetCollidable, direction))
+                .map(targetCollidable -> CollisionResult.collision(collidable, targetCollidable, direction))
                 .orElse(CollisionResult.noCollision());
     }
 
