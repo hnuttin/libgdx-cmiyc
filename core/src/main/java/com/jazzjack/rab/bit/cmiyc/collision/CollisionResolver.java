@@ -18,6 +18,11 @@ public class CollisionResolver {
                         (Enemy) collisionResult.getSourceCollidable(),
                         (Player) collisionResult.getTargetCollidable(),
                         collisionResult.getDirection());
+            } else if (collisionResult.getSourceCollidable() instanceof Enemy && collisionResult.getTargetCollidable() instanceof Enemy) {
+                return handleEnemhyithEnemyCollision(
+                        (Enemy) collisionResult.getSourceCollidable(),
+                        (Enemy) collisionResult.getTargetCollidable(),
+                        collisionResult.getDirection());
             }
             return collisionResult;
         } else {
@@ -25,10 +30,22 @@ public class CollisionResolver {
         }
     }
 
+    private CollisionResult handleEnemhyithEnemyCollision(Enemy enemy1, Enemy enemy2, Direction direction) {
+        boolean pushSucceeded = enemy2.pushToDirection(enemy1, direction);
+        if (pushSucceeded) {
+            return enemy1.moveToDirection(direction);
+        } else {
+            return CollisionResult.unresolved(enemy1, enemy2, direction);
+        }
+    }
+
     private CollisionResult handlePlayerWithEnemyCollision(Player player, Enemy enemy, Direction direction) {
-        enemy.pushByPlayer(player, direction);
-        // TODO push result: enemy moved, or enemy killed?
-        return player.moveToDirection(direction);
+        boolean pushSucceeded = enemy.pushToDirection(player, direction);
+        if (pushSucceeded) {
+            return player.moveToDirection(direction);
+        } else {
+            return CollisionResult.unresolved(player, enemy, direction);
+        }
     }
 
     private CollisionResult handleEnemyToPlayerCollision(Enemy enemy, Player player, Direction direction) {

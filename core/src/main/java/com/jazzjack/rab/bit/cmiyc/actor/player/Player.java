@@ -1,12 +1,13 @@
 package com.jazzjack.rab.bit.cmiyc.actor.player;
 
+import com.jazzjack.rab.bit.cmiyc.actor.HasPower;
 import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
-public class Player extends MovableActor {
+public class Player extends MovableActor implements HasPower {
 
     private int actionPointsPerTurn;
     private int actionPointsConsumed;
@@ -34,6 +35,7 @@ public class Player extends MovableActor {
         return sight;
     }
 
+    @Override
     public int getPower() {
         return power;
     }
@@ -47,7 +49,7 @@ public class Player extends MovableActor {
     }
 
     public void damangeFromEnemy(Enemy enemy) {
-        hp = Math.max(0, hp - enemy.getDamageOutput());
+        hp = Math.max(0, hp - enemy.getPower());
     }
 
     public boolean isDead() {

@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.cmiyc.render;
+package com.jazzjack.rab.bit.cmiyc.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public abstract class LibGdxRenderTest {
+public abstract class LibGdxAlphaDrawerSupport {
 
     @Mock
     protected Batch batch;
@@ -38,12 +38,12 @@ public abstract class LibGdxRenderTest {
             this.inOrder = inOrder;
         }
 
-        AlphaAsserter withAlpha(float alpha) {
+        public AlphaAsserter withAlpha(float alpha) {
             this.alpha = alpha;
             return this;
         }
 
-        void doAssert(Runnable toAssert) {
+        public void doAssert(Runnable toAssert) {
             inOrder.verify(batch).setColor(0f, 0f, 0f, alpha);
             toAssert.run();
             inOrder.verify(batch).setColor(originalColor);

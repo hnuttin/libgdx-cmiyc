@@ -1,7 +1,8 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyDestroyedEvent;
+import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaDataFactory;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
@@ -22,12 +23,12 @@ public class LevelFactory {
         this.context = context;
         this.levelSuppliers = new ArrayList<>();
         this.currentLevelIndex = 0;
-        this.levelMetaDataFactory = createLevelMetaDataFactory();
+        this.levelMetaDataFactory = createLevelMetaDataFactory(assetManager);
         initializeLevelSuppliers(assetManager);
     }
 
-    private LevelMetaDataFactory createLevelMetaDataFactory() {
-        return new LevelMetaDataFactory(new ObjectTypeParser(new FileHandle("maps/objecttypes.xml")));
+    private LevelMetaDataFactory createLevelMetaDataFactory(GameAssetManager assetManager) {
+        return new LevelMetaDataFactory(new ObjectTypeParser(assetManager.getObjectTypesFileHandle()));
     }
 
     private void initializeLevelSuppliers(GameAssetManager assetManager) {
@@ -47,6 +48,7 @@ public class LevelFactory {
             LevelTiledMap levelTiledMap = new LevelTiledMap(levelSuppliers.get(currentLevelIndex).get());
             Level level = new Level(context, levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 9);
             currentLevelIndex++;
+            GameEventBus.registerEventSubscriber(level, EnemyDestroyedEvent.class);
             return level;
         }
     }
