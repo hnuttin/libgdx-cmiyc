@@ -1,5 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
+import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.gdx.LibGdxTest;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
@@ -20,14 +21,17 @@ class Level_PlayerPushEnemiesTest extends LibGdxTest {
 
     @Test
     void expectPlayerToPushTwoEnemies() {
-        CollisionResult collisionResult = level.getPlayer().moveToDirection(Direction.UP);
+        Player player = level.getPlayer();
+
+        CollisionResult collisionResult = player.moveToDirection(Direction.UP);
         assertThat(collisionResult.isCollision()).isFalse();
 
-        collisionResult = level.getPlayer().moveToDirection(Direction.RIGHT);
+        collisionResult = player.moveToDirection(Direction.RIGHT);
         assertThat(collisionResult.isCollision()).isFalse();
+        assertThat(player.getHp()).isEqualTo(3);
+        assertThat(player.getX()).isEqualTo(1);
+        assertThat(player.getY()).isEqualTo(1);
 
-        assertThat(level.getPlayer().getX()).isEqualTo(1);
-        assertThat(level.getPlayer().getY()).isEqualTo(1);
         assertThat(level.getEnemies().get(0).getX()).isEqualTo(2);
         assertThat(level.getEnemies().get(0).getY()).isEqualTo(1);
         assertThat(level.getEnemies().get(1).getX()).isEqualTo(3);

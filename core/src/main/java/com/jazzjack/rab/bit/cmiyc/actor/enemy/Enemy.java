@@ -68,18 +68,18 @@ public class Enemy extends MovableActor implements HasPower {
         routes.remove(route);
     }
 
-    public boolean pushToDirection(HasPower hasPower, Direction direction) {
+    public EnemyPushResult pushToDirection(HasPower hasPower, Direction direction) {
         CollisionResult collisionResult = moveToDirection(direction);
         if (collisionResult.isCollision()) {
             if (hasPower.getPower() >= getPower()) {
                 GameEventBus.publishEvent(new EnemyDestroyedEvent(this));
-                return true;
+                return EnemyPushResult.DESTROYED;
             } else {
-                return false;
+                return EnemyPushResult.FAILED;
             }
         } else {
             generateRoutes();
-            return true;
+            return EnemyPushResult.PUSHED;
         }
     }
 }

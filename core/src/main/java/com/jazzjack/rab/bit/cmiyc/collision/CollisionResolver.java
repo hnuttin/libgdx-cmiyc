@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.collision;
 
 import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyPushResult;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 
 public class CollisionResolver {
@@ -25,9 +26,12 @@ public class CollisionResolver {
         }
     }
 
-    private CollisionResolvement pushEnemy(MovableActor player, Enemy enemy, CollisionResult collisionResult) {
-        boolean pushSucceeded = enemy.pushToDirection(player, collisionResult.getDirection());
-        if (pushSucceeded) {
+    private CollisionResolvement pushEnemy(MovableActor movableActor, Enemy enemy, CollisionResult collisionResult) {
+        EnemyPushResult pushSucceeded = enemy.pushToDirection(movableActor, collisionResult.getDirection());
+        if (pushSucceeded.isSuccess()) {
+            if (pushSucceeded == EnemyPushResult.DESTROYED && movableActor instanceof Player) {
+                ((Player) movableActor).damageFromEnemy(enemy);
+            }
             return CollisionResolvement.resolvedMovementAllowed(collisionResult);
         } else {
             return CollisionResolvement.resolvedMovementNotAllowed(collisionResult);

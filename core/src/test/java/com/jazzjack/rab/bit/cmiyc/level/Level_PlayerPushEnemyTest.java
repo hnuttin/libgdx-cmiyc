@@ -1,5 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
+import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.gdx.LibGdxTest;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
@@ -20,16 +21,19 @@ class Level_PlayerPushEnemyTest extends LibGdxTest {
 
     @Test
     void expectPlayerToPushEnemy() {
-        CollisionResult collisionResult = level.getPlayer().moveToDirection(Direction.UP);
-        assertThat(collisionResult.isCollision()).isFalse();
-        assertThat(level.getPlayer().getActionPointsConsumed()).isEqualTo(1);
+        Player player = level.getPlayer();
 
-        collisionResult = level.getPlayer().moveToDirection(Direction.RIGHT);
+        CollisionResult collisionResult = player.moveToDirection(Direction.UP);
         assertThat(collisionResult.isCollision()).isFalse();
-        assertThat(level.getPlayer().getActionPointsConsumed()).isEqualTo(2);
+        assertThat(player.getActionPointsConsumed()).isEqualTo(1);
 
-        assertThat(level.getPlayer().getX()).isEqualTo(1);
-        assertThat(level.getPlayer().getY()).isEqualTo(1);
+        collisionResult = player.moveToDirection(Direction.RIGHT);
+        assertThat(collisionResult.isCollision()).isFalse();
+        assertThat(player.getActionPointsConsumed()).isEqualTo(2);
+        assertThat(player.getHp()).isEqualTo(3);
+        assertThat(player.getX()).isEqualTo(1);
+        assertThat(player.getY()).isEqualTo(1);
+
         assertThat(level.getEnemies().get(0).getX()).isEqualTo(2);
         assertThat(level.getEnemies().get(0).getY()).isEqualTo(1);
     }
