@@ -34,7 +34,7 @@ public class CollisionResolver {
             }
             return CollisionResolvement.resolvedMovementAllowed(collisionResult);
         } else {
-            return CollisionResolvement.resolvedMovementNotAllowed(collisionResult);
+            return CollisionResolvement.unresolved(collisionResult);
         }
     }
 
