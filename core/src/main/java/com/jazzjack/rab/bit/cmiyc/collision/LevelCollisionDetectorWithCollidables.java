@@ -26,10 +26,14 @@ public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetecto
         this.collidables.addAll(collidables);
     }
 
+    public void removeCollidable(Collidable collidable) {
+        collidables.remove(collidable);
+    }
+
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
         CollisionResult levelCollisionResult = super.collides(collidable, direction);
-        if (levelCollisionResult.isUnresolved()) {
+        if (levelCollisionResult.isCollision()) {
             return levelCollisionResult;
         } else {
             return collidesWithAnyCollidable(collidable, direction);
@@ -38,9 +42,10 @@ public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetecto
 
     private CollisionResult collidesWithAnyCollidable(final Collidable collidable, Direction direction) {
         return collidables.stream()
+                .filter(collidableFromDetector -> !collidableFromDetector.equals(collidable))
                 .filter(collidableFromDetector -> collidableFromDetector.willCollideWith(collidable))
                 .findFirst()
-                .map(targetCollidable -> CollisionResult.unresolved(collidable, targetCollidable, direction))
+                .map(targetCollidable -> CollisionResult.collision(collidable, targetCollidable, direction))
                 .orElse(CollisionResult.noCollision());
     }
 

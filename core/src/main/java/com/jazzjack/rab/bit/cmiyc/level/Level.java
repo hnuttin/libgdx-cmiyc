@@ -8,6 +8,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.collision.LevelCollisionDetectorWithCollidables;
+import com.jazzjack.rab.bit.cmiyc.game.EventSubscriber;
 import com.jazzjack.rab.bit.cmiyc.level.meta.EnemyMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaData;
 
@@ -16,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static java.util.stream.Collectors.toList;
 
-public class Level {
+public class Level implements EventSubscriber<EnemyDestroyedEvent> {
 
     private final LevelContext context;
     private final LevelTiledMap tiledMap;
@@ -72,6 +73,7 @@ public class Level {
     private void initializeCollisionDetectors() {
         this.playerMovementCollisionDetector.addCollidable(enemies.get());
         this.enemyMovementCollisionDetector.addCollidable(player);
+        this.enemyMovementCollisionDetector.addCollidable(enemies.get());
         this.enemyRouteCollisionDetector.addEnemies(enemies.get());
     }
 
@@ -113,5 +115,13 @@ public class Level {
 
     public void generateEnemyRoutes() {
         enemies.generateRoutes();
+    }
+
+    @Override
+    public void handleEvent(EnemyDestroyedEvent event) {
+        playerMovementCollisionDetector.removeCollidable(event.getEnemy());
+        enemyMovementCollisionDetector.removeCollidable(event.getEnemy());
+        enemyRouteCollisionDetector.removeEnemy(event.getEnemy());
+        enemies.removeEnemy(event.getEnemy());
     }
 }

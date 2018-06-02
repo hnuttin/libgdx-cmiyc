@@ -1,12 +1,13 @@
 package com.jazzjack.rab.bit.cmiyc.actor.player;
 
+import com.jazzjack.rab.bit.cmiyc.actor.HasPower;
 import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
-public class Player extends MovableActor {
+public class Player extends MovableActor implements HasPower {
 
     private int actionPointsPerTurn;
     private int actionPointsConsumed;
@@ -15,7 +16,6 @@ public class Player extends MovableActor {
     private int hp;
 
     private int sight;
-    private int power;
 
     public Player(ActorContext context, HasPosition hasPosition) {
         super(context, "player", hasPosition);
@@ -27,15 +27,10 @@ public class Player extends MovableActor {
         this.hp = 3;
 
         this.sight = 5;
-        this.power = 1;
     }
 
     public int getSight() {
         return sight;
-    }
-
-    public int getPower() {
-        return power;
     }
 
     public int getMaxHp() {
@@ -46,8 +41,8 @@ public class Player extends MovableActor {
         return hp;
     }
 
-    public void damangeFromEnemy(Enemy enemy) {
-        hp = Math.max(0, hp - enemy.getDamageOutput());
+    public void damageFromEnemy(Enemy enemy) {
+        hp = Math.max(0, hp - enemy.getPower());
     }
 
     public boolean isDead() {
@@ -58,7 +53,7 @@ public class Player extends MovableActor {
     public CollisionResult moveToDirection(Direction direction) {
         if (hasActionPointsLeft()) {
             CollisionResult collisionResult = super.moveToDirection(direction);
-            if (collisionResult.isResolved()) {
+            if (collisionResult.isNoCollision()) {
                 actionPointsConsumed++;
             }
             return collisionResult;

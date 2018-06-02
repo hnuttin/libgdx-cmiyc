@@ -1,12 +1,14 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
 import com.google.common.collect.ImmutableList;
+import com.jazzjack.rab.bit.cmiyc.actor.HasPower;
 import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.EnemyRouteAnimation;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
+import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
@@ -16,21 +18,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class Enemy extends MovableActor {
+public class Enemy extends MovableActor implements HasPower {
 
     private final EnemyContext context;
 
     private final Predictability predictability;
     private final List<Route> routes;
 
-    private final int damageOutput;
-
     public Enemy(EnemyContext context, String name, Predictability predictability, HasPosition hasPosition) {
         super(context, name, hasPosition);
         this.context = context;
         this.predictability = predictability;
         this.routes = new ArrayList<>();
-        this.damageOutput = 1;
     }
 
     public Predictability getPredictability() {
@@ -39,10 +38,6 @@ public class Enemy extends MovableActor {
 
     public ImmutableList<Route> getRoutes() {
         return ImmutableList.copyOf(routes);
-    }
-
-    public int getDamageOutput() {
-        return damageOutput;
     }
 
     public void generateRoutes() {
@@ -67,14 +62,25 @@ public class Enemy extends MovableActor {
     }
 
     public CollisionResult moveToStep(Step step) {
-        return super.moveToDirection(step.getDirection());
+        return moveToDirection(step.getDirection());
     }
 
     public void removeRoute(Route route) {
         routes.remove(route);
     }
 
-    public void pushByPlayer(Player player, Direction direction) {
-        // TODO
+    public EnemyPushResult pushToDirection(HasPower hasPower, Direction direction) {
+        CollisionResult collisionResult = moveToDirection(direction);
+        if (collisionResult.isCollision()) {
+            if (hasPower.getPower() >= getPower()) {
+                GameEventBus.publishEvent(new EnemyDestroyedEvent(this));
+                return EnemyPushResult.DESTROYED;
+            } else {
+                return EnemyPushResult.FAILED;
+            }
+        } else {
+            generateRoutes();
+            return EnemyPushResult.PUSHED;
+        }
     }
 }

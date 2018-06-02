@@ -39,7 +39,7 @@ public class EnemyRouteAnimation implements Animation {
     private void moveEnemyToNextRouteStep() {
         Step step = routeToAnimate.getSteps().get(0);
         CollisionResult collisionResult = enemy.moveToStep(step);
-        if (collisionResult.isUnresolved()) {
+        if (collisionResult.isCollision()) {
             endAnimation();
         } else {
             routeToAnimate.removeStep(step);

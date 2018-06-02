@@ -23,10 +23,14 @@ public class EnemyRouteCollisionDetector implements CollisionDetector {
         this.enemies.addAll(enemies);
     }
 
+    public void removeEnemy(Enemy enemy) {
+        this.enemies.remove(enemy);
+    }
+
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
         CollisionResult collisionResult = collidesWithEnemyRoutes(collidable, direction);
-        if (collisionResult.isUnresolved()) {
+        if (collisionResult.isCollision()) {
             return collisionResult;
         } else {
             return collisionDetector.collides(collidable, direction);
@@ -39,7 +43,7 @@ public class EnemyRouteCollisionDetector implements CollisionDetector {
                 .flatMap(route -> route.getSteps().stream())
                 .filter(step -> step.willCollideWith(collidable))
                 .findFirst()
-                .map(step -> CollisionResult.unresolved(collidable, step, direction))
+                .map(step -> CollisionResult.collision(collidable, step, direction))
                 .orElse(CollisionResult.noCollision());
     }
 }
