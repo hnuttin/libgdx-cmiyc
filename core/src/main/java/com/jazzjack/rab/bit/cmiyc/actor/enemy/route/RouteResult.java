@@ -1,5 +1,7 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
+
 import java.util.List;
 
 public class RouteResult {

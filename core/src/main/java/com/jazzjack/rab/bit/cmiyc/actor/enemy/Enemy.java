@@ -2,9 +2,9 @@ package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
 import com.google.common.collect.ImmutableList;
 import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.AnimationRoute;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.EnemyRouteAnimation;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Step;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
@@ -54,7 +54,7 @@ public class Enemy extends MovableActor {
         if (routes.isEmpty()) {
             return CompletableFuture.completedFuture(null);
         } else {
-            AnimationRoute routeToAnimate = new AnimationRoute(chooseRoute(context.getRandomizer()));
+            Route routeToAnimate = chooseRoute(context.getRandomizer());
             routes.clear();
             routes.add(routeToAnimate);
             EnemyRouteAnimation animation = new EnemyRouteAnimation(this, routeToAnimate);
@@ -66,11 +66,11 @@ public class Enemy extends MovableActor {
         return randomizer.chooseRandomChance(routes);
     }
 
-    CollisionResult moveToStep(Step step) {
+    public CollisionResult moveToStep(Step step) {
         return super.moveToDirection(step.getDirection());
     }
 
-    void removeRoute(Route route) {
+    public void removeRoute(Route route) {
         routes.remove(route);
     }
 

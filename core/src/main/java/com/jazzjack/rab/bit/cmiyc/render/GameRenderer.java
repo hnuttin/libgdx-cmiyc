@@ -2,7 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.jazzjack.rab.bit.cmiyc.game.GameEventBus;
+import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.NewLevelSubscriber;
 import com.jazzjack.rab.bit.cmiyc.render.level.LevelRenderer;

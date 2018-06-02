@@ -3,7 +3,7 @@ package com.jazzjack.rab.bit.cmiyc.level;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyContext;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyRouteCollisionDetector;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.EnemyRouteCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;

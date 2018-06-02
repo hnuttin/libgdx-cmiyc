@@ -1,21 +1,21 @@
-package com.jazzjack.rab.bit.cmiyc.actor.enemy;
+package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.AnimationRoute;
-import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Step;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.animation.Animation;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 
-class EnemyRouteAnimation implements Animation {
+public class EnemyRouteAnimation implements Animation {
 
     private static final float ANIMATION_SPEED_IN_SECONDS = 0.2f;
 
     private final Enemy enemy;
-    private final AnimationRoute routeToAnimate;
+    private final Route routeToAnimate;
 
     private float timeSinceLastStep;
     private boolean inProgress;
 
-    EnemyRouteAnimation(Enemy enemy, AnimationRoute routeToAnimate) {
+    public EnemyRouteAnimation(Enemy enemy, Route routeToAnimate) {
         this.enemy = enemy;
         this.routeToAnimate = routeToAnimate;
 

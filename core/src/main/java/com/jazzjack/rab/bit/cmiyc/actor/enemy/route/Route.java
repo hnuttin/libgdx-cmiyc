@@ -1,6 +1,7 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
 import com.google.common.collect.ImmutableList;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.shared.Chance;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class Route implements Chance {
         return percentage;
     }
 
-    protected boolean removeStepInternal(Step step) {
+    public boolean removeStep(Step step) {
         return steps.remove(step);
     }
 

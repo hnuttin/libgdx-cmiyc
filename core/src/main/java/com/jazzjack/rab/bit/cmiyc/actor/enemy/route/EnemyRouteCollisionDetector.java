@@ -1,5 +1,6 @@
-package com.jazzjack.rab.bit.cmiyc.actor.enemy;
+package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;

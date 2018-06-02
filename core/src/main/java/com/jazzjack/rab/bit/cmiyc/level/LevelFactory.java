@@ -2,6 +2,8 @@ package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyDestroyedEvent;
+import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaDataFactory;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
@@ -47,6 +49,7 @@ public class LevelFactory {
             LevelTiledMap levelTiledMap = new LevelTiledMap(levelSuppliers.get(currentLevelIndex).get());
             Level level = new Level(context, levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 9);
             currentLevelIndex++;
+            GameEventBus.registerEventSubscriber(level, EnemyDestroyedEvent.class);
             return level;
         }
     }

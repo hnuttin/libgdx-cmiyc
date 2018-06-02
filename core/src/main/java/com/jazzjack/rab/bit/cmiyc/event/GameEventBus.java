@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.cmiyc.game;
+package com.jazzjack.rab.bit.cmiyc.event;
 
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
 import com.jazzjack.rab.bit.cmiyc.level.Level;

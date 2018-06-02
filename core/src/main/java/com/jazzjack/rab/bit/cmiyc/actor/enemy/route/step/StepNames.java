@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
+package com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step;
 
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
