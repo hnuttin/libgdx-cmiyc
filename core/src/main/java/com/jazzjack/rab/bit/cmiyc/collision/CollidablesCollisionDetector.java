@@ -1,6 +1,5 @@
 package com.jazzjack.rab.bit.cmiyc.collision;
 
-import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 import java.util.HashSet;
@@ -9,12 +8,11 @@ import java.util.Set;
 
 import static java.util.Arrays.asList;
 
-public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetector {
+public class CollidablesCollisionDetector implements CollisionDetector {
 
     private final Set<Collidable> collidables;
 
-    public LevelCollisionDetectorWithCollidables(LevelTiledMap levelTiledMap) {
-        super(levelTiledMap);
+    public CollidablesCollisionDetector() {
         this.collidables = new HashSet<>();
     }
 
@@ -32,15 +30,6 @@ public class LevelCollisionDetectorWithCollidables extends LevelCollisionDetecto
 
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
-        CollisionResult levelCollisionResult = super.collides(collidable, direction);
-        if (levelCollisionResult.isCollision()) {
-            return levelCollisionResult;
-        } else {
-            return collidesWithAnyCollidable(collidable, direction);
-        }
-    }
-
-    private CollisionResult collidesWithAnyCollidable(final Collidable collidable, Direction direction) {
         return collidables.stream()
                 .filter(collidableFromDetector -> !collidableFromDetector.equals(collidable))
                 .filter(collidableFromDetector -> collidableFromDetector.willCollideWith(collidable))

@@ -2,13 +2,15 @@ package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemies;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyAddedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyContext;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.EnemyRouteCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
-import com.jazzjack.rab.bit.cmiyc.collision.LevelCollisionDetectorWithCollidables;
-import com.jazzjack.rab.bit.cmiyc.game.EventSubscriber;
+import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerCollisionDetector;
+import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.meta.EnemyMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaData;
 
@@ -17,16 +19,11 @@ import java.util.concurrent.CompletableFuture;
 
 import static java.util.stream.Collectors.toList;
 
-public class Level implements EventSubscriber<EnemyDestroyedEvent> {
+public class Level {
 
     private final LevelContext context;
     private final LevelTiledMap tiledMap;
     private final LevelMetaData levelMetaData;
-
-    private final LevelCollisionDetectorWithCollidables playerMovementCollisionDetector;
-    private final LevelCollisionDetectorWithCollidables enemyMovementCollisionDetector;
-    private final EnemyRouteCollisionDetector enemyRouteCollisionDetector;
-    private final EnemyContext enemyContext;
 
     private final Player player;
     private final Enemies enemies;
@@ -38,43 +35,37 @@ public class Level implements EventSubscriber<EnemyDestroyedEvent> {
         this.tiledMap = tiledMap;
         this.levelMetaData = levelMetaData;
 
+        LevelCollisionDetector levelCollisionDetector = new LevelCollisionDetector(tiledMap);
+        this.player = createPlayer(levelCollisionDetector);
+        this.enemies = createEnemies(createEnemyContext(context, levelCollisionDetector));
+
         this.turnsLeft = maxTurns;
-
-        this.playerMovementCollisionDetector = new LevelCollisionDetectorWithCollidables(tiledMap);
-        this.enemyMovementCollisionDetector = new LevelCollisionDetectorWithCollidables(tiledMap);
-        this.enemyRouteCollisionDetector = new EnemyRouteCollisionDetector(playerMovementCollisionDetector);
-
-        this.enemyContext = new EnemyContext(
-                enemyMovementCollisionDetector,
-                context.getCollisionResolver(),
-                context.getRandomizer(),
-                context.getAnimationRegister(),
-                new RouteGenerator(enemyRouteCollisionDetector, context.getRandomizer()));
-
-        this.player = createPlayer();
-        this.enemies = createEnemies();
-
-        initializeCollisionDetectors();
     }
 
-    private Player createPlayer() {
-        ActorContext actorContext = new ActorContext(playerMovementCollisionDetector, this.context.getCollisionResolver());
+    private Player createPlayer(LevelCollisionDetector levelCollisionDetector) {
+        ActorContext actorContext = new ActorContext(new PlayerCollisionDetector(levelCollisionDetector), this.context.getCollisionResolver());
         return new Player(actorContext, levelMetaData.getStartPosition());
     }
 
-    private Enemies createEnemies() {
-        return new Enemies(levelMetaData.getEnemies().stream().map(this::createEnemy).collect(toList()));
+    private EnemyContext createEnemyContext(LevelContext context, LevelCollisionDetector levelCollisionDetector) {
+        return new EnemyContext(
+                new EnemyMovementCollisionDetector(this.player, levelCollisionDetector),
+                context.getCollisionResolver(),
+                context.getRandomizer(),
+                context.getAnimationRegister(),
+                new RouteGenerator(new EnemyRouteCollisionDetector(levelCollisionDetector), context.getRandomizer()));
     }
 
-    private Enemy createEnemy(EnemyMarkerObject enemyMarkerObject) {
-        return new Enemy(enemyContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject);
+    private Enemies createEnemies(EnemyContext enemyContext) {
+        return new Enemies(levelMetaData.getEnemies().stream()
+                .map(enemyMarkerObject -> createEnemy(enemyContext, enemyMarkerObject))
+                .collect(toList()));
     }
 
-    private void initializeCollisionDetectors() {
-        this.playerMovementCollisionDetector.addCollidable(enemies.get());
-        this.enemyMovementCollisionDetector.addCollidable(player);
-        this.enemyMovementCollisionDetector.addCollidable(enemies.get());
-        this.enemyRouteCollisionDetector.addEnemies(enemies.get());
+    private Enemy createEnemy(EnemyContext enemyContext, EnemyMarkerObject enemyMarkerObject) {
+        Enemy enemy = new Enemy(enemyContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject);
+        GameEventBus.publishEvent(new EnemyAddedEvent(enemy));
+        return enemy;
     }
 
     public LevelTiledMap getTiledMap() {
@@ -117,11 +108,4 @@ public class Level implements EventSubscriber<EnemyDestroyedEvent> {
         enemies.generateRoutes();
     }
 
-    @Override
-    public void handleEvent(EnemyDestroyedEvent event) {
-        playerMovementCollisionDetector.removeCollidable(event.getEnemy());
-        enemyMovementCollisionDetector.removeCollidable(event.getEnemy());
-        enemyRouteCollisionDetector.removeEnemy(event.getEnemy());
-        enemies.removeEnemy(event.getEnemy());
-    }
 }

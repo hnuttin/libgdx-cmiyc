@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
+import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
 import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
@@ -32,7 +33,7 @@ class FogOfWarBuffer implements Disposable, PlayerMovedSubscriber {
     }
 
     @Override
-    public void playerMoved() {
+    public void playerMoved(PlayerMovedEvent playerMovedEvent) {
         rebuffer = true;
     }
 

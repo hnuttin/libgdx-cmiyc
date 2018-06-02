@@ -1,6 +1,8 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
-public interface NewLevelSubscriber {
+import com.jazzjack.rab.bit.cmiyc.event.EventSubscriber;
 
-    void onNewLevel(Level newLevel);
+public interface NewLevelSubscriber extends EventSubscriber {
+
+    void newLevel(NewLevelEvent newLevelEvent);
 }

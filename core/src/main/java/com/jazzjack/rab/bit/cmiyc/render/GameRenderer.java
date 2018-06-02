@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
+import com.jazzjack.rab.bit.cmiyc.level.NewLevelEvent;
 import com.jazzjack.rab.bit.cmiyc.level.NewLevelSubscriber;
 import com.jazzjack.rab.bit.cmiyc.render.level.LevelRenderer;
 
@@ -22,12 +23,13 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
     }
 
     @Override
-    public void onNewLevel(Level newLevel) {
-        levelRenderer = new LevelRenderer(newLevel, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
-        hudRenderer = new HUDRenderer(newLevel, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
+    public void newLevel(NewLevelEvent newLevelEvent) {
+        Level level = newLevelEvent.getLevel();
+        levelRenderer = new LevelRenderer(level, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
+        hudRenderer = new HUDRenderer(level, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
         Gdx.graphics.setWindowedMode(
-                NUMBER_OF_HORIZONTAL_TILES_TO_RENDER * (int) newLevel.getTiledMap().getTilePixelSize() * 2,
-                NUMBER_OF_VERTICAL_TILES_TO_RENDER * (int) newLevel.getTiledMap().getTilePixelSize() * 2);
+                NUMBER_OF_HORIZONTAL_TILES_TO_RENDER * (int) level.getTiledMap().getTilePixelSize() * 2,
+                NUMBER_OF_VERTICAL_TILES_TO_RENDER * (int) level.getTiledMap().getTilePixelSize() * 2);
     }
 
     @Override

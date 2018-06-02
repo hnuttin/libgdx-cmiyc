@@ -4,6 +4,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.HasPower;
 import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
+import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
@@ -55,6 +56,7 @@ public class Player extends MovableActor implements HasPower {
             CollisionResult collisionResult = super.moveToDirection(direction);
             if (collisionResult.isNoCollision()) {
                 actionPointsConsumed++;
+                GameEventBus.publishEvent(new PlayerMovedEvent(this));
             }
             return collisionResult;
         } else {

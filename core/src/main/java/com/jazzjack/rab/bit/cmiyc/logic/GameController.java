@@ -2,7 +2,6 @@ package com.jazzjack.rab.bit.cmiyc.logic;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
@@ -45,7 +44,6 @@ public class GameController implements InputProcessor {
 
     private void startLevel(Level level) {
         currentLevel = level;
-        GameEventBus.publishNewLevelEvent(level);
         startPlayerTurn();
     }
 
@@ -64,7 +62,6 @@ public class GameController implements InputProcessor {
             return true;
         }
         if (movePlayer(keycode)) {
-            GameEventBus.publishPlayerMovedEvent();
             if (currentLevel.hasPlayerReachedEnd()) {
                 startNextLevel();
             }

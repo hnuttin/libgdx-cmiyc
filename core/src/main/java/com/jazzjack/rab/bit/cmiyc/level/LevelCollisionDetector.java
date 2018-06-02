@@ -1,8 +1,10 @@
-package com.jazzjack.rab.bit.cmiyc.collision;
+package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
+import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
+import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
+import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 public class LevelCollisionDetector implements CollisionDetector {

@@ -1,14 +1,17 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
+import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class Enemies {
+public class Enemies implements EnemyAddedEventSubscriber, EnemyDestroyedEventSubscriber {
 
     private final List<Enemy> listOfEnemies;
 
     public Enemies(List<Enemy> listOfEnemies) {
         this.listOfEnemies = listOfEnemies;
+        GameEventBus.registerSubscriber(this);
     }
 
     public List<Enemy> get() {
@@ -31,7 +34,13 @@ public class Enemies {
         return moveAllEnemiesFuture;
     }
 
-    public void removeEnemy(Enemy enemy) {
-        listOfEnemies.remove(enemy);
+    @Override
+    public void enemyAdded(EnemyAddedEvent event) {
+        listOfEnemies.add(event.getEnemy());
+    }
+
+    @Override
+    public void enemyDestroyed(EnemyDestroyedEvent event) {
+        listOfEnemies.remove(event.getEnemy());
     }
 }

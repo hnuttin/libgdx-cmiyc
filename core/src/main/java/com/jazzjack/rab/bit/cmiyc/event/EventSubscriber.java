@@ -1,6 +1,5 @@
 package com.jazzjack.rab.bit.cmiyc.event;
 
-public interface EventSubscriber<E extends Event> {
+public interface EventSubscriber {
 
-    void handleEvent(E event);
 }

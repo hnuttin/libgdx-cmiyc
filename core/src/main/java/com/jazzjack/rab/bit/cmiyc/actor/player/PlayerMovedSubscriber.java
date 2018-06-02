@@ -1,6 +1,8 @@
 package com.jazzjack.rab.bit.cmiyc.actor.player;
 
-public interface PlayerMovedSubscriber {
+import com.jazzjack.rab.bit.cmiyc.event.EventSubscriber;
 
-    void playerMoved();
+public interface PlayerMovedSubscriber extends EventSubscriber {
+
+    void playerMoved(PlayerMovedEvent event);
 }

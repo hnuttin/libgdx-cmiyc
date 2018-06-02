@@ -1,49 +1,70 @@
 package com.jazzjack.rab.bit.cmiyc.event;
 
-import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
-import com.jazzjack.rab.bit.cmiyc.level.Level;
-import com.jazzjack.rab.bit.cmiyc.level.NewLevelSubscriber;
-
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class GameEventBus {
 
-    private GameEventBus() {
-        // never instantiate
-    }
+    private static final GameEventBus INSTANCE = new GameEventBus();
 
-    private static final Map<Class<Event>, List<EventSubscriber<Event>>> eventSubscribersMap = new HashMap<>();
-
-    public static <E extends Event> void registerEventSubscriber(EventSubscriber<E> eventSubscriber, Class<E> eventClass) {
-        List<EventSubscriber<Event>> eventSubscribers = GameEventBus.eventSubscribersMap.get(eventClass);
-        if (eventSubscribers == null) {
-            eventSubscribers = new ArrayList<>();
-            eventSubscribersMap.put((Class<Event>) eventClass, eventSubscribers);
-        }
-        eventSubscribers.add((EventSubscriber<Event>) eventSubscriber);
+    public static void registerSubscriber(EventSubscriber eventSubscriber) {
+        INSTANCE.registerEventSubscriberInternal(eventSubscriber);
     }
 
     public static void publishEvent(Event event) {
-        List<EventSubscriber<Event>> eventSubscribers = eventSubscribersMap.get(event.getClass());
-        eventSubscribers.forEach(eventSubscriber -> eventSubscriber.handleEvent(event));
+        INSTANCE.publishEventInternal(event);
     }
 
-    private static final List<NewLevelSubscriber> NEW_LEVEL_SUBSCRIBERS = new ArrayList<>();
-    public static void registerSubscriber(NewLevelSubscriber newLevelSubscriber) {
-        NEW_LEVEL_SUBSCRIBERS.add(newLevelSubscriber);
-    }
-    public static void publishNewLevelEvent(Level newLevel) {
-        NEW_LEVEL_SUBSCRIBERS.forEach(listener -> listener.onNewLevel(newLevel));
+    final Map<Class<Event>, List<Consumer<Event>>> eventSubscribersMap;
+
+    GameEventBus() {
+        this.eventSubscribersMap = new HashMap<>();
     }
 
-    private static final List<PlayerMovedSubscriber> PLAYER_MOVED_SUBSCRIBERS = new ArrayList<>();
-    public static void registerSubscriber(PlayerMovedSubscriber playerMovedSubscriber) {
-        PLAYER_MOVED_SUBSCRIBERS.add(playerMovedSubscriber);
+    void registerEventSubscriberInternal(EventSubscriber eventSubscriber) {
+        for (Class<?> subscriberCandidate : eventSubscriber.getClass().getInterfaces()) {
+            if (EventSubscriber.class.isAssignableFrom(subscriberCandidate)) {
+                addSubscriberInterface(eventSubscriber, subscriberCandidate);
+            }
+        }
     }
-    public static void publishPlayerMovedEvent() {
-        PLAYER_MOVED_SUBSCRIBERS.forEach(PlayerMovedSubscriber::playerMoved);
+
+    private void addSubscriberInterface(EventSubscriber eventSubscriber, Class<?> subscriberCandidate) {
+        for (Method subscriberMethed : subscriberCandidate.getDeclaredMethods()) {
+            if (subscriberMethed.getParameterCount() == 1) {
+                if (Event.class.isAssignableFrom(subscriberMethed.getParameterTypes()[0])) {
+                    //noinspection unchecked
+                    addEventSubscriber(eventSubscriber, subscriberMethed, (Class<Event>) subscriberMethed.getParameterTypes()[0]);
+                } else {
+                    throw new IllegalArgumentException("Parameter type for declared event subscriber is not of type Event.class");
+                }
+            } else {
+                throw new IllegalArgumentException("Declared event subscriber method has less or more than one parameter: one Event.class parameter is required");
+            }
+        }
+    }
+
+    private void addEventSubscriber(EventSubscriber eventSubscriber, Method subscriberMethed, Class<Event> eventClass) {
+        List<Consumer<Event>> eventSubscribers = eventSubscribersMap.computeIfAbsent(eventClass, k -> new ArrayList<>());
+        eventSubscribers.add(event -> {
+            try {
+                subscriberMethed.invoke(eventSubscriber, event);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new IllegalStateException("Failed to invoke event subscriber", e);
+            }
+        });
+    }
+
+    void publishEventInternal(Event event) {
+        //noinspection SuspiciousMethodCalls
+        List<Consumer<Event>> eventSubscribers = eventSubscribersMap.get(event.getClass());
+        if (eventSubscribers != null) {
+            eventSubscribers.forEach(eventSubscriber -> eventSubscriber.accept(event));
+        }
     }
 }

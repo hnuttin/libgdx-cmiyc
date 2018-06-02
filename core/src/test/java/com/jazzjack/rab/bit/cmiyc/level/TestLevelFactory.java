@@ -15,7 +15,8 @@ import static org.mockito.Mockito.when;
 
 class TestLevelFactory {
 
-    private TestLevelFactory() {}
+    private TestLevelFactory() {
+    }
 
     static Level createLevel(String levelFile) {
         LevelContext levelContext = new LevelContext(new CollisionResolver(), new Randomizer(new RandomInteger()), mock(AnimationRegister.class));
