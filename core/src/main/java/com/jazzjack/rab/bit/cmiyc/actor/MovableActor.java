@@ -33,8 +33,10 @@ public class MovableActor extends SimpleActor implements HasPower {
             if (collisionResolvement.isResolved()) {
                 if (collisionResolvement.isMovementNotAllowed()) {
                     mutatePositionForDirection(direction.getOppositeDirection());
+                    return collisionResolvement.getCollisionResult();
+                } else {
+                    return CollisionResult.noCollision();
                 }
-                return CollisionResult.noCollision();
             } else {
                 mutatePositionForDirection(direction.getOppositeDirection());
                 return collisionResolvement.getCollisionResult();

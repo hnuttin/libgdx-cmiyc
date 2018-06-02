@@ -79,4 +79,10 @@ public class Player extends MovableActor implements HasPower {
     public void resetActionPoints() {
         actionPointsConsumed = 0;
     }
+
+    public void incrementHp() {
+        if (hp < maxHp) {
+            hp++;
+        }
+    }
 }

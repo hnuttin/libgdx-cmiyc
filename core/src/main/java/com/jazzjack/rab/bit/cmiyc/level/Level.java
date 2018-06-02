@@ -11,6 +11,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
+import com.jazzjack.rab.bit.cmiyc.item.ItemPickupHandler;
 import com.jazzjack.rab.bit.cmiyc.level.meta.EnemyMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaData;
 
@@ -40,6 +41,8 @@ public class Level {
         this.enemies = createEnemies(createEnemyContext(context, levelCollisionDetector));
 
         this.turnsLeft = maxTurns;
+
+        new ItemPickupHandler(levelMetaData.getItems());
     }
 
     private Player createPlayer(LevelCollisionDetector levelCollisionDetector) {
