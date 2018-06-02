@@ -6,9 +6,8 @@ import com.badlogic.gdx.utils.XmlReader;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
-
-import static java.lang.String.format;
 
 public class ObjectTypeParser {
 
@@ -26,11 +25,13 @@ public class ObjectTypeParser {
     }
 
     public Map<String, String> getDefaultProperties(String objectType) {
+        Map<String, String> defaultProperties = new HashMap<>();
         XmlReader.Element objectTypeElement = getObjectType(objectType);
-        Array<XmlReader.Element> objectTypeProperties = objectTypeElement.getChildrenByName(ELEMENT_PROPERTY);
-        Map<String, String> defaultProperties = new HashMap<>(objectTypeProperties.size);
-        for (XmlReader.Element propertyElement : objectTypeProperties) {
-            defaultProperties.put(propertyElement.getAttribute(ATTRIBUTE_NAME), propertyElement.getAttribute(ATTRIBUTE_DEFAULT));
+        if (objectTypeElement != null) {
+            Array<XmlReader.Element> objectTypeProperties = objectTypeElement.getChildrenByName(ELEMENT_PROPERTY);
+            for (XmlReader.Element propertyElement : objectTypeProperties) {
+                defaultProperties.put(propertyElement.getAttribute(ATTRIBUTE_NAME), propertyElement.getAttribute(ATTRIBUTE_DEFAULT));
+            }
         }
         return defaultProperties;
     }
@@ -42,13 +43,10 @@ public class ObjectTypeParser {
     private XmlReader.Element getChildElementWithAttribute(XmlReader.Element parentElement, String childElementName, String attributeName, String attributeValue) {
         Array<XmlReader.Element> objecttypes = parentElement.getChildrenByName(childElementName);
         return Stream.of(objecttypes.items)
+                .filter(Objects::nonNull)
                 .filter(element -> attributeValue.equalsIgnoreCase(element.getAttribute(attributeName)))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(format(
-                        "No child element '%s' found for attribute name '%s' and attribute value '%s'",
-                        childElementName,
-                        attributeName,
-                        attributeValue)));
+                .orElse(null);
     }
 
 }

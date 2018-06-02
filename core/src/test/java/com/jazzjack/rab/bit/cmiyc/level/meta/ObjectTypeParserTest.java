@@ -35,4 +35,11 @@ class ObjectTypeParserTest {
         assertThat(defaultProperties).containsKey("predictability");
         assertThat(defaultProperties).containsValue("LOW");
     }
+
+    @Test
+    void epectEmptyDefautPropertiesIfObjectTypeNotFound() {
+        Map<String, String> defaultProperties = objectTypeParser.getDefaultProperties("unknown");
+
+        assertThat(defaultProperties).isEmpty();
+    }
 }

@@ -52,6 +52,21 @@ class LevelMetaDataFactoryTest {
         assertEnemy(levelMetaData.getEnemies().get(2), "enemy3", Predictability.LOW, 16, 1);
     }
 
+    @Test
+    void expectItemsCorrectlyCreated() {
+        LevelMetaData levelMetaData = levelMetaDataFactory.create(levelTiledMap);
+
+        assertThat(levelMetaData.getItems()).hasSize(2);
+        assertItem(levelMetaData.getItems().get(0), "item-hp", 0, 0);
+        assertItem(levelMetaData.getItems().get(1), "item-hp", 1, 0);
+    }
+
+    private void assertItem(MarkerObject item, String name, int x, int y) {
+        assertThat(item.getType()).isEqualTo(name);
+        assertThat(item.getX()).isEqualTo(x);
+        assertThat(item.getY()).isEqualTo(y);
+    }
+
     private void assertEnemy(EnemyMarkerObject enemy, String name, Predictability predictability, int x, int y) {
         assertThat(enemy.getType()).isEqualTo(name);
         assertThat(enemy.getPredictability()).isEqualTo(predictability);

@@ -7,6 +7,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
+import com.jazzjack.rab.bit.cmiyc.level.meta.MarkerObject;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 import com.jazzjack.rab.bit.cmiyc.render.Renderer;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
@@ -53,6 +54,7 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
         renderPlayer();
         renderEnemies();
         renderEndPosition();
+        renderItems();
         batch.end();
         fogOfWarBuffer.renderSight();
     }
@@ -109,9 +111,22 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
                 1);
     }
 
+    private void renderItems() {
+        level.getLevelMetaData().getItems().forEach(this::drawItem);
+    }
+
+    private void drawItem(MarkerObject item) {
+        batch.draw(
+                assetManager.getTextureForName(item.getType()),
+                item.getX(),
+                item.getY(),
+                1,
+                1);
+    }
+
     private void drawActor(Actor actor) {
         batch.draw(
-                assetManager.getTextureForActor(actor),
+                assetManager.getTextureForName(actor.getName()),
                 actor.getX(),
                 actor.getY(),
                 1,

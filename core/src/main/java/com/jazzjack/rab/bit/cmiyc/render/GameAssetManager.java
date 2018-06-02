@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -98,8 +97,8 @@ public class GameAssetManager extends AssetManager {
         return get(ATLAS_LIGHTS, TextureAtlas.class).findRegion(ATLAS_REGION_LIGHT);
     }
 
-    public TextureAtlas.AtlasRegion getTextureForActor(Actor actor) {
-        return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(actor.getName());
+    public TextureAtlas.AtlasRegion getTextureForName(String name) {
+        return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(name);
     }
 
     public TextureAtlas.AtlasRegion getHpFilledTexture() {

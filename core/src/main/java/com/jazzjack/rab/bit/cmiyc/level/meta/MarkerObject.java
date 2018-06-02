@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.level.meta;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.jazzjack.rab.bit.cmiyc.level.InvalidLevelException;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
@@ -32,6 +33,11 @@ public class MarkerObject implements HasPosition {
             return new Position(
                     (int) (rectangleMapObject.getRectangle().x / tilePixelSize),
                     (int) (rectangleMapObject.getRectangle().y / tilePixelSize));
+        } else if (mapObject instanceof PolygonMapObject) {
+            PolygonMapObject polygonMapObject = (PolygonMapObject) mapObject;
+            return new Position(
+                    (int) (polygonMapObject.getPolygon().getX() / tilePixelSize),
+                    (int) (polygonMapObject.getPolygon().getY() / tilePixelSize));
         } else {
             throw new InvalidLevelException("Unsupported marker object " + mapObject.getClass().getSimpleName());
         }

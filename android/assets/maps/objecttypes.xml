@@ -10,5 +10,6 @@
  <objecttype name="enemy3" color="#fc0107">
   <property name="predictability" type="string" default="LOW"/>
  </objecttype>
+    <objecttype name="hp" color="#ffff0a" />
  <objecttype name="start" color="#21ff06"/>
 </objecttypes>

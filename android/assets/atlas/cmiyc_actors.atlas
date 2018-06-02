@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 ap-ending-left
   rotate: false
-  xy: 334, 200
+  xy: 268, 166
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -34,7 +34,7 @@ eight
   index: -1
 end
   rotate: false
-  xy: 104, 2
+  xy: 334, 200
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -88,6 +88,13 @@ hp-filled
   orig: 32, 32
   offset: 0, 0
   index: -1
+item-hp
+  rotate: false
+  xy: 368, 200
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 nine
   rotate: false
   xy: 134, 36
@@ -97,14 +104,14 @@ nine
   index: -1
 one
   rotate: false
-  xy: 2, 36
+  xy: 68, 102
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 368, 200
+  xy: 104, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -181,7 +188,7 @@ route-vertical
   index: -1
 seven
   rotate: false
-  xy: 68, 102
+  xy: 2, 36
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

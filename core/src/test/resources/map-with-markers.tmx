@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="left-down" width="20" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="19">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="left-down" width="20" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="21">
  <objectgroup name="markers">
   <object id="11" type="enemy1" x="192" y="64" width="32" height="32">
    <ellipse/>
@@ -12,5 +12,11 @@
   </object>
   <object id="14" type="start" x="32" y="224" width="32" height="32"/>
   <object id="17" type="end" x="576" y="160" width="32" height="32"/>
+  <object id="19" type="item-hp" x="0" y="320">
+   <polygon points="0,0 32,-32 32,0"/>
+  </object>
+  <object id="20" type="item-hp" x="32" y="320">
+   <polygon points="0,0 32,-32 32,0"/>
+  </object>
  </objectgroup>
 </map>
