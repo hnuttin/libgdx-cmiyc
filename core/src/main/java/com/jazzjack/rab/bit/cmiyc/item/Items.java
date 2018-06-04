@@ -7,16 +7,19 @@ import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.meta.MarkerObject;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class ItemPickupHandler implements PlayerMovedSubscriber {
+public class Items implements PlayerMovedSubscriber {
 
+    private final List<MarkerObject> items;
     private final List<Handler> itemHandlers;
 
-    public ItemPickupHandler(List<MarkerObject> items) {
-        itemHandlers = items.stream().map(Handler::new).collect(toList());
+    public Items(List<MarkerObject> items) {
+        this.items = items;
+        this.itemHandlers = items.stream().map(Handler::new).collect(toList());
         GameEventBus.registerSubscriber(this);
     }
 
@@ -27,12 +30,16 @@ public class ItemPickupHandler implements PlayerMovedSubscriber {
                 .ifPresent(handler -> handler.handle(player));
     }
 
+    public List<MarkerObject> getItems() {
+        return Collections.unmodifiableList(items);
+    }
+
     @Override
     public void playerMoved(PlayerMovedEvent event) {
         handleItemPickup(event.getPlayer());
     }
 
-    private static class Handler implements HasPosition {
+    private class Handler implements HasPosition {
 
         private final MarkerObject markerObject;
 
@@ -42,6 +49,7 @@ public class ItemPickupHandler implements PlayerMovedSubscriber {
 
         private void handle(Player player) {
             player.incrementHp();
+            items.remove(markerObject);
         }
 
         @Override

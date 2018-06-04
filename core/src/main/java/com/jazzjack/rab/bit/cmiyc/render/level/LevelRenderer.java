@@ -102,7 +102,7 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     }
 
     private void renderEndPosition() {
-        HasPosition endPosition = level.getLevelMetaData().getEndPosition();
+        HasPosition endPosition = level.getLevelEndPosition();
         batch.draw(
                 assetManager.getPlayerEndTexture(),
                 endPosition.getX(),
@@ -112,7 +112,7 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     }
 
     private void renderItems() {
-        level.getLevelMetaData().getItems().forEach(this::drawItem);
+        level.getItems().forEach(this::drawItem);
     }
 
     private void drawItem(MarkerObject item) {

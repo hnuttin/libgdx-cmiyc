@@ -11,9 +11,11 @@ import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
-import com.jazzjack.rab.bit.cmiyc.item.ItemPickupHandler;
+import com.jazzjack.rab.bit.cmiyc.item.Items;
 import com.jazzjack.rab.bit.cmiyc.level.meta.EnemyMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaData;
+import com.jazzjack.rab.bit.cmiyc.level.meta.MarkerObject;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -28,6 +30,7 @@ public class Level {
 
     private final Player player;
     private final Enemies enemies;
+    private final Items items;
 
     private int turnsLeft;
 
@@ -42,7 +45,7 @@ public class Level {
 
         this.turnsLeft = maxTurns;
 
-        new ItemPickupHandler(levelMetaData.getItems());
+        items = new Items(levelMetaData.getItems());
     }
 
     private Player createPlayer(LevelCollisionDetector levelCollisionDetector) {
@@ -75,8 +78,8 @@ public class Level {
         return tiledMap;
     }
 
-    public LevelMetaData getLevelMetaData() {
-        return levelMetaData;
+    public HasPosition getLevelEndPosition() {
+        return levelMetaData.getEndPosition();
     }
 
     public Player getPlayer() {
@@ -89,6 +92,10 @@ public class Level {
 
     public List<Enemy> getEnemies() {
         return enemies.get();
+    }
+
+    public List<MarkerObject> getItems() {
+        return items.getItems();
     }
 
     public int getTurnsLeft() {
