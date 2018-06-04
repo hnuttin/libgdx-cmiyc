@@ -9,7 +9,7 @@ import static java.util.Collections.singletonList;
 
 public class Randomizer {
 
-    static final int HUNDRED_PERCENT = 100;
+    public static final int HUNDRED_PERCENT = 100;
 
     private final RandomInteger randomInteger;
 
