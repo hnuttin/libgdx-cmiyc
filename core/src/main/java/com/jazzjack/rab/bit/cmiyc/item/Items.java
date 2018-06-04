@@ -7,6 +7,7 @@ import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.meta.MarkerObject;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,11 +15,11 @@ import static java.util.stream.Collectors.toList;
 
 public class Items implements PlayerMovedSubscriber {
 
-    private final List<MarkerObject> items;
+    private final List<MarkerObject> listOfItems;
     private final List<Handler> itemHandlers;
 
     public Items(List<MarkerObject> items) {
-        this.items = items;
+        this.listOfItems = new ArrayList<>(items);
         this.itemHandlers = items.stream().map(Handler::new).collect(toList());
         GameEventBus.registerSubscriber(this);
     }
@@ -31,7 +32,7 @@ public class Items implements PlayerMovedSubscriber {
     }
 
     public List<MarkerObject> getItems() {
-        return Collections.unmodifiableList(items);
+        return Collections.unmodifiableList(listOfItems);
     }
 
     @Override
@@ -49,7 +50,8 @@ public class Items implements PlayerMovedSubscriber {
 
         private void handle(Player player) {
             player.incrementHp();
-            items.remove(markerObject);
+            listOfItems.remove(markerObject);
+            itemHandlers.remove(this);
         }
 
         @Override
