@@ -7,6 +7,7 @@ import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,7 +19,7 @@ public class DirectionChanceCalculator {
         this.targetPosition = targetPosition;
     }
 
-    public List<DirectionChance> calculate(HasPosition startPosition, List<Direction> directions, Sense sense) {
+    public List<DirectionChance> calculate(HasPosition startPosition, Set<Direction> directions, Sense sense) {
         List<Direction> directionsTowardsTargetPosition = determineDirectionsTowardsTargetPosition(startPosition);
         int numberOfDirectionsTowardsPosition = (int) directions.stream().filter(directionsTowardsTargetPosition::contains).count();
         int restPercentage = (Randomizer.HUNDRED_PERCENT - (numberOfDirectionsTowardsPosition * sense.getPercentageWeight())) / directions.size();

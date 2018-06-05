@@ -26,7 +26,7 @@ public class StepNames {
     public static final String CORNER_BOTTOM_LEFT = "route-corner-bottom-left";
 
     private static final EnumMap<Direction, String> DIRECTION_TO_ENDING_MAPPING = new EnumMap<>(Direction.class);
-    private static final Map<DirectionAndNextDirection, String> DIRECTION_AND_NEXT_DIRECTION_MAPPING = new HashMap<>();
+    private static final Map<TwoConsecutiveDirections, String> TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING = new HashMap<>();
 
     static {
         DIRECTION_TO_ENDING_MAPPING.put(Direction.RIGHT, ENDING_RIGHT);
@@ -34,39 +34,39 @@ public class StepNames {
         DIRECTION_TO_ENDING_MAPPING.put(Direction.UP, ENDING_TOP);
         DIRECTION_TO_ENDING_MAPPING.put(Direction.DOWN, ENDING_BOTTOM);
 
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.UP, Direction.LEFT), CORNER_TOP_RIGHT);
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.RIGHT, Direction.DOWN), CORNER_TOP_RIGHT);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.UP, Direction.LEFT), CORNER_TOP_RIGHT);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.RIGHT, Direction.DOWN), CORNER_TOP_RIGHT);
 
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.UP, Direction.RIGHT), CORNER_TOP_LEFT);
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.LEFT, Direction.DOWN), CORNER_TOP_LEFT);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.UP, Direction.RIGHT), CORNER_TOP_LEFT);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.LEFT, Direction.DOWN), CORNER_TOP_LEFT);
 
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.DOWN, Direction.LEFT), CORNER_BOTTOM_RIGHT);
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.RIGHT, Direction.UP), CORNER_BOTTOM_RIGHT);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.DOWN, Direction.LEFT), CORNER_BOTTOM_RIGHT);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.RIGHT, Direction.UP), CORNER_BOTTOM_RIGHT);
 
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.LEFT, Direction.UP), CORNER_BOTTOM_LEFT);
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.DOWN, Direction.RIGHT), CORNER_BOTTOM_LEFT);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.LEFT, Direction.UP), CORNER_BOTTOM_LEFT);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.DOWN, Direction.RIGHT), CORNER_BOTTOM_LEFT);
 
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.RIGHT, Direction.RIGHT), HORIZONTAL);
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.LEFT, Direction.LEFT), HORIZONTAL);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.RIGHT, Direction.RIGHT), HORIZONTAL);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.LEFT, Direction.LEFT), HORIZONTAL);
 
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.UP, Direction.UP), VERTICAL);
-        DIRECTION_AND_NEXT_DIRECTION_MAPPING.put(new DirectionAndNextDirection(Direction.DOWN, Direction.DOWN), VERTICAL);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.UP, Direction.UP), VERTICAL);
+        TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.put(new TwoConsecutiveDirections(Direction.DOWN, Direction.DOWN), VERTICAL);
     }
 
     public static String getEndingForDirection(Direction direction) {
         return DIRECTION_TO_ENDING_MAPPING.get(direction);
     }
 
-    public static String getBasedOnNextDirection(Direction direction, Direction nextDirection) {
-        return DIRECTION_AND_NEXT_DIRECTION_MAPPING.get(new DirectionAndNextDirection(direction, nextDirection));
+    public static String getBasedOnTwoConsecutiveDirections(Direction direction, Direction nextDirection) {
+        return TWO_CONSECUTIVE_DIRECTIONS_TO_STEPNAME_MAPPING.get(new TwoConsecutiveDirections(direction, nextDirection));
     }
 
-    private static class DirectionAndNextDirection {
+    private static class TwoConsecutiveDirections {
 
         private final Direction direction;
         private final Direction nextDirection;
 
-        private DirectionAndNextDirection(Direction direction, Direction nextDirection) {
+        private TwoConsecutiveDirections(Direction direction, Direction nextDirection) {
             this.direction = direction;
             this.nextDirection = nextDirection;
         }
@@ -76,7 +76,7 @@ public class StepNames {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            DirectionAndNextDirection that = (DirectionAndNextDirection) o;
+            TwoConsecutiveDirections that = (TwoConsecutiveDirections) o;
 
             if (direction != that.direction) return false;
             return nextDirection == that.nextDirection;
