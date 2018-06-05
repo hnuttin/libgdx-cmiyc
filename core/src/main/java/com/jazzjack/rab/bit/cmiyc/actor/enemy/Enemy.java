@@ -31,7 +31,7 @@ public class Enemy extends MovableActor implements HasPower {
         this.context = context;
         this.predictability = predictability;
         this.routes = new ArrayList<>();
-        this.sense = Sense.MEDIUM;
+        this.sense = Sense.HIGH;
     }
 
     public Predictability getPredictability() {
