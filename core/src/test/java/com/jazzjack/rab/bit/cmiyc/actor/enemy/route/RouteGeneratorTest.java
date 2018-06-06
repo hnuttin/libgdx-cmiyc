@@ -331,7 +331,7 @@ class RouteGeneratorTest {
     }
 
     private Enemy enemy(int startX, int startY) {
-        return new Enemy(mock(EnemyContext.class), "enemy", Predictability.HIGH, new Position(startX, startY));
+        return new Enemy(mock(EnemyContext.class), "enemy", Predictability.HIGH, Sense.LOW, new Position(startX, startY));
     }
 
 }

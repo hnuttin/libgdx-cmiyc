@@ -70,7 +70,7 @@ public class Level {
     }
 
     private Enemy createEnemy(EnemyContext enemyContext, EnemyMarkerObject enemyMarkerObject) {
-        Enemy enemy = new Enemy(enemyContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject);
+        Enemy enemy = new Enemy(enemyContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject.getSense(), enemyMarkerObject);
         GameEventBus.publishEvent(new EnemyAddedEvent(enemy));
         return enemy;
     }

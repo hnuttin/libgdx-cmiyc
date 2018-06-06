@@ -5,6 +5,7 @@ import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandleResolver;
 import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
 import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
+import com.jazzjack.rab.bit.cmiyc.shared.Sense;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,9 +48,9 @@ class LevelMetaDataFactoryTest {
         LevelMetaData levelMetaData = levelMetaDataFactory.create(levelTiledMap);
 
         assertThat(levelMetaData.getEnemies()).hasSize(3);
-        assertEnemy(levelMetaData.getEnemies().get(0), "enemy1", Predictability.HIGH, 6, 7);
-        assertEnemy(levelMetaData.getEnemies().get(1), "enemy2", Predictability.MEDIUM, 10, 4);
-        assertEnemy(levelMetaData.getEnemies().get(2), "enemy3", Predictability.LOW, 16, 1);
+        assertEnemy(levelMetaData.getEnemies().get(0), "enemy1", Predictability.HIGH, Sense.LOW, 6, 7);
+        assertEnemy(levelMetaData.getEnemies().get(1), "enemy2", Predictability.MEDIUM, Sense.MEDIUM, 10, 4);
+        assertEnemy(levelMetaData.getEnemies().get(2), "enemy3", Predictability.LOW, Sense.HIGH, 16, 1);
     }
 
     @Test
@@ -67,9 +68,10 @@ class LevelMetaDataFactoryTest {
         assertThat(item.getY()).isEqualTo(y);
     }
 
-    private void assertEnemy(EnemyMarkerObject enemy, String name, Predictability predictability, int x, int y) {
+    private void assertEnemy(EnemyMarkerObject enemy, String name, Predictability predictability, Sense sense, int x, int y) {
         assertThat(enemy.getType()).isEqualTo(name);
         assertThat(enemy.getPredictability()).isEqualTo(predictability);
+        assertThat(enemy.getSense()).isEqualTo(sense);
         assertThat(enemy.getX()).isEqualTo(x);
         assertThat(enemy.getY()).isEqualTo(y);
     }
