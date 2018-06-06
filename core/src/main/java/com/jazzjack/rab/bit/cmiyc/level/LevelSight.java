@@ -3,6 +3,9 @@ package com.jazzjack.rab.bit.cmiyc.level;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class LevelSight {
 
     private static final String PROPERTY_VISISTED = "visited";
@@ -16,8 +19,11 @@ public class LevelSight {
 
     private void markTiles(Player player) {
         markAllTilesNotInSight();
-        TiledMapTileLayer.Cell playerCell = mapLayer.getCell(player.getX(), player.getY());
-        markTileVisitedAndInSight(playerCell);
+        for (int cellX = startSightX(player); cellX < endSightX(player); cellX++) {
+            for (int cellY = startSightY(player); cellY < endSightY(player); cellY++) {
+                markTileVisitedAndInSight(mapLayer.getCell(cellX, cellY));
+            }
+        }
     }
 
     private void markAllTilesNotInSight() {
@@ -26,6 +32,22 @@ public class LevelSight {
                 markTileNotInSight(mapLayer.getCell(cellX, cellY));
             }
         }
+    }
+
+    private int startSightX(Player player) {
+        return max(0, player.getX() - player.getSight());
+    }
+
+    private int endSightX(Player player) {
+        return min(mapLayer.getWidth(), player.getX() + player.getSight());
+    }
+
+    private int startSightY(Player player) {
+        return max(0, player.getY() - player.getSight());
+    }
+
+    private int endSightY(Player player) {
+        return min(mapLayer.getHeight(), player.getY() + player.getSight());
     }
 
     private void markTileNotInSight(TiledMapTileLayer.Cell cell) {
