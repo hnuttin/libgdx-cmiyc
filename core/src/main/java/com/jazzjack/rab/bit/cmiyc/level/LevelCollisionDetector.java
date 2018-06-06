@@ -11,15 +11,14 @@ public class LevelCollisionDetector implements CollisionDetector {
 
     private static final String PROPERTY_COLLISION = "collision";
 
-    private final LevelTiledMap levelTiledMap;
+    private final TiledMapTileLayer mapLayer;
 
-    public LevelCollisionDetector(LevelTiledMap levelTiledMap) {
-        this.levelTiledMap = levelTiledMap;
+    public LevelCollisionDetector(TiledMapTileLayer mapLayer) {
+        this.mapLayer = mapLayer;
     }
 
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
-        TiledMapTileLayer mapLayer = levelTiledMap.getMapLayer();
         for (int cellX = 0; cellX < mapLayer.getWidth(); cellX++) {
             for (int cellY = 0; cellY < mapLayer.getHeight(); cellY++) {
                 if (collidesWithCell(cellX, cellY, collidable)) {
@@ -31,7 +30,7 @@ public class LevelCollisionDetector implements CollisionDetector {
     }
 
     private boolean collidesWithCell(int cellX, int cellY, Collidable collidable) {
-        TiledMapTileLayer.Cell cell = levelTiledMap.getMapLayer().getCell(cellX, cellY);
+        TiledMapTileLayer.Cell cell = mapLayer.getCell(cellX, cellY);
         MapProperties properties = cell.getTile().getProperties();
         Boolean tileCollides = properties.get(PROPERTY_COLLISION, Boolean.class);
         return tileCollides != null && tileCollides && collidesWithTile(cellX, cellY, collidable);

@@ -40,13 +40,13 @@ public class Level {
         this.tiledMap = tiledMap;
         this.levelMetaData = levelMetaData;
 
-        LevelCollisionDetector levelCollisionDetector = new LevelCollisionDetector(tiledMap);
+        LevelCollisionDetector levelCollisionDetector = new LevelCollisionDetector(tiledMap.getMapLayer());
+
         this.player = createPlayer(levelCollisionDetector);
         this.enemies = createEnemies(createEnemyContext(context, levelCollisionDetector));
+        this.items = new Items(levelMetaData.getItems());
 
         this.turnsLeft = maxTurns;
-
-        items = new Items(levelMetaData.getItems());
     }
 
     private Player createPlayer(LevelCollisionDetector levelCollisionDetector) {
