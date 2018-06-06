@@ -89,4 +89,11 @@ class Randomizer_ChooseRandomChanceTest {
         assertThat(randomChance.getPercentage()).isEqualTo(THIRD_CHANCE);
     }
 
+    @Test
+    void expectNoExceptionWhenTotalPercentageNot100Percent() {
+        when(randomInteger.randomInteger(FIRST_CHANCE + SECOND_CHANCE)).thenReturn(1);
+        Chance randomChance = randomizer.chooseRandomChance(asList(() -> FIRST_CHANCE, () -> SECOND_CHANCE));
+        assertThat(randomChance.getPercentage()).isEqualTo(FIRST_CHANCE);
+    }
+
 }

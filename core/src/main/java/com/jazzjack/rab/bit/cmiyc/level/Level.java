@@ -5,6 +5,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyAddedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyContext;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovementCollisionDetector;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.DirectionChanceCalculator;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.EnemyRouteCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
@@ -55,11 +56,11 @@ public class Level {
 
     private EnemyContext createEnemyContext(LevelContext context, LevelCollisionDetector levelCollisionDetector) {
         return new EnemyContext(
-                new EnemyMovementCollisionDetector(this.player, levelCollisionDetector),
+                new EnemyMovementCollisionDetector(player, levelCollisionDetector),
                 context.getCollisionResolver(),
                 context.getRandomizer(),
                 context.getAnimationRegister(),
-                new RouteGenerator(new EnemyRouteCollisionDetector(levelCollisionDetector), context.getRandomizer()));
+                new RouteGenerator(new EnemyRouteCollisionDetector(levelCollisionDetector), new DirectionChanceCalculator(player), context.getRandomizer()));
     }
 
     private Enemies createEnemies(EnemyContext enemyContext) {
@@ -69,7 +70,7 @@ public class Level {
     }
 
     private Enemy createEnemy(EnemyContext enemyContext, EnemyMarkerObject enemyMarkerObject) {
-        Enemy enemy = new Enemy(enemyContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject);
+        Enemy enemy = new Enemy(enemyContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject.getSense(), enemyMarkerObject);
         GameEventBus.publishEvent(new EnemyAddedEvent(enemy));
         return enemy;
     }

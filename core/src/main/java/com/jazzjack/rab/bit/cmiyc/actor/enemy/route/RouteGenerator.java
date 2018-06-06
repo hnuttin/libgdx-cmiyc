@@ -1,7 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
 import com.google.common.collect.Streams;
-import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames;
@@ -10,6 +9,8 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepResultCollisionDete
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.Sense;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,18 +25,21 @@ import static java.util.stream.Collectors.toSet;
 public class RouteGenerator {
 
     private final CollisionDetector collisionDetector;
+    private final DirectionChanceCalculator directionChanceCalculator;
     private final Randomizer randomizer;
 
-    public RouteGenerator(CollisionDetector collisionDetector, Randomizer randomizer) {
+    public RouteGenerator(CollisionDetector collisionDetector, DirectionChanceCalculator directionChanceCalculator, Randomizer randomizer) {
         this.collisionDetector = collisionDetector;
+        this.directionChanceCalculator = directionChanceCalculator;
         this.randomizer = randomizer;
     }
 
     public List<Route> generateRoutes(Enemy enemy, int amount, int maxLength) {
         StepResultCollisionDetector routeCollisionDetector = new StepResultCollisionDetector(collisionDetector);
+        routeCollisionDetector.addStepResult(enemy);
         List<RouteResult> routeResults = IntStream.range(0, amount)
                 .boxed()
-                .map(i -> generateRoute(enemy, maxLength, routeCollisionDetector))
+                .map(i -> generateRoute(enemy, maxLength, routeCollisionDetector, enemy.getSense()))
                 .filter(route -> !route.getSteps().isEmpty())
                 .collect(toList());
         List<Integer> percentages = routeResults.isEmpty() ? emptyList() : randomizer.randomPercentages(enemy.getPredictability(), routeResults.size());
@@ -44,13 +48,14 @@ public class RouteGenerator {
                 .collect(toList());
     }
 
-    private RouteResult generateRoute(Actor actor, int maxLength, StepResultCollisionDetector collisionDetector) {
+    private RouteResult generateRoute(HasPosition startPosition, int maxLength, StepResultCollisionDetector collisionDetector, Sense sense) {
         List<StepResult> stepsResults = new ArrayList<>(maxLength);
         for (int stepIndex = 0; stepIndex < maxLength; stepIndex++) {
             StepResult stepResult = generateStep(
-                    stepsResults.isEmpty() ? new StepResult(actor.getX(), actor.getY(), null) : stepsResults.get(stepsResults.size() - 1),
-                    copyWithoutDirection(Direction.valuesAsSet(), stepsResults.isEmpty() ? null : stepsResults.get(stepsResults.size() - 1).getDirection().getOppositeDirection()),
-                    collisionDetector);
+                    stepsResults.isEmpty() ? startPosition : stepsResults.get(stepsResults.size() - 1),
+                    Direction.valuesAsSet(),
+                    collisionDetector,
+                    sense);
             if (stepResult != null) {
                 stepsResults.add(stepResult);
                 collisionDetector.addStepResult(stepResult);
@@ -62,20 +67,21 @@ public class RouteGenerator {
         return new RouteResult(steps);
     }
 
-    private StepResult generateStep(StepResult previousStep, Set<Direction> allowedDirections, StepResultCollisionDetector routeCollisionDetector) {
+    private StepResult generateStep(HasPosition previousPosition, Set<Direction> allowedDirections, StepResultCollisionDetector routeCollisionDetector, Sense sense) {
         if (allowedDirections.isEmpty()) {
             return null;
         }
-        Direction direction = randomizer.randomFromSet(allowedDirections);
-        StepResult stepResult = createStepResultForDirection(previousStep, direction);
-        if (routeCollisionDetector.collides(stepResult, direction).isNoCollision()) {
+        List<DirectionChance> directionChances = directionChanceCalculator.calculate(previousPosition, allowedDirections, sense);
+        DirectionChance directionChance = randomizer.chooseRandomChance(directionChances);
+        StepResult stepResult = createStepResultForDirection(previousPosition, directionChance.getDirection());
+        if (routeCollisionDetector.collides(stepResult, directionChance.getDirection()).isNoCollision()) {
             return stepResult;
         } else {
-            return generateStep(previousStep, copyWithoutDirection(allowedDirections, direction), routeCollisionDetector);
+            return generateStep(previousPosition, copyWithoutDirection(allowedDirections, directionChance.getDirection()), routeCollisionDetector, sense);
         }
     }
 
-    private StepResult createStepResultForDirection(StepResult previousStepResult, Direction direction) {
+    private StepResult createStepResultForDirection(HasPosition previousStepResult, Direction direction) {
         final int x;
         final int y;
         switch (direction) {
@@ -122,7 +128,7 @@ public class RouteGenerator {
     }
 
     private Step createStepForPreviousStepResult(StepResult previousStepResult, StepResult stepResult) {
-        return createStep(StepNames.getBasedOnNextDirection(previousStepResult.getDirection(), stepResult.getDirection()), previousStepResult);
+        return createStep(StepNames.getBasedOnTwoConsecutiveDirections(previousStepResult.getDirection(), stepResult.getDirection()), previousStepResult);
     }
 
     private Step createEndingStep(StepResult stepResult) {

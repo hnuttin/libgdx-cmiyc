@@ -11,6 +11,7 @@ import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.Sense;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.ArrayList;
@@ -23,11 +24,13 @@ public class Enemy extends MovableActor implements HasPower {
 
     private final Predictability predictability;
     private final List<Route> routes;
+    private final Sense sense;
 
-    public Enemy(EnemyContext context, String name, Predictability predictability, HasPosition hasPosition) {
+    public Enemy(EnemyContext context, String name, Predictability predictability, Sense sense, HasPosition hasPosition) {
         super(context, name, hasPosition);
         this.context = context;
         this.predictability = predictability;
+        this.sense = sense;
         this.routes = new ArrayList<>();
     }
 
@@ -81,5 +84,9 @@ public class Enemy extends MovableActor implements HasPower {
             generateRoutes();
             return EnemyPushResult.PUSHED;
         }
+    }
+
+    public Sense getSense() {
+        return sense;
     }
 }

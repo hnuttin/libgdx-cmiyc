@@ -9,6 +9,8 @@ import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
+import com.jazzjack.rab.bit.cmiyc.shared.Sense;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 import com.jazzjack.rab.bit.cmiyc.shared.position.Position;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -38,12 +40,15 @@ import static com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames.VERTIC
 import static com.jazzjack.rab.bit.cmiyc.collision.CollidableMatcher.matchesCollidable;
 import static com.jazzjack.rab.bit.cmiyc.collision.CollisionResult.collision;
 import static com.jazzjack.rab.bit.cmiyc.collision.CollisionResult.noCollision;
+import static com.jazzjack.rab.bit.cmiyc.collision.PositionMatcher.matchesPosition;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -58,6 +63,8 @@ class RouteGeneratorTest {
     @Mock
     private CollisionDetector collisionDetector;
     @Mock
+    private DirectionChanceCalculator directionChanceCalculator;
+    @Mock
     private Randomizer randomizer;
 
     @BeforeEach
@@ -67,11 +74,12 @@ class RouteGeneratorTest {
 
     @Test
     void expectNoCollidingSteps() {
-        when(randomizer.randomFromSet(anySet())).thenReturn(
-                Direction.RIGHT,
-                Direction.UP,
-                Direction.LEFT,
-                Direction.DOWN);
+        when(directionChanceCalculator.calculate(any(HasPosition.class), anySet(), any(Sense.class))).thenReturn(emptyList());
+        when(randomizer.chooseRandomChance(anyList())).thenReturn(
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.UP),
+                aDirectionChance(Direction.LEFT),
+                aDirectionChance(Direction.DOWN));
         when(collisionDetector.collides(matchesCollidable(2, 1), eq(Direction.RIGHT))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.RIGHT));
         when(collisionDetector.collides(matchesCollidable(1, 2), eq(Direction.UP))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.UP));
         when(collisionDetector.collides(matchesCollidable(0, 1), eq(Direction.LEFT))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.LEFT));
@@ -87,13 +95,14 @@ class RouteGeneratorTest {
 
     @Test
     void expectNoPreviousSteps() {
-        when(randomizer.randomFromSet(anySet())).thenReturn(
-                Direction.RIGHT,
-                Direction.DOWN,
-                Direction.RIGHT,
-                Direction.UP,
-                Direction.LEFT,
-                Direction.UP);
+        when(directionChanceCalculator.calculate(any(HasPosition.class), anySet(), any(Sense.class))).thenReturn(emptyList());
+        when(randomizer.chooseRandomChance(anyList())).thenReturn(
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.DOWN),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.UP),
+                aDirectionChance(Direction.LEFT),
+                aDirectionChance(Direction.UP));
         when(collisionDetector.collides(matchesCollidable(1, 1), eq(Direction.RIGHT))).thenReturn(noCollision());
         when(collisionDetector.collides(matchesCollidable(1, 0), eq(Direction.DOWN))).thenReturn(noCollision());
         when(collisionDetector.collides(matchesCollidable(2, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
@@ -116,14 +125,15 @@ class RouteGeneratorTest {
 
     @Test
     void expectNoPreviousRouteSteps() {
-        when(randomizer.randomFromSet(anySet())).thenReturn(
-                Direction.RIGHT,
-                Direction.RIGHT,
-                Direction.RIGHT,
-                Direction.UP,
-                Direction.RIGHT,
-                Direction.DOWN,
-                Direction.RIGHT);
+        when(directionChanceCalculator.calculate(any(HasPosition.class), anySet(), any(Sense.class))).thenReturn(emptyList());
+        when(randomizer.chooseRandomChance(anyList())).thenReturn(
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.UP),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.DOWN),
+                aDirectionChance(Direction.RIGHT));
         when(collisionDetector.collides(matchesCollidable(1, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
         when(collisionDetector.collides(matchesCollidable(2, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
         when(collisionDetector.collides(matchesCollidable(3, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
@@ -152,15 +162,18 @@ class RouteGeneratorTest {
 
     @Test
     void expectRouteEndedBecauseNoDirectionsAllowedAnymore() {
-        when(randomizer.randomFromSet(anySet())).thenReturn(
-                Direction.RIGHT,
-                Direction.RIGHT,
-                Direction.UP,
-                Direction.DOWN);
+        when(directionChanceCalculator.calculate(any(HasPosition.class), anySet(), any(Sense.class))).thenReturn(emptyList());
+        when(randomizer.chooseRandomChance(anyList())).thenReturn(
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.UP),
+                aDirectionChance(Direction.DOWN),
+                aDirectionChance(Direction.LEFT));
         when(collisionDetector.collides(matchesCollidable(1, 1), eq(Direction.RIGHT))).thenReturn(noCollision());
         when(collisionDetector.collides(matchesCollidable(2, 1), eq(Direction.RIGHT))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.RIGHT));
         when(collisionDetector.collides(matchesCollidable(1, 2), eq(Direction.UP))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.UP));
         when(collisionDetector.collides(matchesCollidable(1, 0), eq(Direction.DOWN))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.DOWN));
+        when(collisionDetector.collides(matchesCollidable(0, 1), eq(Direction.LEFT))).thenReturn(noCollision());
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(0, 1), 1, 2);
 
@@ -172,26 +185,27 @@ class RouteGeneratorTest {
 
     @Test
     void expectAllPossibleStepNames() {
-        when(randomizer.randomFromSet(anySet())).thenReturn(
-                Direction.RIGHT,
-                Direction.RIGHT,
-                Direction.UP,
-                Direction.UP,
-                Direction.LEFT,
-                Direction.UP,
-                Direction.RIGHT,
-                Direction.RIGHT,
-                Direction.DOWN,
-                Direction.RIGHT,
-                Direction.RIGHT,
-                Direction.RIGHT,
-                Direction.DOWN,
-                Direction.DOWN,
-                Direction.LEFT,
-                Direction.UP,
-                Direction.LEFT,
-                Direction.DOWN,
-                Direction.DOWN);
+        when(directionChanceCalculator.calculate(any(HasPosition.class), anySet(), any(Sense.class))).thenReturn(emptyList());
+        when(randomizer.chooseRandomChance(anyList())).thenReturn(
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.UP),
+                aDirectionChance(Direction.UP),
+                aDirectionChance(Direction.LEFT),
+                aDirectionChance(Direction.UP),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.DOWN),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.DOWN),
+                aDirectionChance(Direction.DOWN),
+                aDirectionChance(Direction.LEFT),
+                aDirectionChance(Direction.UP),
+                aDirectionChance(Direction.LEFT),
+                aDirectionChance(Direction.DOWN),
+                aDirectionChance(Direction.DOWN));
         when(collisionDetector.collides(any(Collidable.class), any(Direction.class))).thenReturn(noCollision());
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 1, 18);
@@ -222,7 +236,8 @@ class RouteGeneratorTest {
 
     @Test
     void expectEndingRight() {
-        when(randomizer.randomFromSet(anySet())).thenReturn(Direction.RIGHT);
+        when(directionChanceCalculator.calculate(any(HasPosition.class), anySet(), any(Sense.class))).thenReturn(emptyList());
+        when(randomizer.chooseRandomChance(anyList())).thenReturn(aDirectionChance(Direction.RIGHT));
         when(collisionDetector.collides(any(Collidable.class), any(Direction.class))).thenReturn(noCollision());
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 1, 1);
@@ -235,7 +250,8 @@ class RouteGeneratorTest {
 
     @Test
     void expectEndingLeft() {
-        when(randomizer.randomFromSet(anySet())).thenReturn(Direction.LEFT);
+        when(directionChanceCalculator.calculate(any(HasPosition.class), anySet(), any(Sense.class))).thenReturn(emptyList());
+        when(randomizer.chooseRandomChance(anyList())).thenReturn(aDirectionChance(Direction.LEFT));
         when(collisionDetector.collides(any(Collidable.class), any(Direction.class))).thenReturn(noCollision());
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(1, 0), 1, 1);
@@ -248,7 +264,8 @@ class RouteGeneratorTest {
 
     @Test
     void expectEndingTop() {
-        when(randomizer.randomFromSet(anySet())).thenReturn(Direction.UP);
+        when(directionChanceCalculator.calculate(any(HasPosition.class), anySet(), any(Sense.class))).thenReturn(emptyList());
+        when(randomizer.chooseRandomChance(anyList())).thenReturn(aDirectionChance(Direction.UP));
         when(collisionDetector.collides(any(Collidable.class), any(Direction.class))).thenReturn(noCollision());
 
         List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 1, 1);
@@ -260,15 +277,20 @@ class RouteGeneratorTest {
     }
 
     @Test
-    void expectRandomizerOnlyCalledWithAllowedDirections() {
-        when(randomizer.randomFromSet(Direction.valuesAsSet())).thenReturn(Direction.RIGHT);
+    void expectDirectionChanceCalculatorAndRandomizerToBeCalledWithCorrectParameters() {
+        Enemy enemy = enemy(0, 0);
+        List<DirectionChance> directionChances = emptyList();
+        when(directionChanceCalculator.calculate(matchesPosition(enemy), eq(Direction.valuesAsSet()), eq(enemy.getSense()))).thenReturn(directionChances);
+        when(randomizer.chooseRandomChance(directionChances)).thenReturn(aDirectionChance(Direction.RIGHT));
         when(collisionDetector.collides(matchesCollidable(1, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
-        when(randomizer.randomFromSet(new HashSet<>(asList(Direction.RIGHT, Direction.UP, Direction.DOWN)))).thenReturn(Direction.UP);
+        when(directionChanceCalculator.calculate(matchesPosition(1, 0), eq(new HashSet<>(asList(Direction.RIGHT, Direction.UP, Direction.DOWN))), eq(enemy.getSense()))).thenReturn(directionChances);
+        when(randomizer.chooseRandomChance(directionChances)).thenReturn(aDirectionChance(Direction.UP));
         when(collisionDetector.collides(matchesCollidable(1, 1), eq(Direction.UP))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.UP));
-        when(randomizer.randomFromSet(new HashSet<>(asList(Direction.RIGHT, Direction.DOWN)))).thenReturn(Direction.RIGHT);
+        when(directionChanceCalculator.calculate(matchesPosition(1, 1), eq(new HashSet<>(asList(Direction.RIGHT, Direction.DOWN))), eq(enemy.getSense()))).thenReturn(directionChances);
+        when(randomizer.chooseRandomChance(directionChances)).thenReturn(aDirectionChance(Direction.RIGHT));
         when(collisionDetector.collides(matchesCollidable(2, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0), 1, 2);
+        List<Route> routes = routeGenerator.generateRoutes(enemy, 1, 2);
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -280,12 +302,13 @@ class RouteGeneratorTest {
 
     @Test
     void expectEmptyRoutesToBeFilteredOut() {
-        when(randomizer.randomFromSet(anySet())).thenReturn(
-                Direction.RIGHT,
-                Direction.RIGHT,
-                Direction.UP,
-                Direction.DOWN,
-                Direction.LEFT);
+        when(directionChanceCalculator.calculate(any(HasPosition.class), anySet(), any(Sense.class))).thenReturn(emptyList());
+        when(randomizer.chooseRandomChance(anyList())).thenReturn(
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.RIGHT),
+                aDirectionChance(Direction.UP),
+                aDirectionChance(Direction.DOWN),
+                aDirectionChance(Direction.LEFT));
         when(collisionDetector.collides(any(Collidable.class), any(Direction.class))).thenReturn(
                 noCollision(),
                 collision(mock(Collidable.class), mock(Collidable.class), Direction.RIGHT),
@@ -303,8 +326,12 @@ class RouteGeneratorTest {
         assertThat(step.getName()).isEqualTo(name);
     }
 
+    private DirectionChance aDirectionChance(Direction direction) {
+        return new DirectionChance(direction, 0);
+    }
+
     private Enemy enemy(int startX, int startY) {
-        return new Enemy(mock(EnemyContext.class), "enemy", Predictability.HIGH, new Position(startX, startY));
+        return new Enemy(mock(EnemyContext.class), "enemy", Predictability.HIGH, Sense.LOW, new Position(startX, startY));
     }
 
 }

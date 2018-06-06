@@ -1,43 +1,31 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step;
 
 import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
+import com.jazzjack.rab.bit.cmiyc.collision.CollidablesCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetector;
+import com.jazzjack.rab.bit.cmiyc.collision.CollisionDetectorCombiner;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.util.Arrays.asList;
 
 public class StepResultCollisionDetector implements CollisionDetector {
 
-    private final CollisionDetector collisionDetector;
-    private final List<StepResult> stepResults;
+    private final CollidablesCollisionDetector collisionDetectorWithStepResults;
+    private final CollisionDetectorCombiner collisionDetectorCombiner;
 
-    public StepResultCollisionDetector(CollisionDetector collisionDetector) {
-        this.collisionDetector = collisionDetector;
-        stepResults = new ArrayList<>();
+    public StepResultCollisionDetector(CollisionDetector levelcollisiondetector) {
+        this.collisionDetectorWithStepResults = new CollidablesCollisionDetector();
+        this.collisionDetectorCombiner = new CollisionDetectorCombiner(asList(levelcollisiondetector, collisionDetectorWithStepResults));
     }
 
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
-        CollisionResult collisionResult = collidesWithStepResults(collidable, direction);
-        if (collisionResult.isCollision()) {
-            return collisionResult;
-        } else {
-            return collisionDetector.collides(collidable, direction);
-        }
+        return collisionDetectorCombiner.collides(collidable, direction);
     }
 
-    private CollisionResult collidesWithStepResults(Collidable collidable, Direction direction) {
-        return stepResults.stream()
-                .filter(collidable::willCollideWith)
-                .findFirst()
-                .map(stepResult -> CollisionResult.collision(collidable, stepResult, direction))
-                .orElse(CollisionResult.noCollision());
-    }
-
-    public void addStepResult(StepResult stepResult) {
-        stepResults.add(stepResult);
+    public void addStepResult(Collidable collidable) {
+        collisionDetectorWithStepResults.addCollidable(collidable);
     }
 
 }
