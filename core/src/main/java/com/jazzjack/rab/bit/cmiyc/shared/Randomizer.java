@@ -57,13 +57,14 @@ public class Randomizer {
 
     @SuppressWarnings("unchecked")
     public <T extends Chance> T chooseRandomChance(List<T> chances) {
-        int randomPercentage = randomInteger.randomInteger(HUNDRED_PERCENT) + 1;
+        int totalPercentage = chances.stream().mapToInt(Chance::getPercentage).sum();
+        int randomPercentage = randomInteger.randomInteger(totalPercentage) + 1;
         List<PercentageInterval> percentageStack = createPercentageStack(chances);
         return (T) percentageStack.stream()
                 .filter(percentageInterval -> matchesPercentageInterval(randomPercentage, percentageInterval))
                 .map(percentageInterval -> percentageInterval.chance)
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("This should happen if percentageStack is correctly created: this is a bug!"));
+                .orElseThrow(() -> new IllegalStateException("This should not happen if percentageStack is correctly created: this is a bug!"));
     }
 
     private <T extends Chance> List<PercentageInterval> createPercentageStack(List<T> chances) {
