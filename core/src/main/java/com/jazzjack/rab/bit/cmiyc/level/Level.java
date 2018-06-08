@@ -51,7 +51,7 @@ public class Level {
 
     private Player createPlayer(LevelCollisionDetector levelCollisionDetector) {
         ActorContext actorContext = new ActorContext(new PlayerCollisionDetector(levelCollisionDetector), this.context.getCollisionResolver());
-        return new Player(actorContext, levelMetaData.getStartPosition());
+        return new Player(actorContext, levelMetaData.getStartPosition(), 5);
     }
 
     private EnemyContext createEnemyContext(LevelContext context, LevelCollisionDetector levelCollisionDetector) {

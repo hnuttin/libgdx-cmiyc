@@ -2,25 +2,53 @@ package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
+import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedEvent;
+import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class LevelSight {
+public class LevelSight implements PlayerMovedSubscriber {
 
-    private static final String PROPERTY_VISISTED = "visited";
+    private static final String PROPERTY_VISITED = "visited";
     private static final String PROPERTY_IN_SIGHT = "inSight";
 
     private final TiledMapTileLayer mapLayer;
 
-    public LevelSight(TiledMapTileLayer mapLayer) {
+    public LevelSight(TiledMapTileLayer mapLayer, Player player) {
         this.mapLayer = mapLayer;
+        markTiles(player);
+    }
+
+    @Override
+    public void playerMoved(PlayerMovedEvent event) {
+        markTiles(event.getPlayer());
+    }
+
+    public boolean isVisited(HasPosition hasPosition) {
+        return getCellBooleanProperty(hasPosition, PROPERTY_VISITED);
+    }
+
+    public boolean isInSight(HasPosition hasPosition) {
+        return getCellBooleanProperty(hasPosition, PROPERTY_IN_SIGHT);
+    }
+
+    private boolean getCellBooleanProperty(HasPosition hasPosition, String property) {
+        Object propertyValue = mapLayer.getCell(hasPosition.getX(), hasPosition.getY()).getTile().getProperties().get(property);
+        if (propertyValue == null) {
+            return false;
+        } else if (propertyValue instanceof Boolean) {
+            return (boolean) propertyValue;
+        } else {
+            throw new IllegalArgumentException(String.format("Property %s is not of type boolean", property));
+        }
     }
 
     private void markTiles(Player player) {
         markAllTilesNotInSight();
-        for (int cellX = startSightX(player); cellX < endSightX(player); cellX++) {
-            for (int cellY = startSightY(player); cellY < endSightY(player); cellY++) {
+        for (int cellX = startSightX(player); cellX <= endSightX(player); cellX++) {
+            for (int cellY = startSightY(player); cellY <= endSightY(player); cellY++) {
                 markTileVisitedAndInSight(mapLayer.getCell(cellX, cellY));
             }
         }
@@ -55,7 +83,7 @@ public class LevelSight {
     }
 
     private void markTileVisitedAndInSight(TiledMapTileLayer.Cell cell) {
-        cell.getTile().getProperties().put(PROPERTY_VISISTED, true);
+        cell.getTile().getProperties().put(PROPERTY_VISITED, true);
         cell.getTile().getProperties().put(PROPERTY_IN_SIGHT, true);
     }
 }

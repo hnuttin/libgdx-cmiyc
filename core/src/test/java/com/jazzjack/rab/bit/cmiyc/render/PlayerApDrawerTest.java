@@ -48,7 +48,7 @@ class PlayerApDrawerTest extends LibGdxAlphaDrawerSupport {
     @Test
     void expectConsumedApDrawnCorrectly() {
         ActorContext actorContext = new ActorContext(NeverCollideCollisionDetector.TEST_INSTANCE, mock(CollisionResolver.class));
-        Player player = new Player(actorContext, new Position(0, 0));
+        Player player = new Player(actorContext, new Position(0, 0), 5);
         player.moveToDirection(Direction.RIGHT);
         player.moveToDirection(Direction.RIGHT);
 
