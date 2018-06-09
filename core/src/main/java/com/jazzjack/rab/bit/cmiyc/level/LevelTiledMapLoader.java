@@ -3,7 +3,6 @@ package com.jazzjack.rab.bit.cmiyc.level;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
@@ -11,11 +10,6 @@ public class LevelTiledMapLoader extends TmxMapLoader {
 
     public LevelTiledMapLoader(FileHandleResolver resolver) {
         super(resolver);
-    }
-
-    @Override
-    public TiledMap load(String fileName) {
-        return super.load(fileName);
     }
 
     @Override
