@@ -1,6 +1,8 @@
 package com.jazzjack.rab.bit.cmiyc.render.level;
 
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
@@ -12,10 +14,11 @@ import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 import com.jazzjack.rab.bit.cmiyc.render.Renderer;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
+import static com.jazzjack.rab.bit.cmiyc.render.AlphaDrawer.alphaDrawer;
 import static com.jazzjack.rab.bit.cmiyc.render.level.TextDrawer.Position.BOTTOM;
 import static com.jazzjack.rab.bit.cmiyc.render.level.TextDrawer.Position.TOP;
 
-public class LevelRenderer extends OrthogonalTiledMapRenderer implements Renderer {
+public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Renderer {
 
     private static final float ROUTE_ALPHA = 0.7f;
     private static final float LEVEL_CAMERA_SCALE = 1.5f;
@@ -23,16 +26,18 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     private final Level level;
     private final GameAssetManager assetManager;
     private final LevelCamera camera;
+    private final Batch batch;
     private final TextDrawer textDrawer;
     private final FogOfWarBuffer fogOfWarBuffer;
 
     public LevelRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
-        super(null, 1 / level.getLevelTiledMap().getTilePixelSize());
+        super(level.getLevelTiledMap(), 1 / level.getLevelTiledMap().getTilePixelSize());
         this.level = level;
         this.assetManager = assetManager;
         this.camera = new LevelCamera(level, numberOfHorizontalTilesToRender, LEVEL_CAMERA_SCALE);
-        this.textDrawer = new TextDrawer(assetManager, super.batch, this.camera);
-        this.fogOfWarBuffer = new FogOfWarBuffer(this.level, super.batch, assetManager);
+        this.batch = new SpriteBatch();
+        this.textDrawer = new TextDrawer(assetManager, this.batch, this.camera);
+        this.fogOfWarBuffer = new FogOfWarBuffer(this.level, this.batch, assetManager);
     }
 
     @Override
@@ -44,13 +49,14 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     public void render() {
         camera.update();
         setView(camera);
+        batch.setProjectionMatrix(camera.combined);
         renderMap();
     }
 
     private void renderMap() {
         fogOfWarBuffer.bufferSight();
-        batch.begin();
         renderLevel();
+        batch.begin();
         renderPlayer();
         renderEnemies();
         renderEndPosition();
@@ -60,7 +66,7 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     }
 
     private void renderLevel() {
-        super.renderMapLayer(level.getLevelTiledMap().getMapLayer());
+        super.render();
     }
 
     private void renderPlayer() {
@@ -73,9 +79,9 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
 
     private void drawEnemy(Enemy enemy) {
         drawActor(enemy);
-        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, ROUTE_ALPHA);
-        drawEnemyRoutes(enemy);
-        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1f);
+        alphaDrawer(batch)
+                .withAlpha(ROUTE_ALPHA)
+                .draw(() -> drawEnemyRoutes(enemy));
     }
 
     private void drawEnemyRoutes(Enemy enemy) {
@@ -136,6 +142,7 @@ public class LevelRenderer extends OrthogonalTiledMapRenderer implements Rendere
     @Override
     public void dispose() {
         super.dispose();
+        batch.dispose();
         fogOfWarBuffer.dispose();
     }
 }
