@@ -33,6 +33,8 @@ public class Level {
     private final Enemies enemies;
     private final Items items;
 
+    private final LevelSight levelSight;
+
     private int turnsLeft;
 
     public Level(LevelContext context, LevelTiledMap levelTiledMap, LevelMetaData levelMetaData, int maxTurns) {
@@ -48,12 +50,12 @@ public class Level {
 
         this.turnsLeft = maxTurns;
 
-        new LevelSightMarker(levelTiledMap, this.player);
+        levelSight = new LevelSight(levelTiledMap, this.player, enemies);
     }
 
     private Player createPlayer(LevelCollisionDetector levelCollisionDetector) {
         ActorContext actorContext = new ActorContext(new PlayerCollisionDetector(levelCollisionDetector), this.context.getCollisionResolver());
-        return new Player(actorContext, levelMetaData.getStartPosition(), 5);
+        return new Player(actorContext, levelMetaData.getStartPosition(), 2);
     }
 
     private EnemyContext createEnemyContext(LevelContext context, LevelCollisionDetector levelCollisionDetector) {
@@ -99,6 +101,10 @@ public class Level {
 
     public List<MarkerObject> getItems() {
         return items.getItems();
+    }
+
+    public LevelSight getLevelSight() {
+        return levelSight;
     }
 
     public int getTurnsLeft() {

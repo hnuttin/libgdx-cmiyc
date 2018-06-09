@@ -78,10 +78,12 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     }
 
     private void drawEnemy(Enemy enemy) {
-        drawActor(enemy);
-        alphaDrawer(batch)
-                .withAlpha(ROUTE_ALPHA)
-                .draw(() -> drawEnemyRoutes(enemy));
+        if (level.getLevelSight().isEnemyInSight(enemy)) {
+            drawActor(enemy);
+            alphaDrawer(batch)
+                    .withAlpha(ROUTE_ALPHA)
+                    .draw(() -> drawEnemyRoutes(enemy));
+        }
     }
 
     private void drawEnemyRoutes(Enemy enemy) {

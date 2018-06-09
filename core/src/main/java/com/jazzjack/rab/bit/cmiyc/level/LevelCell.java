@@ -14,7 +14,7 @@ public class LevelCell extends TiledMapTileLayer.Cell {
         properties = new MapProperties();
     }
 
-    boolean isVisited() {
+    public boolean isVisited() {
         return properties.get(PROPERTY_VISITED, false, Boolean.class);
     }
 

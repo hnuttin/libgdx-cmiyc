@@ -22,6 +22,7 @@ public class GameAssetManager extends AssetManager {
     private static final String ATLAS_LIGHTS = "atlas/lights.atlas";
     private static final String ATLAS_CMIYC_FONTS = "atlas/cmiyc_fonts.atlas";
     private static final String ATLAS_CMIYC_ACTORS = "atlas/cmiyc_actors.atlas";
+    private static final String ATLAS_CMIYC_LIGHTS = "atlas/cmiyc_lights.atlas";
 
     private static final String ATLAS_REGION_LIGHT = "light";
     private static final String ATLAS_REGION_PLAYER_END = "end";
@@ -30,6 +31,9 @@ public class GameAssetManager extends AssetManager {
     private static final String ATLAS_REGION_AP_START = "ap-ending-left";
     private static final String ATLAS_REGION_AP_MIDDLE = "ap-horizontal";
     private static final String ATLAS_REGION_AP_END = "ap-ending-right";
+
+    private static final String ATLAS_REGION_TILE_IN_SIGHT = "tile-in-sight-full";
+    private static final String ATLAS_REGION_TILE_VISITED = "tile-visited";
 
     private static final String FONT_VCR = "fonts/vcr-df.fnt";
 
@@ -73,6 +77,7 @@ public class GameAssetManager extends AssetManager {
         load(ATLAS_LIGHTS, TextureAtlas.class);
         load(ATLAS_CMIYC_FONTS, TextureAtlas.class);
         load(ATLAS_CMIYC_ACTORS, TextureAtlas.class);
+        load(ATLAS_CMIYC_LIGHTS, TextureAtlas.class);
     }
 
     private void loadFonts() {
@@ -94,8 +99,12 @@ public class GameAssetManager extends AssetManager {
         return (LevelTiledMap) get(MAP2, TiledMap.class);
     }
 
-    public TextureAtlas.AtlasRegion getLightTexture() {
-        return get(ATLAS_LIGHTS, TextureAtlas.class).findRegion(ATLAS_REGION_LIGHT);
+    public TextureAtlas.AtlasRegion getTileInSightTexture() {
+        return get(ATLAS_CMIYC_LIGHTS, TextureAtlas.class).findRegion(ATLAS_REGION_TILE_IN_SIGHT);
+    }
+
+    public TextureAtlas.AtlasRegion getTileVisitedTexture() {
+        return get(ATLAS_CMIYC_LIGHTS, TextureAtlas.class).findRegion(ATLAS_REGION_TILE_VISITED);
     }
 
     public TextureAtlas.AtlasRegion getTextureForName(String name) {

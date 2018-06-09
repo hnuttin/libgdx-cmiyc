@@ -9,6 +9,8 @@ import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
+
 public class GameController implements InputProcessor {
 
     private static final Map<Integer, Direction> KEY_TO_DIRECTION_MAPPING = new HashMap<>();
@@ -105,6 +107,7 @@ public class GameController implements InputProcessor {
 
     private void startPlayerTurn() {
         currentGamePhase = GamePhase.PLAYER_TURN;
+        publishEvent(new GamePhaseEvent(currentGamePhase));
         currentLevel.generateEnemyRoutes();
         currentLevel.getPlayer().resetActionPoints();
     }
