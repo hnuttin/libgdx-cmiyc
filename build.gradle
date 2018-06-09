@@ -11,6 +11,7 @@ buildscript {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
         classpath 'com.android.tools.build:gradle:2.2.0'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.3'
+        classpath 'org.ajoberstar:gradle-git:1.7.2'
     }
 }
 
@@ -22,6 +23,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
     apply plugin: "jacoco"
+    apply plugin: "org.ajoberstar.grgit"
 
     version = '1.0'
     ext {
@@ -33,6 +35,7 @@ allprojects {
         aiVersion = '1.8.0'
         junitVersion = '5.2.0'
         mockitoVersion = '2.18.3'
+        currentBranch = System.getenv('TRAVIS_BRANCH') ? System.getenv('TRAVIS_BRANCH') : grgit.getBranch().getCurrent().getName()
     }
 
     sonarqube {
@@ -42,6 +45,7 @@ allprojects {
             properties["sonar.login"] = "5d9a0b8b32655b1afd71f286f5dad4fa98098217"
             properties["sonar.projectKey"] = "cmiyc"
             properties["sonar.projectName"] = "Catch me if you can"
+            properties["sonar.branch.name"] = "$currentBranch"
         }
     }
 
