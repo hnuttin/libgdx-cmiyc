@@ -1,7 +1,5 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jazzjack.rab.bit.cmiyc.animation.AnimationRegister;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
@@ -20,18 +18,15 @@ class TestLevelFactory {
 
     static Level createLevel(String levelFile) {
         LevelContext levelContext = new LevelContext(new CollisionResolver(), new Randomizer(new RandomInteger()), mock(AnimationRegister.class));
-        TiledMap tiledMap = createTiledMap(levelFile);
+        LevelTiledMap levelTiledMap = createLevelTiledMap(levelFile);
         GameAssetManager assetManagerMock = mock(GameAssetManager.class);
         when(assetManagerMock.getObjectTypesFileHandle()).thenReturn(new ClasspathFileHandle("objecttypes.xml"));
-        when(assetManagerMock.getTiledMap1()).thenReturn(tiledMap);
+        when(assetManagerMock.getTiledMap1()).thenReturn(levelTiledMap);
         return new LevelFactory(levelContext, assetManagerMock).createNextLevel();
     }
 
     static LevelTiledMap createLevelTiledMap(String levelFile) {
-        return new LevelTiledMap(createTiledMap(levelFile));
+        return new LevelTiledMap(new LevelTiledMapLoader(new ClasspathFileHandleResolver()).load(levelFile));
     }
 
-    private static TiledMap createTiledMap(String levelFile) {
-        return new TmxMapLoader(new ClasspathFileHandleResolver()).load(levelFile);
-    }
 }
