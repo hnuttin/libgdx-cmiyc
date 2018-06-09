@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
+import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMapLoader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class GameAssetManager extends AssetManager {
 
     private void configureLoaders() {
         InternalFileHandleResolver resolver = new InternalFileHandleResolver();
-        setLoader(TiledMap.class, new TmxMapLoader(resolver));
+        setLoader(TiledMap.class, new LevelTiledMapLoader(resolver));
     }
 
     private void loadMaps() {
@@ -85,12 +86,12 @@ public class GameAssetManager extends AssetManager {
         return new FileHandle("maps/objecttypes.xml");
     }
 
-    public TiledMap getTiledMap1() {
-        return get(MAP1, TiledMap.class);
+    public LevelTiledMap getTiledMap1() {
+        return (LevelTiledMap) get(MAP1, TiledMap.class);
     }
 
-    public TiledMap getTiledMap2() {
-        return get(MAP2, TiledMap.class);
+    public LevelTiledMap getTiledMap2() {
+        return (LevelTiledMap) get(MAP2, TiledMap.class);
     }
 
     public TextureAtlas.AtlasRegion getLightTexture() {

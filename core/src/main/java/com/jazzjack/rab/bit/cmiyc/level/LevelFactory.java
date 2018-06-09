@@ -1,6 +1,5 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaDataFactory;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ObjectTypeParser;
@@ -14,7 +13,7 @@ public class LevelFactory {
 
     private final LevelContext context;
     private final LevelMetaDataFactory levelMetaDataFactory;
-    private final List<Supplier<TiledMap>> levelSuppliers;
+    private final List<Supplier<LevelTiledMap>> levelSuppliers;
 
     private int currentLevelIndex;
 
@@ -44,7 +43,7 @@ public class LevelFactory {
         if (currentLevelIndex >= levelSuppliers.size()) {
             throw new InvalidLevelException("No new level anymore: finished?");
         } else {
-            LevelTiledMap levelTiledMap = new LevelTiledMap(levelSuppliers.get(currentLevelIndex).get());
+            LevelTiledMap levelTiledMap = levelSuppliers.get(currentLevelIndex).get();
             Level level = new Level(context, levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 9);
             currentLevelIndex++;
             GameEventBus.publishEvent(new NewLevelEvent(level));

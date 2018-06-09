@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 public class Level {
 
     private final LevelContext context;
-    private final LevelTiledMap tiledMap;
+    private final LevelTiledMap levelTiledMap;
     private final LevelMetaData levelMetaData;
 
     private final Player player;
@@ -35,23 +35,25 @@ public class Level {
 
     private int turnsLeft;
 
-    public Level(LevelContext context, LevelTiledMap tiledMap, LevelMetaData levelMetaData, int maxTurns) {
+    public Level(LevelContext context, LevelTiledMap levelTiledMap, LevelMetaData levelMetaData, int maxTurns) {
         this.context = context;
-        this.tiledMap = tiledMap;
+        this.levelTiledMap = levelTiledMap;
         this.levelMetaData = levelMetaData;
 
-        LevelCollisionDetector levelCollisionDetector = new LevelCollisionDetector(tiledMap);
+        LevelCollisionDetector levelCollisionDetector = new LevelCollisionDetector(levelTiledMap.getMapLayer());
+
         this.player = createPlayer(levelCollisionDetector);
         this.enemies = createEnemies(createEnemyContext(context, levelCollisionDetector));
+        this.items = new Items(levelMetaData.getItems());
 
         this.turnsLeft = maxTurns;
 
-        items = new Items(levelMetaData.getItems());
+        new LevelSightMarker(levelTiledMap, this.player);
     }
 
     private Player createPlayer(LevelCollisionDetector levelCollisionDetector) {
         ActorContext actorContext = new ActorContext(new PlayerCollisionDetector(levelCollisionDetector), this.context.getCollisionResolver());
-        return new Player(actorContext, levelMetaData.getStartPosition());
+        return new Player(actorContext, levelMetaData.getStartPosition(), 5);
     }
 
     private EnemyContext createEnemyContext(LevelContext context, LevelCollisionDetector levelCollisionDetector) {
@@ -75,8 +77,8 @@ public class Level {
         return enemy;
     }
 
-    public LevelTiledMap getTiledMap() {
-        return tiledMap;
+    public LevelTiledMap getLevelTiledMap() {
+        return levelTiledMap;
     }
 
     public HasPosition getLevelEndPosition() {

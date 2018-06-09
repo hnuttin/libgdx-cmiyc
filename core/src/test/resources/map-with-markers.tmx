@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="left-down" width="20" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="21">
+ <tileset firstgid="1" source="pixel-art.tsx"/>
+ <layer name="map" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJzjZmBg4B7Fo3gUY8UAgpMImQ==
+  </data>
+ </layer>
  <objectgroup name="markers">
   <object id="11" type="enemy1" x="192" y="64" width="32" height="32">
    <ellipse/>

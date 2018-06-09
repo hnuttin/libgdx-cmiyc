@@ -20,7 +20,7 @@ class ItemsTest {
         MarkerObject markerObject = mock(MarkerObject.class);
         when(markerObject.getX()).thenReturn(0);
         when(markerObject.getY()).thenReturn(0);
-        Player player = new Player(mock(ActorContext.class), new Position(0, 0));
+        Player player = new Player(mock(ActorContext.class), new Position(0, 0), 5);
 
         Items items = new Items(singletonList(markerObject));
         items.playerMoved(new PlayerMovedEvent(player));
@@ -34,7 +34,7 @@ class ItemsTest {
         MarkerObject markerObject = mock(MarkerObject.class);
         when(markerObject.getX()).thenReturn(0);
         when(markerObject.getY()).thenReturn(0);
-        Player player = new Player(mock(ActorContext.class), new Position(0, 0));
+        Player player = new Player(mock(ActorContext.class), new Position(0, 0), 5);
 
         Items items = new Items(singletonList(markerObject));
         items.playerMoved(new PlayerMovedEvent(player));

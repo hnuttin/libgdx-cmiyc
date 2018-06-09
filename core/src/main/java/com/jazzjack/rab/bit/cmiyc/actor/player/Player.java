@@ -18,7 +18,7 @@ public class Player extends MovableActor implements HasPower {
 
     private int sight;
 
-    public Player(ActorContext context, HasPosition hasPosition) {
+    public Player(ActorContext context, HasPosition hasPosition, int sight) {
         super(context, "player", hasPosition);
 
         this.actionPointsPerTurn = 5;
@@ -27,7 +27,7 @@ public class Player extends MovableActor implements HasPower {
         this.maxHp = 5;
         this.hp = 3;
 
-        this.sight = 5;
+        this.sight = sight;
     }
 
     public int getSight() {

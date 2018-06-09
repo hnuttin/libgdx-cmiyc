@@ -28,8 +28,8 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
         levelRenderer = new LevelRenderer(level, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
         hudRenderer = new HUDRenderer(level, assetManager, NUMBER_OF_HORIZONTAL_TILES_TO_RENDER);
         Gdx.graphics.setWindowedMode(
-                NUMBER_OF_HORIZONTAL_TILES_TO_RENDER * (int) level.getTiledMap().getTilePixelSize() * 2,
-                NUMBER_OF_VERTICAL_TILES_TO_RENDER * (int) level.getTiledMap().getTilePixelSize() * 2);
+                NUMBER_OF_HORIZONTAL_TILES_TO_RENDER * (int) level.getLevelTiledMap().getTilePixelSize() * 2,
+                NUMBER_OF_VERTICAL_TILES_TO_RENDER * (int) level.getLevelTiledMap().getTilePixelSize() * 2);
     }
 
     @Override

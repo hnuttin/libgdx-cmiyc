@@ -54,7 +54,7 @@ class LevelCamera extends GameCamera {
     }
 
     private float topCameraLimit() {
-        return level.getTiledMap().getHeight() - viewportHeight / 2f;
+        return level.getLevelTiledMap().getHeight() - viewportHeight / 2f;
     }
 
     private float bottomCameraLimit() {
@@ -62,7 +62,7 @@ class LevelCamera extends GameCamera {
     }
 
     private float rightCameraLimit() {
-        return level.getTiledMap().getWidth() - viewportWidth / 2f;
+        return level.getLevelTiledMap().getWidth() - viewportWidth / 2f;
     }
 
     private float leftCameraLimit() {
