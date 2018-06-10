@@ -107,7 +107,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../lights/tile-in-sight.png,type:Input,regionName:null},{path:../lights/tile-visited.png,type:Input,regionName:null},{path:../lights/tile-in-sight-square.png,type:Input,regionName:null},{path:../lights/tile-in-sight-full.png,type:Input,regionName:null}]
+inputFiles=[{path:../lights/tile-in-sight.png,type:Input,regionName:null},{path:../lights/tile-visited.png,type:Input,regionName:null},{path:../lights/tile-in-sight-square.png,type:Input,regionName:null},{path:../lights/tile-in-sight-full.png,type:Input,regionName:null},{path:../lights/sight.png,type:Input,regionName:null}]
 
 
 -PROJ-

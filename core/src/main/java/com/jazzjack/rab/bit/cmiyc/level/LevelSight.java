@@ -1,6 +1,8 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovedEvent;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovedSubscriber;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
@@ -18,7 +20,7 @@ import java.util.function.Supplier;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class LevelSight implements PlayerMovedSubscriber, GamePhaseEventSubscriber {
+public class LevelSight implements PlayerMovedSubscriber, GamePhaseEventSubscriber, EnemyMovedSubscriber {
 
     private final LevelTiledMap levelTiledMap;
     private final Player player;
@@ -37,6 +39,11 @@ public class LevelSight implements PlayerMovedSubscriber, GamePhaseEventSubscrib
 
     @Override
     public void playerMoved(PlayerMovedEvent event) {
+        markTiles();
+    }
+
+    @Override
+    public void enemyMoved(EnemyMovedEvent event) {
         markTiles();
     }
 

@@ -37,7 +37,7 @@ public class GameController implements InputProcessor {
     }
 
     private void startNextLevel() {
-        startLevel(levelFactory.createNextLevel());
+        startLevel(levelFactory.createLevel(1));
     }
 
     private void restartLevel() {
@@ -61,6 +61,14 @@ public class GameController implements InputProcessor {
     private boolean handlePlayerKeys(int keycode) {
         if (keycode == Input.Keys.E) {
             endPlayerTurn();
+            return true;
+        }
+        if (keycode == Input.Keys.NUM_1) {
+            startLevel(levelFactory.createLevel(1));
+            return true;
+        }
+        if (keycode == Input.Keys.NUM_2) {
+            startLevel(levelFactory.createLevel(2));
             return true;
         }
         if (movePlayer(keycode)) {

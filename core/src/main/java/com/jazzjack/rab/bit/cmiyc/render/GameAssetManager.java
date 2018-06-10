@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class GameAssetManager extends AssetManager {
 
-    private static final String MAP1 = "maps/cmiyc1.tmx";
+    private static final String MAP1 = "maps/cmiyc-1-tutorial.tmx";
     private static final String MAP2 = "maps/cmiyc2.tmx";
 
     private static final String ATLAS_LIGHTS = "atlas/lights.atlas";
@@ -24,7 +24,7 @@ public class GameAssetManager extends AssetManager {
     private static final String ATLAS_CMIYC_ACTORS = "atlas/cmiyc_actors.atlas";
     private static final String ATLAS_CMIYC_LIGHTS = "atlas/cmiyc_lights.atlas";
 
-    private static final String ATLAS_REGION_LIGHT = "light";
+    private static final String ATLAS_REGION_SIGHT = "sight";
     private static final String ATLAS_REGION_PLAYER_END = "end";
     private static final String ATLAS_REGION_HP_FILLED = "hp-filled";
     private static final String ATLAS_REGION_HP_EMPTY = "hp-empty";
@@ -99,8 +99,8 @@ public class GameAssetManager extends AssetManager {
         return (LevelTiledMap) get(MAP2, TiledMap.class);
     }
 
-    public TextureAtlas.AtlasRegion getTileInSightTexture() {
-        return get(ATLAS_CMIYC_LIGHTS, TextureAtlas.class).findRegion(ATLAS_REGION_TILE_IN_SIGHT);
+    public TextureAtlas.AtlasRegion getSightTexture() {
+        return get(ATLAS_CMIYC_LIGHTS, TextureAtlas.class).findRegion(ATLAS_REGION_SIGHT);
     }
 
     public TextureAtlas.AtlasRegion getTileVisitedTexture() {

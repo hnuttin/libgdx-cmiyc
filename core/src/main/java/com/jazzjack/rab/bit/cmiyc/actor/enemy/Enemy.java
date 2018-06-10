@@ -7,7 +7,6 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.EnemyRouteAnimation;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
-import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
@@ -17,6 +16,8 @@ import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 
 public class Enemy extends MovableActor implements HasPower {
 
@@ -64,7 +65,11 @@ public class Enemy extends MovableActor implements HasPower {
     }
 
     public CollisionResult moveToStep(Step step) {
-        return moveToDirection(step.getDirection());
+        CollisionResult collisionResult = moveToDirection(step.getDirection());
+        if (collisionResult.isNoCollision()) {
+            publishEvent(new EnemyMovedEvent(this));
+        }
+        return collisionResult;
     }
 
     public void removeRoute(Route route) {
@@ -75,7 +80,7 @@ public class Enemy extends MovableActor implements HasPower {
         CollisionResult collisionResult = moveToDirection(direction);
         if (collisionResult.isCollision()) {
             if (hasPower.getPower() >= getPower()) {
-                GameEventBus.publishEvent(new EnemyDestroyedEvent(this));
+                publishEvent(new EnemyDestroyedEvent(this));
                 return EnemyPushResult.DESTROYED;
             } else {
                 return EnemyPushResult.FAILED;
