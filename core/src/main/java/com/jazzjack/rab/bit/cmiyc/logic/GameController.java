@@ -33,11 +33,11 @@ public class GameController implements InputProcessor {
     }
 
     public void startGame() {
-        startNextLevel();
+        startLevel(levelFactory.createLevel(1));
     }
 
     private void startNextLevel() {
-        startLevel(levelFactory.createLevel(1));
+        startLevel(levelFactory.createNextLevel());
     }
 
     private void restartLevel() {
@@ -85,11 +85,7 @@ public class GameController implements InputProcessor {
 
     private Boolean movePlayer(int keycode) {
         Direction direction = KEY_TO_DIRECTION_MAPPING.get(keycode);
-        if (direction != null) {
-            return currentLevel.getPlayer().moveToDirection(direction).isNoCollision();
-        } else {
-            return false;
-        }
+        return direction != null && currentLevel.getPlayer().moveToDirection(direction).isNoCollision();
     }
 
     private void endPlayerTurn() {
