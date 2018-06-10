@@ -2,7 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.shared;
 
 public enum Sense {
 
-    HIGH(40), MEDIUM(30), LOW(10);
+    HIGH(40), MEDIUM(30), LOW(10), NONE(0);
 
     private final int percentageWeight;
 

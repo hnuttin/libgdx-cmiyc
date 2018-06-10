@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LevelSightTest extends LibGdxTest {
+class LevelPlayerSightTest extends LibGdxTest {
 
     private Level level;
 
@@ -21,10 +21,15 @@ class LevelSightTest extends LibGdxTest {
     }
 
     @Test
-    void movePlayer() {
+    void expectTilesMarkedAndEnemiesMarkedAndTriggered() {
         Player player = level.getPlayer();
+
         player.moveToDirection(Direction.UP);
+        assertThat(level.getEnemies().get(0).isTriggered()).isTrue();
+
         player.moveToDirection(Direction.RIGHT);
+        assertThat(level.getEnemies().get(1).isTriggered()).isTrue();
+
         player.moveToDirection(Direction.RIGHT);
         player.moveToDirection(Direction.RIGHT);
 
@@ -53,19 +58,20 @@ class LevelSightTest extends LibGdxTest {
         assertVistedAndInSight(2, 4, false, false);
         assertVistedAndInSight(3, 4, false, false);
         assertVistedAndInSight(4, 4, false, false);
+        assertThat(level.getLevelPlayerSight().isEnemyInSight(level.getEnemies().get(0))).isTrue();
+        assertThat(level.getLevelPlayerSight().isEnemyInSight(level.getEnemies().get(1))).isTrue();
 
-        assertThat(level.getLevelSight().isEnemyInSight(level.getEnemies().get(0))).isTrue();
-        assertThat(level.getLevelSight().isEnemyInSight(level.getEnemies().get(1))).isTrue();
+        level.getLevelPlayerSight().newGamePhase(new GamePhaseEvent(GamePhase.PLAYER_TURN));
+        assertThat(level.getLevelPlayerSight().isEnemyInSight(level.getEnemies().get(0))).isFalse();
+        assertThat(level.getLevelPlayerSight().isEnemyInSight(level.getEnemies().get(1))).isTrue();
 
-        level.getLevelSight().newGamePhase(new GamePhaseEvent(GamePhase.PLAYER_TURN));
-
-        assertThat(level.getLevelSight().isEnemyInSight(level.getEnemies().get(0))).isFalse();
-        assertThat(level.getLevelSight().isEnemyInSight(level.getEnemies().get(1))).isTrue();
+        level.getEnemies().get(0).moveToDirection(Direction.RIGHT);
+        assertThat(level.getLevelPlayerSight().isEnemyInSight(level.getEnemies().get(0))).isTrue();
     }
 
     private void assertVistedAndInSight(int x, int y, boolean visited, boolean inSight) {
-        assertThat(level.getLevelSight().isTileVisited(x, y)).isEqualTo(visited);
-        assertThat(level.getLevelSight().isTileInSight(x, y)).isEqualTo(inSight);
+        assertThat(level.getLevelPlayerSight().isTileVisited(x, y)).isEqualTo(visited);
+        assertThat(level.getLevelPlayerSight().isTileInSight(x, y)).isEqualTo(inSight);
     }
 
 }

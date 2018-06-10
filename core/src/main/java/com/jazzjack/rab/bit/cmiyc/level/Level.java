@@ -33,7 +33,7 @@ public class Level {
     private final Enemies enemies;
     private final Items items;
 
-    private final LevelSight levelSight;
+    private final LevelPlayerSight levelPlayerSight;
 
     private int turnsLeft;
 
@@ -50,7 +50,7 @@ public class Level {
 
         this.turnsLeft = maxTurns;
 
-        levelSight = new LevelSight(levelTiledMap, this.player, enemies);
+        levelPlayerSight = new LevelPlayerSight(levelTiledMap, this.player, enemies);
     }
 
     private Player createPlayer(LevelCollisionDetector levelCollisionDetector) {
@@ -103,8 +103,8 @@ public class Level {
         return items.getItems();
     }
 
-    public LevelSight getLevelSight() {
-        return levelSight;
+    public LevelPlayerSight getLevelPlayerSight() {
+        return levelPlayerSight;
     }
 
     public int getTurnsLeft() {

@@ -71,7 +71,7 @@ class FogOfWarRenderer implements Disposable, PlayerMovedSubscriber {
     private void drawCellsVisited(LevelTiledMap levelTiledMap) {
         for (int x = 0; x < levelTiledMap.getWidth(); x++) {
             for (int y = 0; y < levelTiledMap.getHeight(); y++) {
-                if (level.getLevelSight().isTileVisited(x, y) && !level.getLevelSight().isTileInSight(x, y)) {
+                if (level.getLevelPlayerSight().isTileVisited(x, y) && !level.getLevelPlayerSight().isTileInSight(x, y)) {
                     drawCellVisited(x, y);
                 }
             }

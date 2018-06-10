@@ -78,7 +78,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     }
 
     private void drawEnemy(Enemy enemy) {
-        if (level.getLevelSight().isEnemyInSight(enemy)) {
+        if (level.getLevelPlayerSight().isEnemyInSight(enemy)) {
             drawActor(enemy);
             alphaDrawer(batch)
                     .withAlpha(ROUTE_ALPHA)

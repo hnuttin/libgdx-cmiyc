@@ -6,7 +6,6 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovedSubscriber;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
-import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.logic.GamePhase;
 import com.jazzjack.rab.bit.cmiyc.logic.GamePhaseEvent;
 import com.jazzjack.rab.bit.cmiyc.logic.GamePhaseEventSubscriber;
@@ -17,10 +16,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.registerSubscriber;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class LevelSight implements PlayerMovedSubscriber, GamePhaseEventSubscriber, EnemyMovedSubscriber {
+public class LevelPlayerSight implements PlayerMovedSubscriber, GamePhaseEventSubscriber, EnemyMovedSubscriber {
 
     private final LevelTiledMap levelTiledMap;
     private final Player player;
@@ -28,13 +28,13 @@ public class LevelSight implements PlayerMovedSubscriber, GamePhaseEventSubscrib
 
     private final Map<Enemy, Boolean> enemiesInSight;
 
-    LevelSight(LevelTiledMap levelTiledMap, Player player, Supplier<List<Enemy>> enemySupplier) {
+    LevelPlayerSight(LevelTiledMap levelTiledMap, Player player, Supplier<List<Enemy>> enemySupplier) {
         this.levelTiledMap = levelTiledMap;
         this.player = player;
         this.enemySupplier = enemySupplier;
         this.enemiesInSight = new HashMap<>();
         markTiles();
-        GameEventBus.registerSubscriber(this);
+        registerSubscriber(this);
     }
 
     @Override
@@ -81,6 +81,7 @@ public class LevelSight implements PlayerMovedSubscriber, GamePhaseEventSubscrib
                 levelCell.markInSight();
                 for (Enemy enemy : enemySupplier.get()) {
                     if (enemy.hasSamePositionAs(new Position(cellX, cellY))) {
+                        enemy.trigger();
                         markEnemyInSight(enemy);
                     }
                 }

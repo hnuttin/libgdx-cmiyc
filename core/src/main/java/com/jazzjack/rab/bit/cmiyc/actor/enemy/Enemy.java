@@ -27,6 +27,8 @@ public class Enemy extends MovableActor implements HasPower {
     private final List<Route> routes;
     private final Sense sense;
 
+    private boolean triggered;
+
     public Enemy(EnemyContext context, String name, Predictability predictability, Sense sense, HasPosition hasPosition) {
         super(context, name, hasPosition);
         this.context = context;
@@ -65,7 +67,12 @@ public class Enemy extends MovableActor implements HasPower {
     }
 
     public CollisionResult moveToStep(Step step) {
-        CollisionResult collisionResult = moveToDirection(step.getDirection());
+        return moveToDirection(step.getDirection());
+    }
+
+    @Override
+    public CollisionResult moveToDirection(Direction direction) {
+        CollisionResult collisionResult = super.moveToDirection(direction);
         if (collisionResult.isNoCollision()) {
             publishEvent(new EnemyMovedEvent(this));
         }
@@ -92,6 +99,14 @@ public class Enemy extends MovableActor implements HasPower {
     }
 
     public Sense getSense() {
-        return sense;
+        return isTriggered() ? Sense.NONE : sense;
+    }
+
+    public void trigger() {
+        triggered = true;
+    }
+
+    public boolean isTriggered() {
+        return triggered;
     }
 }
