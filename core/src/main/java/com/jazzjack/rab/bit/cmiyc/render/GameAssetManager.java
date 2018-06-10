@@ -91,11 +91,11 @@ public class GameAssetManager extends AssetManager {
         return new FileHandle("maps/objecttypes.xml");
     }
 
-    public LevelTiledMap getTiledMap1() {
+    public LevelTiledMap getLevelTiledMap1() {
         return (LevelTiledMap) get(MAP1, TiledMap.class);
     }
 
-    public LevelTiledMap getTiledMap2() {
+    public LevelTiledMap getLevelTiledMap2() {
         return (LevelTiledMap) get(MAP2, TiledMap.class);
     }
 

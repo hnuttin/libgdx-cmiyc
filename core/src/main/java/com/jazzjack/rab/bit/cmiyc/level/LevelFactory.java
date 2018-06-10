@@ -30,8 +30,8 @@ public class LevelFactory {
     }
 
     private void initializeLevelSuppliers(GameAssetManager assetManager) {
-        levelSuppliers.add(assetManager::getTiledMap1);
-        levelSuppliers.add(assetManager::getTiledMap2);
+        levelSuppliers.add(assetManager::getLevelTiledMap1);
+        levelSuppliers.add(assetManager::getLevelTiledMap2);
     }
 
     public Level createLevel(int index) {
