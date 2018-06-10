@@ -20,7 +20,7 @@ public class LevelFactory {
     public LevelFactory(LevelContext context, GameAssetManager assetManager) {
         this.context = context;
         this.levelSuppliers = new ArrayList<>();
-        this.currentLevelIndex = 0;
+        this.currentLevelIndex = 1;
         this.levelMetaDataFactory = createLevelMetaDataFactory(assetManager);
         initializeLevelSuppliers(assetManager);
     }
@@ -30,22 +30,30 @@ public class LevelFactory {
     }
 
     private void initializeLevelSuppliers(GameAssetManager assetManager) {
-        levelSuppliers.add(assetManager::getTiledMap1);
-        levelSuppliers.add(assetManager::getTiledMap2);
+        levelSuppliers.add(assetManager::getLevelTiledMap1);
+        levelSuppliers.add(assetManager::getLevelTiledMap2);
+    }
+
+    public Level createLevel(int index) {
+        currentLevelIndex = index;
+        return createLevel();
     }
 
     public Level createCurrentLevel() {
-        currentLevelIndex--;
-        return createNextLevel();
+        return createLevel();
     }
 
     public Level createNextLevel() {
-        if (currentLevelIndex >= levelSuppliers.size()) {
+        currentLevelIndex++;
+        return createLevel();
+    }
+
+    private Level createLevel() {
+        if (currentLevelIndex - 1 >= levelSuppliers.size()) {
             throw new InvalidLevelException("No new level anymore: finished?");
         } else {
-            LevelTiledMap levelTiledMap = levelSuppliers.get(currentLevelIndex).get();
+            LevelTiledMap levelTiledMap = levelSuppliers.get(currentLevelIndex - 1).get();
             Level level = new Level(context, levelTiledMap, levelMetaDataFactory.create(levelTiledMap), 9);
-            currentLevelIndex++;
             GameEventBus.publishEvent(new NewLevelEvent(level));
             return level;
         }

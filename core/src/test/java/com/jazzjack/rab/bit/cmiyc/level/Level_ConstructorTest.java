@@ -1,6 +1,7 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
+import com.jazzjack.rab.bit.cmiyc.gdx.LibGdxTest;
 import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 import com.jazzjack.rab.bit.cmiyc.shared.Sense;
 
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Level_ConstructorTest {
+class Level_ConstructorTest extends LibGdxTest {
 
     private Level level;
 

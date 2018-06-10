@@ -28,7 +28,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     private final LevelCamera camera;
     private final Batch batch;
     private final TextDrawer textDrawer;
-    private final FogOfWarBuffer fogOfWarBuffer;
+    private final FogOfWarRenderer fogOfWarRenderer;
 
     public LevelRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
         super(level.getLevelTiledMap(), 1 / level.getLevelTiledMap().getTilePixelSize());
@@ -37,7 +37,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
         this.camera = new LevelCamera(level, numberOfHorizontalTilesToRender, LEVEL_CAMERA_SCALE);
         this.batch = new SpriteBatch();
         this.textDrawer = new TextDrawer(assetManager, this.batch, this.camera);
-        this.fogOfWarBuffer = new FogOfWarBuffer(this.level, this.batch, assetManager);
+        this.fogOfWarRenderer = new FogOfWarRenderer(this.level, this.batch, assetManager);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     }
 
     private void renderMap() {
-        fogOfWarBuffer.bufferSight();
+        fogOfWarRenderer.buffer();
         renderLevel();
         batch.begin();
         renderPlayer();
@@ -62,7 +62,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
         renderEndPosition();
         renderItems();
         batch.end();
-        fogOfWarBuffer.renderSight();
+        fogOfWarRenderer.render();
     }
 
     private void renderLevel() {
@@ -78,10 +78,12 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     }
 
     private void drawEnemy(Enemy enemy) {
-        drawActor(enemy);
-        alphaDrawer(batch)
-                .withAlpha(ROUTE_ALPHA)
-                .draw(() -> drawEnemyRoutes(enemy));
+        if (level.getLevelSight().isEnemyInSight(enemy)) {
+            drawActor(enemy);
+            alphaDrawer(batch)
+                    .withAlpha(ROUTE_ALPHA)
+                    .draw(() -> drawEnemyRoutes(enemy));
+        }
     }
 
     private void drawEnemyRoutes(Enemy enemy) {
@@ -143,6 +145,6 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     public void dispose() {
         super.dispose();
         batch.dispose();
-        fogOfWarBuffer.dispose();
+        fogOfWarRenderer.dispose();
     }
 }

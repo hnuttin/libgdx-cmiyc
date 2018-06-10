@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="pixel-art" tilewidth="32" tileheight="32" tilecount="10" columns="0">
+<tileset name="pixel-art" tilewidth="32" tileheight="32" tilecount="16" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -87,5 +87,41 @@
    <property name="collision" type="bool" value="false"/>
   </properties>
   <image width="32" height="32" source="sprites/ground.png"/>
+ </tile>
+ <tile id="11">
+  <properties>
+   <property name="collision" type="bool" value="true"/>
+  </properties>
+  <image width="32" height="32" source="sprites/box-cover-lower-end.png"/>
+ </tile>
+ <tile id="12">
+  <properties>
+   <property name="collision" type="bool" value="true"/>
+  </properties>
+  <image width="32" height="32" source="sprites/box-cover-upper-end.png"/>
+ </tile>
+ <tile id="13">
+  <properties>
+   <property name="collision" type="bool" value="true"/>
+  </properties>
+  <image width="32" height="32" source="sprites/box-cover-vertical.png"/>
+ </tile>
+ <tile id="14">
+  <properties>
+   <property name="collision" type="bool" value="true"/>
+  </properties>
+  <image width="32" height="32" source="sprites/box-cover-horizontal.png"/>
+ </tile>
+ <tile id="15">
+  <properties>
+   <property name="collision" type="bool" value="true"/>
+  </properties>
+  <image width="32" height="32" source="sprites/box-cover-left-end.png"/>
+ </tile>
+ <tile id="16">
+  <properties>
+   <property name="collision" type="bool" value="true"/>
+  </properties>
+  <image width="32" height="32" source="sprites/box-cover-right-end.png"/>
  </tile>
 </tileset>

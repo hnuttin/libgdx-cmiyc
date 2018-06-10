@@ -18,15 +18,11 @@ class TestLevelFactory {
 
     static Level createLevel(String levelFile) {
         LevelContext levelContext = new LevelContext(new CollisionResolver(), new Randomizer(new RandomInteger()), mock(AnimationRegister.class));
-        LevelTiledMap levelTiledMap = createLevelTiledMap(levelFile);
+        LevelTiledMap levelTiledMap = new LevelTiledMap(new LevelTiledMapLoader(new ClasspathFileHandleResolver()).load(levelFile));
         GameAssetManager assetManagerMock = mock(GameAssetManager.class);
         when(assetManagerMock.getObjectTypesFileHandle()).thenReturn(new ClasspathFileHandle("objecttypes.xml"));
-        when(assetManagerMock.getTiledMap1()).thenReturn(levelTiledMap);
-        return new LevelFactory(levelContext, assetManagerMock).createNextLevel();
-    }
-
-    static LevelTiledMap createLevelTiledMap(String levelFile) {
-        return new LevelTiledMap(new LevelTiledMapLoader(new ClasspathFileHandleResolver()).load(levelFile));
+        when(assetManagerMock.getLevelTiledMap1()).thenReturn(levelTiledMap);
+        return new LevelFactory(levelContext, assetManagerMock).createLevel(1);
     }
 
 }

@@ -1,0 +1,41 @@
+
+cmiyc_lights.png
+size: 256,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+sight
+  rotate: false
+  xy: 2, 70
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+tile-in-sight
+  rotate: false
+  xy: 36, 36
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tile-in-sight-full
+  rotate: false
+  xy: 2, 36
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tile-in-sight-square
+  rotate: false
+  xy: 2, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tile-visited
+  rotate: false
+  xy: 164, 198
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

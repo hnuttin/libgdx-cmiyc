@@ -9,6 +9,8 @@ import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
+
 public class GameController implements InputProcessor {
 
     private static final Map<Integer, Direction> KEY_TO_DIRECTION_MAPPING = new HashMap<>();
@@ -31,7 +33,7 @@ public class GameController implements InputProcessor {
     }
 
     public void startGame() {
-        startNextLevel();
+        startLevel(levelFactory.createLevel(1));
     }
 
     private void startNextLevel() {
@@ -61,6 +63,14 @@ public class GameController implements InputProcessor {
             endPlayerTurn();
             return true;
         }
+        if (keycode == Input.Keys.NUM_1) {
+            startLevel(levelFactory.createLevel(1));
+            return true;
+        }
+        if (keycode == Input.Keys.NUM_2) {
+            startLevel(levelFactory.createLevel(2));
+            return true;
+        }
         if (movePlayer(keycode)) {
             if (currentLevel.hasPlayerReachedEnd()) {
                 startNextLevel();
@@ -75,11 +85,7 @@ public class GameController implements InputProcessor {
 
     private Boolean movePlayer(int keycode) {
         Direction direction = KEY_TO_DIRECTION_MAPPING.get(keycode);
-        if (direction != null) {
-            return currentLevel.getPlayer().moveToDirection(direction).isNoCollision();
-        } else {
-            return false;
-        }
+        return direction != null && currentLevel.getPlayer().moveToDirection(direction).isNoCollision();
     }
 
     private void endPlayerTurn() {
@@ -105,6 +111,7 @@ public class GameController implements InputProcessor {
 
     private void startPlayerTurn() {
         currentGamePhase = GamePhase.PLAYER_TURN;
+        publishEvent(new GamePhaseEvent(currentGamePhase));
         currentLevel.generateEnemyRoutes();
         currentLevel.getPlayer().resetActionPoints();
     }

@@ -8,7 +8,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 public class LevelTiledMap extends TiledMap {
 
@@ -46,11 +45,7 @@ public class LevelTiledMap extends TiledMap {
         return getProperties().get("height", Integer.class);
     }
 
-    public LevelCell getLevelCell(HasPosition position) {
-        return getLevelCell(position.getX(), position.getY());
-    }
-
-    public LevelCell getLevelCell(int x, int y) {
+    LevelCell getLevelCell(int x, int y) {
         return (LevelCell) getMapLayer().getCell(x, y);
     }
 

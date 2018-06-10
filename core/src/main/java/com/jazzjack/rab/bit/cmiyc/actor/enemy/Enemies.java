@@ -4,8 +4,9 @@ import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
-public class Enemies implements EnemyAddedEventSubscriber, EnemyDestroyedEventSubscriber {
+public class Enemies implements Supplier<List<Enemy>>, EnemyAddedEventSubscriber, EnemyDestroyedEventSubscriber {
 
     private final List<Enemy> listOfEnemies;
 
@@ -14,6 +15,7 @@ public class Enemies implements EnemyAddedEventSubscriber, EnemyDestroyedEventSu
         GameEventBus.registerSubscriber(this);
     }
 
+    @Override
     public List<Enemy> get() {
         return listOfEnemies;
     }
