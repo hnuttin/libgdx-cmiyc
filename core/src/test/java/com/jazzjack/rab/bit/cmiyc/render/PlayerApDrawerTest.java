@@ -15,6 +15,7 @@ import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import static com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile.playerProfileBuilder;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -48,7 +49,7 @@ class PlayerApDrawerTest extends LibGdxAlphaDrawerSupport {
     @Test
     void expectConsumedApDrawnCorrectly() {
         ActorContext actorContext = new ActorContext(NeverCollideCollisionDetector.TEST_INSTANCE, mock(CollisionResolver.class));
-        Player player = new Player(actorContext, new Position(0, 0), 5);
+        Player player = new Player(actorContext, new Position(0, 0), playerProfileBuilder().build());
         player.moveToDirection(Direction.RIGHT);
         player.moveToDirection(Direction.RIGHT);
 

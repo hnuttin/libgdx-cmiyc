@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
 import com.jazzjack.rab.bit.cmiyc.animation.AnimationHandler;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
 import com.jazzjack.rab.bit.cmiyc.level.LevelContext;
@@ -11,6 +12,8 @@ import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 import com.jazzjack.rab.bit.cmiyc.render.GameRenderer;
 import com.jazzjack.rab.bit.cmiyc.shared.RandomInteger;
 import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
+
+import static com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile.playerProfileBuilder;
 
 public class Game extends ApplicationAdapter {
 
@@ -28,12 +31,13 @@ public class Game extends ApplicationAdapter {
     private void initGameObjects() {
         assetManager = new GameAssetManager();
         animationHandler = new AnimationHandler();
-        gameController = new GameController(new LevelFactory(createLevelContext(), assetManager));
+        PlayerProfile playerProfile = playerProfileBuilder().build();
+        gameController = new GameController(new LevelFactory(createLevelContext(playerProfile), assetManager), playerProfile);
         gameRenderer = new GameRenderer(assetManager);
     }
 
-    private LevelContext createLevelContext() {
-        return new LevelContext(new CollisionResolver(), new Randomizer(new RandomInteger()), animationHandler);
+    private LevelContext createLevelContext(PlayerProfile playerProfile) {
+        return new LevelContext(new CollisionResolver(), new Randomizer(new RandomInteger()), animationHandler, playerProfile);
     }
 
     private void startNewGame() {

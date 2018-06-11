@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.logic;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
@@ -23,13 +24,15 @@ public class GameController implements InputProcessor {
     }
 
     private final LevelFactory levelFactory;
+    private final PlayerProfile playerProfile;
 
     private Level currentLevel;
 
     private GamePhase currentGamePhase;
 
-    public GameController(LevelFactory levelFactory) {
+    public GameController(LevelFactory levelFactory, PlayerProfile playerProfile) {
         this.levelFactory = levelFactory;
+        this.playerProfile = playerProfile;
     }
 
     public void startGame() {
@@ -102,7 +105,7 @@ public class GameController implements InputProcessor {
     }
 
     private void endEnemyTurn() {
-        if (currentLevel.getPlayer().isDead()) {
+        if (playerProfile.isDead()) {
             restartLevel();
         } else {
             startPlayerTurn();

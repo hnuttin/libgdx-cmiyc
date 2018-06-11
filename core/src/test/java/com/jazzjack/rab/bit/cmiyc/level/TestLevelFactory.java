@@ -8,6 +8,7 @@ import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 import com.jazzjack.rab.bit.cmiyc.shared.RandomInteger;
 import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 
+import static com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile.playerProfileBuilder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -17,7 +18,7 @@ class TestLevelFactory {
     }
 
     static Level createLevel(String levelFile) {
-        LevelContext levelContext = new LevelContext(new CollisionResolver(), new Randomizer(new RandomInteger()), mock(AnimationRegister.class));
+        LevelContext levelContext = new LevelContext(new CollisionResolver(), new Randomizer(new RandomInteger()), mock(AnimationRegister.class), playerProfileBuilder().build());
         LevelTiledMap levelTiledMap = new LevelTiledMap(new LevelTiledMapLoader(new ClasspathFileHandleResolver()).load(levelFile));
         GameAssetManager assetManagerMock = mock(GameAssetManager.class);
         when(assetManagerMock.getObjectTypesFileHandle()).thenReturn(new ClasspathFileHandle("objecttypes.xml"));

@@ -6,6 +6,7 @@ import com.jazzjack.rab.bit.cmiyc.level.meta.MarkerObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile.playerProfileBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -20,7 +21,9 @@ class Level_TurnsLeftTest {
     void beforeEach() {
         LevelMetaData levelMetaData = mock(LevelMetaData.class);
         when(levelMetaData.getStartPosition()).thenReturn(mock(MarkerObject.class));
-        level = new Level(mock(LevelContext.class), mock(LevelTiledMap.class), levelMetaData, MAX_TURNS);
+        LevelContext levelContext = mock(LevelContext.class);
+        when(levelContext.getPlayerProfile()).thenReturn(playerProfileBuilder().build());
+        level = new Level(levelContext, mock(LevelTiledMap.class), levelMetaData, MAX_TURNS);
     }
 
     @Test

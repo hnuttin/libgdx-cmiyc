@@ -10,44 +10,17 @@ import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 public class Player extends MovableActor implements HasPower {
 
-    private int actionPointsPerTurn;
+    private final PlayerProfile playerProfile;
     private int actionPointsConsumed;
 
-    private int maxHp;
-    private int hp;
-
-    private int sight;
-
-    public Player(ActorContext context, HasPosition hasPosition, int sight) {
+    public Player(ActorContext context, HasPosition hasPosition, PlayerProfile playerProfile) {
         super(context, "player", hasPosition);
-
-        this.actionPointsPerTurn = 5;
+        this.playerProfile = playerProfile;
         this.actionPointsConsumed = 0;
-
-        this.maxHp = 5;
-        this.hp = 3;
-
-        this.sight = sight;
-    }
-
-    public int getSight() {
-        return sight;
-    }
-
-    public int getMaxHp() {
-        return maxHp;
-    }
-
-    public int getHp() {
-        return hp;
     }
 
     public void damageFromEnemy(Enemy enemy) {
-        hp = Math.max(0, hp - enemy.getPower());
-    }
-
-    public boolean isDead() {
-        return hp == 0;
+        playerProfile.damage(enemy.getPower());
     }
 
     @Override
@@ -65,7 +38,7 @@ public class Player extends MovableActor implements HasPower {
     }
 
     public int getActionPointsPerTurn() {
-        return actionPointsPerTurn;
+        return playerProfile.getActionPointsPerTurn();
     }
 
     public int getActionPointsConsumed() {
@@ -73,7 +46,7 @@ public class Player extends MovableActor implements HasPower {
     }
 
     public boolean hasActionPointsLeft() {
-        return actionPointsConsumed < actionPointsPerTurn;
+        return actionPointsConsumed < playerProfile.getActionPointsPerTurn();
     }
 
     public void resetActionPoints() {
@@ -81,8 +54,18 @@ public class Player extends MovableActor implements HasPower {
     }
 
     public void incrementHp() {
-        if (hp < maxHp) {
-            hp++;
-        }
+        playerProfile.incrementHp();
+    }
+
+    public int getSight() {
+        return playerProfile.getSight();
+    }
+
+    public int getHp() {
+        return playerProfile.getHp();
+    }
+
+    public int getMaxHp() {
+        return playerProfile.getMaxHp();
     }
 }
