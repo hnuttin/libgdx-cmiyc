@@ -71,6 +71,12 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
 
     private void renderPlayer() {
         drawActor(level.getPlayer());
+        batch.draw(
+                assetManager.getPlayerShieldTexture(),
+                level.getPlayer().getX(),
+                level.getPlayer().getY(),
+                1,
+                1);
     }
 
     private void renderEnemies() {
