@@ -3,6 +3,8 @@ package com.jazzjack.rab.bit.cmiyc.level.meta;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandleResolver;
+import com.jazzjack.rab.bit.cmiyc.gdx.LibGdxTest;
+import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
 import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
 import com.jazzjack.rab.bit.cmiyc.shared.Sense;
@@ -12,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LevelMetaDataFactoryTest {
+class LevelMetaDataFactoryTest extends LibGdxTest {
 
     private final ObjectTypeParser objectTypeParser = new ObjectTypeParser(new ClasspathFileHandle("objecttypes.xml"));
     private final LevelMetaDataFactory levelMetaDataFactory = new LevelMetaDataFactory(objectTypeParser);
@@ -58,14 +60,14 @@ class LevelMetaDataFactoryTest {
         LevelMetaData levelMetaData = levelMetaDataFactory.create(levelTiledMap);
 
         assertThat(levelMetaData.getItems()).hasSize(2);
-        assertItem(levelMetaData.getItems().get(0), "item-hp", 0, 0);
-        assertItem(levelMetaData.getItems().get(1), "item-hp", 1, 0);
+        assertItem(levelMetaData.getItems().get(0), Item.HP, 0, 0);
+        assertItem(levelMetaData.getItems().get(1), Item.SHIELD, 1, 0);
     }
 
-    private void assertItem(MarkerObject item, String name, int x, int y) {
-        assertThat(item.getType()).isEqualTo(name);
-        assertThat(item.getX()).isEqualTo(x);
-        assertThat(item.getY()).isEqualTo(y);
+    private void assertItem(ItemMarkerObject itemMarkerObject, Item item, int x, int y) {
+        assertThat(itemMarkerObject.getItem()).isEqualTo(item);
+        assertThat(itemMarkerObject.getX()).isEqualTo(x);
+        assertThat(itemMarkerObject.getY()).isEqualTo(y);
     }
 
     private void assertEnemy(EnemyMarkerObject enemy, String name, Predictability predictability, Sense sense, int x, int y) {

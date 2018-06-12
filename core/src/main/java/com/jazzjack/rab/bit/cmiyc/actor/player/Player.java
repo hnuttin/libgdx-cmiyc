@@ -5,6 +5,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
+import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
@@ -13,10 +14,13 @@ public class Player extends MovableActor implements HasPower {
     private final PlayerProfile playerProfile;
     private int actionPointsConsumed;
 
+    private boolean shieldActive;
+
     public Player(ActorContext context, HasPosition hasPosition, PlayerProfile playerProfile) {
         super(context, "player", hasPosition);
         this.playerProfile = playerProfile;
         this.actionPointsConsumed = 0;
+        this.shieldActive = false;
     }
 
     public void damageFromEnemy(Enemy enemy) {
@@ -67,5 +71,13 @@ public class Player extends MovableActor implements HasPower {
 
     public int getMaxHp() {
         return playerProfile.getMaxHp();
+    }
+
+    public void pickupItem(Item item) {
+        playerProfile.addItem(item);
+    }
+
+    public boolean isShieldActive() {
+        return shieldActive;
     }
 }

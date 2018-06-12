@@ -26,7 +26,7 @@
   <object id="11" type="enemy1" x="416" y="384" width="32" height="32"/>
   <object id="12" type="enemy1" x="224" y="512" width="32" height="32"/>
   <object id="13" type="enemy2" x="544" y="96" width="32" height="32"/>
-  <object id="15" type="item-armor" x="192" y="352">
+  <object id="15" type="item-shield" x="192" y="352">
    <polygon points="0,0 32,-32 32,0"/>
   </object>
  </objectgroup>

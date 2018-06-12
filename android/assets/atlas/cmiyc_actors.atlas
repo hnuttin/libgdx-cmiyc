@@ -13,7 +13,7 @@ ap-ending-left
   index: -1
 ap-ending-right
   rotate: false
-  xy: 334, 200
+  xy: 200, 66
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -34,7 +34,7 @@ eight
   index: -1
 end
   rotate: false
-  xy: 104, 2
+  xy: 334, 200
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -55,7 +55,7 @@ enemy2
   index: -1
 enemy3
   rotate: false
-  xy: 200, 66
+  xy: 70, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -88,16 +88,16 @@ hp-filled
   orig: 32, 32
   offset: 0, 0
   index: -1
-item-armor
+item-hp
   rotate: false
-  xy: 200, 100
+  xy: 138, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-item-hp
+item-shield
   rotate: false
-  xy: 138, 2
+  xy: 368, 200
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -118,7 +118,7 @@ one
   index: -1
 player
   rotate: false
-  xy: 368, 200
+  xy: 104, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -153,7 +153,7 @@ route-corner-top-right
   index: -1
 route-ending-bottom
   rotate: false
-  xy: 70, 2
+  xy: 300, 200
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -174,7 +174,7 @@ route-ending-right
   index: -1
 route-ending-top
   rotate: false
-  xy: 300, 200
+  xy: 200, 100
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

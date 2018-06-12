@@ -11,16 +11,16 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.RouteGenerator;
 import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerCollisionDetector;
-import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.item.Items;
 import com.jazzjack.rab.bit.cmiyc.level.meta.EnemyMarkerObject;
+import com.jazzjack.rab.bit.cmiyc.level.meta.ItemMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaData;
-import com.jazzjack.rab.bit.cmiyc.level.meta.MarkerObject;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 import static java.util.stream.Collectors.toList;
 
 public class Level {
@@ -74,8 +74,8 @@ public class Level {
     }
 
     private Enemy createEnemy(EnemyContext enemyContext, EnemyMarkerObject enemyMarkerObject) {
-        Enemy enemy = new Enemy(enemyContext, enemyMarkerObject.getType(), enemyMarkerObject.getPredictability(), enemyMarkerObject.getSense(), enemyMarkerObject);
-        GameEventBus.publishEvent(new EnemyAddedEvent(enemy));
+        Enemy enemy = new Enemy(enemyContext, enemyMarkerObject.getName(), enemyMarkerObject.getPredictability(), enemyMarkerObject.getSense(), enemyMarkerObject);
+        publishEvent(new EnemyAddedEvent(enemy));
         return enemy;
     }
 
@@ -99,7 +99,7 @@ public class Level {
         return enemies.get();
     }
 
-    public List<MarkerObject> getItems() {
+    public List<ItemMarkerObject> getItems() {
         return items.getItems();
     }
 

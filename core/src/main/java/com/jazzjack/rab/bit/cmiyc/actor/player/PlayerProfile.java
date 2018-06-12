@@ -1,5 +1,11 @@
 package com.jazzjack.rab.bit.cmiyc.actor.player;
 
+import com.jazzjack.rab.bit.cmiyc.item.Item;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class PlayerProfile {
 
     private int actionPointsPerTurn;
@@ -9,11 +15,15 @@ public class PlayerProfile {
 
     private int sight;
 
+    private final List<Item> items;
+
     private PlayerProfile(Builder builder) {
         this.actionPointsPerTurn = builder.actionPointsPerTurn;
         this.maxHp = builder.maxHp;
         this.hp = builder.hp;
         this.sight = builder.sight;
+
+        this.items = new ArrayList<>();
     }
 
     public int getActionPointsPerTurn() {
@@ -44,6 +54,14 @@ public class PlayerProfile {
 
     public int getSight() {
         return sight;
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(items);
     }
 
     public static Builder playerProfileBuilder() {

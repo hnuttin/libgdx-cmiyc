@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.render.level;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
@@ -9,7 +10,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
-import com.jazzjack.rab.bit.cmiyc.level.meta.MarkerObject;
+import com.jazzjack.rab.bit.cmiyc.level.meta.ItemMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 import com.jazzjack.rab.bit.cmiyc.render.Renderer;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
@@ -71,12 +72,9 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
 
     private void renderPlayer() {
         drawActor(level.getPlayer());
-        batch.draw(
-                assetManager.getPlayerShieldTexture(),
-                level.getPlayer().getX(),
-                level.getPlayer().getY(),
-                1,
-                1);
+        if (level.getPlayer().isShieldActive()) {
+            drawTextureOnPosition(assetManager.getPlayerShieldTexture(), level.getPlayer());
+        }
     }
 
     private void renderEnemies() {
@@ -116,35 +114,23 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     }
 
     private void renderEndPosition() {
-        HasPosition endPosition = level.getLevelEndPosition();
-        batch.draw(
-                assetManager.getPlayerEndTexture(),
-                endPosition.getX(),
-                endPosition.getY(),
-                1,
-                1);
+        drawTextureOnPosition(assetManager.getPlayerEndTexture(), level.getLevelEndPosition());
     }
 
     private void renderItems() {
         level.getItems().forEach(this::drawItem);
     }
 
-    private void drawItem(MarkerObject item) {
-        batch.draw(
-                assetManager.getTextureForName(item.getType()),
-                item.getX(),
-                item.getY(),
-                1,
-                1);
+    private void drawItem(ItemMarkerObject item) {
+        drawTextureOnPosition(assetManager.getTextureForName(item.getName()), item);
     }
 
     private void drawActor(Actor actor) {
-        batch.draw(
-                assetManager.getTextureForName(actor.getName()),
-                actor.getX(),
-                actor.getY(),
-                1,
-                1);
+        drawTextureOnPosition(assetManager.getTextureForName(actor.getName()), actor);
+    }
+
+    private void drawTextureOnPosition(TextureRegion texture, HasPosition hasPosition) {
+        batch.draw(texture, hasPosition.getX(), hasPosition.getY(), 1, 1);
     }
 
     @Override

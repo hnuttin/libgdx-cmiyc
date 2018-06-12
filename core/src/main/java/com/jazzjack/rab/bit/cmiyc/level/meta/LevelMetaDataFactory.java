@@ -30,7 +30,7 @@ public class LevelMetaDataFactory {
         MarkerObject startPosition = createSingleMarkerObject(tiledMap, MARKER_START, markerObjectFactory(tiledMap.getTilePixelSize()));
         MarkerObject endPosition = createSingleMarkerObject(tiledMap, MARKER_END, markerObjectFactory(tiledMap.getTilePixelSize()));
         List<EnemyMarkerObject> enemies = createListMarkerObject(tiledMap, MARKER_ENEMY, enemyMarkerObjectFactory(tiledMap.getTilePixelSize()));
-        List<MarkerObject> items = createListMarkerObject(tiledMap, "item-", markerObjectFactory(tiledMap.getTilePixelSize()));
+        List<ItemMarkerObject> items = createListMarkerObject(tiledMap, "item-", itemMarkerObjectFactory(tiledMap.getTilePixelSize()));
         return new LevelMetaData(startPosition, endPosition, enemies, items);
     }
 
@@ -58,6 +58,10 @@ public class LevelMetaDataFactory {
 
     private Function<MapObject, MarkerObject> markerObjectFactory(float tilePixelSize) {
         return mapObject -> new MarkerObject(mapObject, createDefaultProperties(mapObject), tilePixelSize);
+    }
+
+    private Function<MapObject, ItemMarkerObject> itemMarkerObjectFactory(float tilePixelSize) {
+        return mapObject -> new ItemMarkerObject(mapObject, createDefaultProperties(mapObject), tilePixelSize);
     }
 
     private Function<MapObject, EnemyMarkerObject> enemyMarkerObjectFactory(float tilePixelSize) {
