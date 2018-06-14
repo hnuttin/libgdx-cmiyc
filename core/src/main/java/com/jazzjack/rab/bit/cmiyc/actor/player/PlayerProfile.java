@@ -64,6 +64,10 @@ public class PlayerProfile {
         return Collections.unmodifiableList(items);
     }
 
+    public boolean consumeItem(Item item) {
+        return items.remove(item);
+    }
+
     public static Builder playerProfileBuilder() {
         return new Builder();
     }

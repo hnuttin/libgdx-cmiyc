@@ -4,10 +4,11 @@ import com.jazzjack.rab.bit.cmiyc.actor.HasPower;
 import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
-import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
+
+import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 
 public class Player extends MovableActor implements HasPower {
 
@@ -24,7 +25,11 @@ public class Player extends MovableActor implements HasPower {
     }
 
     public void damageFromEnemy(Enemy enemy) {
-        playerProfile.damage(enemy.getPower());
+        if (shieldActive) {
+            shieldActive = false;
+        } else {
+            playerProfile.damage(enemy.getPower());
+        }
     }
 
     @Override
@@ -33,7 +38,7 @@ public class Player extends MovableActor implements HasPower {
             CollisionResult collisionResult = super.moveToDirection(direction);
             if (collisionResult.isNoCollision()) {
                 actionPointsConsumed++;
-                GameEventBus.publishEvent(new PlayerMovedEvent(this));
+                publishEvent(new PlayerMovedEvent(this));
             }
             return collisionResult;
         } else {
@@ -79,5 +84,14 @@ public class Player extends MovableActor implements HasPower {
 
     public boolean isShieldActive() {
         return shieldActive;
+    }
+
+    public void useItem(Item item) {
+        if (playerProfile.consumeItem(item)) {
+            actionPointsConsumed++;
+            if (item == Item.SHIELD) {
+                shieldActive = true;
+            }
+        }
     }
 }
