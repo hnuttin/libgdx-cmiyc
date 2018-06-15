@@ -25,7 +25,7 @@ class GameControllerTest extends LibGdxTest {
     void setup() {
         PlayerProfile playerProfile = playerProfileBuilder()
                 .withHp(10)
-                .withMaxHp(10)
+                .withMaxHp(20)
                 .withActionPointsPerTurn(3)
                 .build();
         animationRegister = new AnimationHandler();
