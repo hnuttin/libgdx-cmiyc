@@ -19,6 +19,10 @@ public class LevelCollisionDetector implements CollisionDetector {
 
     @Override
     public CollisionResult collides(Collidable collidable, Direction direction) {
+        if (collidableOutsideLevel(collidable)) {
+            return CollisionResult.collision(collidable, collidable, direction);
+        }
+
         for (int cellX = 0; cellX < mapLayer.getWidth(); cellX++) {
             for (int cellY = 0; cellY < mapLayer.getHeight(); cellY++) {
                 if (collidesWithCell(cellX, cellY, collidable)) {
@@ -26,7 +30,13 @@ public class LevelCollisionDetector implements CollisionDetector {
                 }
             }
         }
+
         return CollisionResult.noCollision();
+    }
+
+    private boolean collidableOutsideLevel(Collidable collidable) {
+        return collidable.getX() < 0 || collidable.getX() >= mapLayer.getWidth() ||
+                collidable.getY() < 0 || collidable.getY() >= mapLayer.getHeight();
     }
 
     private boolean collidesWithCell(int cellX, int cellY, Collidable collidable) {

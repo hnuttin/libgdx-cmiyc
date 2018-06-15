@@ -3,6 +3,7 @@ package com.jazzjack.rab.bit.cmiyc.level;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovedSubscriber;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
@@ -83,10 +84,19 @@ public class LevelPlayerSight implements PlayerMovedSubscriber, GamePhaseEventSu
                     if (enemy.hasSamePositionAs(new Position(cellX, cellY))) {
                         enemy.trigger();
                         markEnemyInSight(enemy);
+                        markEnemyRoutesVisited(enemy);
                     }
                 }
             }
         }
+    }
+
+    private void markEnemyRoutesVisited(Enemy enemy) {
+        enemy.getRoutes().forEach(this::markEnemyRouteVisited);
+    }
+
+    private void markEnemyRouteVisited(Route route) {
+        route.getSteps().forEach(step -> levelTiledMap.getLevelCell(step).markVisited());
     }
 
     private void markEnemyInSight(Enemy enemy) {
