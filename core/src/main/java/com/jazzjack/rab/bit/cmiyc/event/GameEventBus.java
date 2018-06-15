@@ -20,6 +20,10 @@ public class GameEventBus {
         INSTANCE.publishEventInternal(event);
     }
 
+    public static void clearSubscribers() {
+        INSTANCE.clearSubscribersInternal();
+    }
+
     final Map<Class<Event>, List<Consumer<Event>>> eventSubscribersMap;
 
     GameEventBus() {
@@ -66,5 +70,9 @@ public class GameEventBus {
         if (eventSubscribers != null) {
             eventSubscribers.forEach(eventSubscriber -> eventSubscriber.accept(event));
         }
+    }
+
+    private void clearSubscribersInternal() {
+        eventSubscribersMap.clear();
     }
 }

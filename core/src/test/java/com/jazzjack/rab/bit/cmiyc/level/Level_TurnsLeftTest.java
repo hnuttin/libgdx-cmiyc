@@ -1,5 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
+import com.jazzjack.rab.bit.cmiyc.gdx.LibGdxTest;
 import com.jazzjack.rab.bit.cmiyc.level.meta.LevelMetaData;
 import com.jazzjack.rab.bit.cmiyc.level.meta.MarkerObject;
 
@@ -11,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class Level_TurnsLeftTest {
+class Level_TurnsLeftTest extends LibGdxTest {
 
     private static final int MAX_TURNS = 9;
 

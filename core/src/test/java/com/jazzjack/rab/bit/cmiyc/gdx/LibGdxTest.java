@@ -5,8 +5,10 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.graphics.GL20;
+import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.mockito.Mockito;
 
@@ -15,7 +17,7 @@ public abstract class LibGdxTest {
     private static Application application;
 
     @BeforeAll
-    public static void init() {
+    static void init() {
         application = new HeadlessApplication(new ApplicationListener() {
             @Override
             public void create() {
@@ -46,8 +48,13 @@ public abstract class LibGdxTest {
         Gdx.gl = Gdx.gl20;
     }
 
+    @AfterEach
+    void afterEach() {
+        GameEventBus.clearSubscribers();
+    }
+
     @AfterAll
-    public static void cleanUp() {
+    static void cleanUp() {
         application.exit();
         application = null;
     }
