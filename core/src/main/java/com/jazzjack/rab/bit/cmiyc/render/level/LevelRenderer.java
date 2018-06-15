@@ -9,6 +9,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames;
+import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ItemMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
@@ -73,7 +74,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     private void renderPlayer() {
         drawActor(level.getPlayer());
         if (level.getPlayer().isShieldActive()) {
-            drawTextureOnPosition(assetManager.getPlayerShieldTexture(), level.getPlayer());
+            drawTextureOnPosition(assetManager.getTextureForName(Item.SHIELD.getName()), level.getPlayer());
         }
     }
 

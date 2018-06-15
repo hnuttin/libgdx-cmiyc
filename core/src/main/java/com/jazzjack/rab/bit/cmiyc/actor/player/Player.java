@@ -8,6 +8,8 @@ import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
+import java.util.List;
+
 import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 
 public class Player extends MovableActor implements HasPower {
@@ -78,12 +80,16 @@ public class Player extends MovableActor implements HasPower {
         return playerProfile.getMaxHp();
     }
 
-    public void pickupItem(Item item) {
-        playerProfile.addItem(item);
-    }
-
     public boolean isShieldActive() {
         return shieldActive;
+    }
+
+    public List<Item> getItems() {
+        return playerProfile.getItems();
+    }
+
+    public void pickupItem(Item item) {
+        playerProfile.addItem(item);
     }
 
     public void useItem(Item item) {

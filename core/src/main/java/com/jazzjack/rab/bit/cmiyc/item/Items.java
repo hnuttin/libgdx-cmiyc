@@ -5,9 +5,8 @@ import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ItemMarkerObject;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.registerSubscriber;
@@ -15,12 +14,12 @@ import static java.util.stream.Collectors.toList;
 
 public class Items implements PlayerMovedSubscriber {
 
-    private static final Map<Item, Function<ItemMarkerObject, ItemHandler>> HANDLER_FACTORIES;
+    private static final EnumMap<Item, Function<ItemMarkerObject, ItemHandler>> HANDLER_FACTORIES;
 
     static {
-        HANDLER_FACTORIES = new HashMap<>();
-        HANDLER_FACTORIES.put(Item.HP, (HpItemHandler::new));
-        HANDLER_FACTORIES.put(Item.SHIELD, (ShieldItemHandler::new));
+        HANDLER_FACTORIES = new EnumMap<>(Item.class);
+        HANDLER_FACTORIES.put(Item.HP, HpItemHandler::new);
+        HANDLER_FACTORIES.put(Item.SHIELD, ShieldItemHandler::new);
     }
 
     private final List<ItemHandler> itemHandlers;

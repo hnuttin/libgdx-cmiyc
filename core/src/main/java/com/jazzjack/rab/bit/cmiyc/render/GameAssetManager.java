@@ -134,10 +134,6 @@ public class GameAssetManager extends AssetManager {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(TURN_ATLAS_REGION_MAPPING.get(turnsLeft));
     }
 
-    public TextureAtlas.AtlasRegion getPlayerShieldTexture() {
-        return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion("item-armor");
-    }
-
     public BitmapFont getPercentageFont() {
         return get(FONT_VCR, BitmapFont.class);
     }

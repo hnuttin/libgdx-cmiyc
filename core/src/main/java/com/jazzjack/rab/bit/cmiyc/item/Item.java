@@ -10,6 +10,10 @@ public enum Item {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public static Item forName(String name) {
         for (Item item : values()) {
             if (item.name.equalsIgnoreCase(name)) {

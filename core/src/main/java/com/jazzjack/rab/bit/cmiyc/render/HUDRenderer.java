@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 
 import static com.jazzjack.rab.bit.cmiyc.render.AlphaDrawer.alphaDrawer;
@@ -84,6 +85,7 @@ public class HUDRenderer implements Renderer {
 
     private void renderStatusBar() {
         renderHp();
+        renderPlayerItems();
         playerApDrawer.draw(level.getPlayer());
     }
 
@@ -95,6 +97,12 @@ public class HUDRenderer implements Renderer {
         TextureAtlas.AtlasRegion hpEmptyTexture = assetManager.getHpEmptyTexture();
         for (float j = level.getPlayer().getHp(); j < level.getPlayer().getMaxHp(); j++) {
             batch.draw(hpEmptyTexture, j, 0f, 1f, 1f);
+        }
+    }
+
+    private void renderPlayerItems() {
+        for (Item item : level.getPlayer().getItems()) {
+            batch.draw(assetManager.getTextureForName(item.getName()), 10, 0f, 1f, 1f);
         }
     }
 
