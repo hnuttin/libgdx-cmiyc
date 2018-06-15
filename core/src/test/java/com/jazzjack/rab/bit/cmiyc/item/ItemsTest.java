@@ -3,7 +3,8 @@ package com.jazzjack.rab.bit.cmiyc.item;
 import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedEvent;
-import com.jazzjack.rab.bit.cmiyc.level.meta.MarkerObject;
+import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
+import com.jazzjack.rab.bit.cmiyc.level.meta.ItemMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.shared.position.Position;
 
 import org.junit.jupiter.api.Test;
@@ -17,32 +18,42 @@ import static org.mockito.Mockito.when;
 class ItemsTest {
 
     @Test
-    void expectItemToBePickedUpByPlayerWhenOnSamePosition() {
-        MarkerObject markerObject = mock(MarkerObject.class);
-        when(markerObject.getX()).thenReturn(0);
-        when(markerObject.getY()).thenReturn(0);
+    void expectHpToBePickedUpByPlayer() {
+        ItemMarkerObject item = mock(ItemMarkerObject.class);
+        when(item.getX()).thenReturn(0);
+        when(item.getY()).thenReturn(0);
+        when(item.getItem()).thenReturn(Item.HP);
+
         Player player = new Player(mock(ActorContext.class), new Position(0, 0), playerProfileBuilder().withHp(1).build());
 
-        Items items = new Items(singletonList(markerObject));
-        items.playerMoved(new PlayerMovedEvent(player));
+        Items items = new Items(singletonList(item));
 
+        items.playerMoved(new PlayerMovedEvent(player));
         assertThat(player.getHp()).isEqualTo(2);
         assertThat(items.getItems()).isEmpty();
+
+        items.playerMoved(new PlayerMovedEvent(player));
+        assertThat(player.getHp()).isEqualTo(2);
     }
 
     @Test
-    void expectItemToBePickedUpOnlyOnce() {
-        MarkerObject markerObject = mock(MarkerObject.class);
-        when(markerObject.getX()).thenReturn(0);
-        when(markerObject.getY()).thenReturn(0);
-        Player player = new Player(mock(ActorContext.class), new Position(0, 0), playerProfileBuilder().withHp(1).build());
+    void expectShieldToBePickedUpByPlayer() {
+        ItemMarkerObject item = mock(ItemMarkerObject.class);
+        when(item.getX()).thenReturn(0);
+        when(item.getY()).thenReturn(0);
+        when(item.getItem()).thenReturn(Item.SHIELD);
 
-        Items items = new Items(singletonList(markerObject));
-        items.playerMoved(new PlayerMovedEvent(player));
-        items.playerMoved(new PlayerMovedEvent(player));
+        PlayerProfile playerProfile = playerProfileBuilder().build();
+        Player player = new Player(mock(ActorContext.class), new Position(0, 0), playerProfile);
 
-        assertThat(player.getHp()).isEqualTo(2);
+        Items items = new Items(singletonList(item));
+
+        items.playerMoved(new PlayerMovedEvent(player));
+        assertThat(playerProfile.getItems()).containsExactly(Item.SHIELD);
         assertThat(items.getItems()).isEmpty();
+
+        items.playerMoved(new PlayerMovedEvent(player));
+        assertThat(playerProfile.getItems()).containsExactly(Item.SHIELD);
     }
 
 }

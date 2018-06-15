@@ -13,5 +13,7 @@
   <property name="predictability" type="string" default="LOW"/>
      <property name="sense" type="string" default="HIGH" />
  </objecttype>
+    <objecttype name="item-hp" color="#ffff0a" />
+    <objecttype name="item-shield" color="#ffffff" />
  <objecttype name="start" color="#21ff06"/>
 </objecttypes>

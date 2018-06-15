@@ -7,9 +7,9 @@ public class LevelMetaData {
     private final MarkerObject startPosition;
     private final MarkerObject endPosition;
     private final List<EnemyMarkerObject> enemies;
-    private final List<MarkerObject> items;
+    private final List<ItemMarkerObject> items;
 
-    LevelMetaData(MarkerObject startPosition, MarkerObject endPosition, List<EnemyMarkerObject> enemies, List<MarkerObject> items) {
+    LevelMetaData(MarkerObject startPosition, MarkerObject endPosition, List<EnemyMarkerObject> enemies, List<ItemMarkerObject> items) {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
         this.enemies = enemies;
@@ -28,7 +28,7 @@ public class LevelMetaData {
         return enemies;
     }
 
-    public List<MarkerObject> getItems() {
+    public List<ItemMarkerObject> getItems() {
         return items;
     }
 }

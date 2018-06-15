@@ -43,7 +43,7 @@ public class MarkerObject implements HasPosition {
         }
     }
 
-    protected String getStringProperty(String propertyName) {
+    String getStringProperty(String propertyName) {
         String property = mapObject.getProperties().get(propertyName, String.class);
         if (property == null) {
             String defaultProperty = objectTypeDefaults.get(propertyName);
@@ -67,7 +67,7 @@ public class MarkerObject implements HasPosition {
         return position.getY();
     }
 
-    public String getType() {
+    protected String getType() {
         return getStringProperty("type");
     }
 }

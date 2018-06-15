@@ -15,6 +15,10 @@ public class EnemyMarkerObject extends MarkerObject {
         super(mapObject, objectTypeDefaults, tilePixelSize);
     }
 
+    public String getName() {
+        return getType();
+    }
+
     public Predictability getPredictability() {
         String predictability = super.getStringProperty(PROPERTY_PREDICTABILITY);
         return Predictability.valueOf(predictability);

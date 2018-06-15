@@ -3,6 +3,7 @@ package com.jazzjack.rab.bit.cmiyc.logic;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
+import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
@@ -62,28 +63,32 @@ public class GameController implements InputProcessor {
     }
 
     private boolean handlePlayerKeys(int keycode) {
-        if (keycode == Input.Keys.E) {
-            endPlayerTurn();
-            return true;
-        }
-        if (keycode == Input.Keys.NUM_1) {
-            startLevel(levelFactory.createLevel(1));
-            return true;
-        }
-        if (keycode == Input.Keys.NUM_2) {
-            startLevel(levelFactory.createLevel(2));
-            return true;
-        }
-        if (movePlayer(keycode)) {
-            if (currentLevel.hasPlayerReachedEnd()) {
-                startNextLevel();
-            }
-            if (!currentLevel.getPlayer().hasActionPointsLeft()) {
+        switch (keycode) {
+            case Input.Keys.E:
                 endPlayerTurn();
-            }
-            return true;
+                return true;
+            case Input.Keys.S:
+                currentLevel.getPlayer().useItem(Item.SHIELD);
+                return true;
+            case Input.Keys.NUM_1:
+                startLevel(levelFactory.createLevel(1));
+                return true;
+            case Input.Keys.NUM_2:
+                startLevel(levelFactory.createLevel(2));
+                return true;
+            default:
+                if (movePlayer(keycode)) {
+                    if (currentLevel.hasPlayerReachedEnd()) {
+                        startNextLevel();
+                    }
+                    if (!currentLevel.getPlayer().hasActionPointsLeft()) {
+                        endPlayerTurn();
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
         }
-        return false;
     }
 
     private Boolean movePlayer(int keycode) {
