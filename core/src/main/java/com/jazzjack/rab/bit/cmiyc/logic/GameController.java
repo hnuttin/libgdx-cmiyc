@@ -36,6 +36,14 @@ public class GameController implements InputProcessor {
         this.playerProfile = playerProfile;
     }
 
+    GamePhase getCurrentGamePhase() {
+        return currentGamePhase;
+    }
+
+    Level getCurrentLevel() {
+        return currentLevel;
+    }
+
     public void startGame() {
         startLevel(levelFactory.createLevel(1));
     }
@@ -69,6 +77,7 @@ public class GameController implements InputProcessor {
                 return true;
             case Input.Keys.S:
                 currentLevel.getPlayer().useItem(Item.SHIELD);
+                endPlayerTurnIfNoActionPointsLeft();
                 return true;
             case Input.Keys.NUM_1:
                 startLevel(levelFactory.createLevel(1));
@@ -81,13 +90,17 @@ public class GameController implements InputProcessor {
                     if (currentLevel.hasPlayerReachedEnd()) {
                         startNextLevel();
                     }
-                    if (!currentLevel.getPlayer().hasActionPointsLeft()) {
-                        endPlayerTurn();
-                    }
+                    endPlayerTurnIfNoActionPointsLeft();
                     return true;
                 } else {
                     return false;
                 }
+        }
+    }
+
+    private void endPlayerTurnIfNoActionPointsLeft() {
+        if (!currentLevel.getPlayer().hasActionPointsLeft()) {
+            endPlayerTurn();
         }
     }
 

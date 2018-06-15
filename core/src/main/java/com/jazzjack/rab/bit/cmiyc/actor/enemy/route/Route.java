@@ -1,9 +1,9 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
-import com.google.common.collect.ImmutableList;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.shared.Chance;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Route implements Chance {
@@ -16,8 +16,8 @@ public class Route implements Chance {
         this.steps = steps;
     }
 
-    public ImmutableList<Step> getSteps() {
-        return ImmutableList.copyOf(steps);
+    public List<Step> getSteps() {
+        return Collections.unmodifiableList(steps);
     }
 
     public Step getLastStep() {
