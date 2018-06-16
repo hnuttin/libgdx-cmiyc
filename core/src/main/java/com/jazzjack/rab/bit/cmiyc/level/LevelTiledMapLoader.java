@@ -11,6 +11,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.XmlReader;
 
+import java.util.function.BiConsumer;
+
 public class LevelTiledMapLoader extends TmxMapLoader {
 
     public LevelTiledMapLoader(FileHandleResolver resolver) {
@@ -35,22 +37,20 @@ public class LevelTiledMapLoader extends TmxMapLoader {
 
             int[] ids = getTileIds(element, width, height);
             TiledMapTileSets tilesets = map.getTileSets();
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int id = ids[y * width + x];
-                    boolean flipHorizontally = ((id & FLAG_FLIP_HORIZONTALLY) != 0);
-                    boolean flipVertically = ((id & FLAG_FLIP_VERTICALLY) != 0);
-                    boolean flipDiagonally = ((id & FLAG_FLIP_DIAGONALLY) != 0);
 
-                    TiledMapTile tile = tilesets.getTile(id & ~MASK_CLEAR);
-                    if (tile != null) {
-                        int correctedY = flipY ? height - 1 - y : y;
-                        TiledMapTileLayer.Cell cell = createTileLayerCell(flipHorizontally, flipVertically, flipDiagonally, x, correctedY);
-                        cell.setTile(tile);
-                        layer.setCell(x, correctedY, cell);
-                    }
+            forEachCell(width, height, (x, y) -> {
+                int id = ids[y * width + x];
+                boolean flipHorizontally = ((id & FLAG_FLIP_HORIZONTALLY) != 0);
+                boolean flipVertically = ((id & FLAG_FLIP_VERTICALLY) != 0);
+
+                TiledMapTile tile = tilesets.getTile(id & ~MASK_CLEAR);
+                if (tile != null) {
+                    int correctedY = flipY ? height - 1 - y : y;
+                    TiledMapTileLayer.Cell cell = createTileLayerCell(flipHorizontally, flipVertically, x, correctedY);
+                    cell.setTile(tile);
+                    layer.setCell(x, correctedY, cell);
                 }
-            }
+            });
 
             XmlReader.Element properties = element.getChildByName("properties");
             if (properties != null) {
@@ -60,24 +60,18 @@ public class LevelTiledMapLoader extends TmxMapLoader {
         }
     }
 
-    private LevelCell createTileLayerCell(boolean flipHorizontally, boolean flipVertically, boolean flipDiagonally, int x, int y) {
-        LevelCell cell = new LevelCell(x, y);
-        if (flipDiagonally) {
-            if (flipHorizontally && flipVertically) {
-                cell.setFlipHorizontally(true);
-                cell.setRotation(TiledMapTileLayer.Cell.ROTATE_270);
-            } else if (flipHorizontally) {
-                cell.setRotation(TiledMapTileLayer.Cell.ROTATE_270);
-            } else if (flipVertically) {
-                cell.setRotation(TiledMapTileLayer.Cell.ROTATE_90);
-            } else {
-                cell.setFlipVertically(true);
-                cell.setRotation(TiledMapTileLayer.Cell.ROTATE_270);
+    private void forEachCell(double width, double height, BiConsumer<Integer, Integer> xyHandler) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                xyHandler.accept(x, y);
             }
-        } else {
-            cell.setFlipHorizontally(flipHorizontally);
-            cell.setFlipVertically(flipVertically);
         }
+    }
+
+    private LevelCell createTileLayerCell(boolean flipHorizontally, boolean flipVertically, int x, int y) {
+        LevelCell cell = new LevelCell(x, y);
+        cell.setFlipHorizontally(flipHorizontally);
+        cell.setFlipVertically(flipVertically);
         return cell;
     }
 }
