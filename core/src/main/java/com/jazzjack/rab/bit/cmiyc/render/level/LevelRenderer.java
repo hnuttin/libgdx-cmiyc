@@ -59,10 +59,10 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
         fogOfWarRenderer.buffer();
         renderLevel();
         batch.begin();
-        renderPlayer();
-        renderEnemies();
         renderEndPosition();
         renderItems();
+        renderPlayer();
+        renderEnemies();
         batch.end();
         fogOfWarRenderer.render();
     }

@@ -48,6 +48,7 @@ public class Enemy extends MovableActor implements HasPower {
     public void generateRoutes() {
         routes.clear();
         routes.addAll(context.getRouteGenerator().generateRoutes(this, 2, 4));
+        publishEvent(new NewEnemyRoutesEvent(this));
     }
 
     public CompletableFuture<Void> moveAlongRandomRoute() {

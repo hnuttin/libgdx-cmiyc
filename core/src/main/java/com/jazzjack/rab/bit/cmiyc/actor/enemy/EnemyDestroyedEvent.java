@@ -1,16 +1,9 @@
 package com.jazzjack.rab.bit.cmiyc.actor.enemy;
 
-import com.jazzjack.rab.bit.cmiyc.event.Event;
-
-public class EnemyDestroyedEvent implements Event {
-
-    private final Enemy enemy;
+public class EnemyDestroyedEvent extends EnemyEvent {
 
     EnemyDestroyedEvent(Enemy enemy) {
-        this.enemy = enemy;
+        super(enemy);
     }
 
-    public Enemy getEnemy() {
-        return enemy;
-    }
 }

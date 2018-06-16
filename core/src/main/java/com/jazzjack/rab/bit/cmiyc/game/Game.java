@@ -1,5 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
@@ -24,6 +25,8 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void create() {
+        Gdx.app.setLogLevel(Application.LOG_ERROR);
+
         initGameObjects();
         startNewGame();
     }

@@ -1,27 +1,32 @@
 package com.jazzjack.rab.bit.cmiyc.level;
 
+import com.badlogic.gdx.Gdx;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyMovedSubscriber;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.NewEnemyRouteSubscriber;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.NewEnemyRoutesEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
 import com.jazzjack.rab.bit.cmiyc.logic.GamePhase;
 import com.jazzjack.rab.bit.cmiyc.logic.GamePhaseEvent;
 import com.jazzjack.rab.bit.cmiyc.logic.GamePhaseEventSubscriber;
-import com.jazzjack.rab.bit.cmiyc.shared.position.Position;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.registerSubscriber;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.util.Collections.singletonList;
 
-public class LevelPlayerSight implements PlayerMovedSubscriber, GamePhaseEventSubscriber, EnemyMovedSubscriber {
+public class LevelPlayerSight implements PlayerMovedSubscriber, GamePhaseEventSubscriber, EnemyMovedSubscriber, NewEnemyRouteSubscriber {
 
     private final LevelTiledMap levelTiledMap;
     private final Player player;
@@ -34,18 +39,23 @@ public class LevelPlayerSight implements PlayerMovedSubscriber, GamePhaseEventSu
         this.player = player;
         this.enemySupplier = enemySupplier;
         this.enemiesInSight = new HashMap<>();
-        markTiles();
+        markAllLevelCells();
         registerSubscriber(this);
     }
 
     @Override
     public void playerMoved(PlayerMovedEvent event) {
-        markTiles();
+        markAllLevelCells();
     }
 
     @Override
     public void enemyMoved(EnemyMovedEvent event) {
-        markTiles();
+        markAllLevelCellsForEnemies(singletonList(event.getEnemy()));
+    }
+
+    @Override
+    public void newEnemyRoutes(NewEnemyRoutesEvent event) {
+        markAllLevelCellsForEnemies(singletonList(event.getEnemy()));
     }
 
     @Override
@@ -68,26 +78,35 @@ public class LevelPlayerSight implements PlayerMovedSubscriber, GamePhaseEventSu
         return inSight != null && inSight;
     }
 
-    private void resetEnemiesInSight() {
-        enemiesInSight.clear();
-        markTiles();
+    private void markAllLevelCells() {
+        markAllTilesNotInSight();
+        forEachLevelCellInSight(cell -> {
+            cell.markVisited();
+            cell.markInSight();
+            for (Enemy enemy : enemySupplier.get()) {
+                markEnemy(cell, enemy);
+            }
+        });
     }
 
-    private void markTiles() {
-        markAllTilesNotInSight();
-        for (int cellX = startSightX(player); cellX <= endSightX(player); cellX++) {
-            for (int cellY = startSightY(player); cellY <= endSightY(player); cellY++) {
-                LevelCell levelCell = levelTiledMap.getLevelCell(cellX, cellY);
-                levelCell.markVisited();
-                levelCell.markInSight();
-                for (Enemy enemy : enemySupplier.get()) {
-                    if (enemy.hasSamePositionAs(new Position(cellX, cellY))) {
-                        enemy.trigger();
-                        markEnemyInSight(enemy);
-                        markEnemyRoutesVisited(enemy);
-                    }
-                }
+    private void resetEnemiesInSight() {
+        enemiesInSight.clear();
+        markAllLevelCellsForEnemies(enemySupplier.get());
+    }
+
+    private void markAllLevelCellsForEnemies(List<Enemy> enemies) {
+        forEachLevelCellInSight(cell -> {
+            for (Enemy enemy : enemies) {
+                markEnemy(cell, enemy);
             }
+        });
+    }
+
+    private void markEnemy(LevelCell cell, Enemy enemy) {
+        if (enemy.hasSamePositionAs(cell)) {
+            enemy.trigger();
+            markEnemyInSight(enemy);
+            markEnemyRoutesVisited(enemy);
         }
     }
 
@@ -96,17 +115,22 @@ public class LevelPlayerSight implements PlayerMovedSubscriber, GamePhaseEventSu
     }
 
     private void markEnemyRouteVisited(Route route) {
-        route.getSteps().forEach(step -> levelTiledMap.getLevelCell(step).markVisited());
+        route.getSteps().forEach(this::markEnemyRouteStepVisited);
+    }
+
+    private void markEnemyRouteStepVisited(Step step) {
+        Gdx.app.debug(getClass().getSimpleName(), String.format("Enemy route step marked visited - x%s - y%s", step.getX(), step.getY()));
+        levelTiledMap.getLevelCell(step).markVisited();
     }
 
     private void markEnemyInSight(Enemy enemy) {
         enemiesInSight.put(enemy, true);
     }
 
-    private void markAllTilesNotInSight() {
-        for (int cellX = 0; cellX < levelTiledMap.getWidth(); cellX++) {
-            for (int cellY = 0; cellY < levelTiledMap.getHeight(); cellY++) {
-                levelTiledMap.getLevelCell(cellX, cellY).markNotInSight();
+    private void forEachLevelCellInSight(Consumer<LevelCell> handler) {
+        for (int cellX = startSightX(player); cellX <= endSightX(player); cellX++) {
+            for (int cellY = startSightY(player); cellY <= endSightY(player); cellY++) {
+                handler.accept(levelTiledMap.getLevelCell(cellX, cellY));
             }
         }
     }
@@ -125,5 +149,13 @@ public class LevelPlayerSight implements PlayerMovedSubscriber, GamePhaseEventSu
 
     private int endSightY(Player player) {
         return min(levelTiledMap.getHeight() - 1, player.getY() + player.getSight());
+    }
+
+    private void markAllTilesNotInSight() {
+        for (int cellX = 0; cellX < levelTiledMap.getWidth(); cellX++) {
+            for (int cellY = 0; cellY < levelTiledMap.getHeight(); cellY++) {
+                levelTiledMap.getLevelCell(cellX, cellY).markNotInSight();
+            }
+        }
     }
 }

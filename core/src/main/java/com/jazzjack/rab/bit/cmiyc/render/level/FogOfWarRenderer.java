@@ -10,12 +10,14 @@ import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedEvent;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerMovedSubscriber;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
+import com.jazzjack.rab.bit.cmiyc.level.LevelCellMarkedEvent;
+import com.jazzjack.rab.bit.cmiyc.level.LevelCellMarkedEventSubscriber;
 import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 
 import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.registerSubscriber;
 
-class FogOfWarRenderer implements Disposable, PlayerMovedSubscriber {
+class FogOfWarRenderer implements Disposable, PlayerMovedSubscriber, LevelCellMarkedEventSubscriber {
 
     private static final float FOG_OF_WAR = 0f;
 
@@ -37,6 +39,13 @@ class FogOfWarRenderer implements Disposable, PlayerMovedSubscriber {
     @Override
     public void playerMoved(PlayerMovedEvent playerMovedEvent) {
         rebuffer = true;
+    }
+
+    @Override
+    public void levelCellMarked(LevelCellMarkedEvent event) {
+        if (event.isMarkedVisited()) {
+            rebuffer = true;
+        }
     }
 
     void buffer() {
