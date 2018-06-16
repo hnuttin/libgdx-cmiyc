@@ -22,7 +22,7 @@ class HUDTextDrawer {
     }
 
     void drawOverlayText(String text, float y, Color color) {
-        BitmapFont percentageFont = assetManager.getPercentageFont();
+        BitmapFont percentageFont = assetManager.getFont();
         percentageFont.setColor(color);
         percentageFont.setUseIntegerPositions(false);
         percentageFont.getData().setScale(1f / pixelsPerUnit);

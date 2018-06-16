@@ -46,7 +46,7 @@ public class HUDRenderer implements Renderer {
     }
 
     private float calculateViewportHeight(int screenWidthInPixels, int screenHeightInPixels) {
-        return hudWidth * screenHeightInPixels / screenWidthInPixels;
+        return 1f * hudWidth * screenHeightInPixels / screenWidthInPixels;
     }
 
     @Override

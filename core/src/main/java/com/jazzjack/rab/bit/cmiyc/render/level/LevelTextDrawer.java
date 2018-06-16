@@ -22,7 +22,7 @@ class LevelTextDrawer {
     }
 
     void drawTextOnTile(String text, float tileX, float tileY, Alignment alignment, float tilePixelSize) {
-        BitmapFont percentageFont = assetManager.getPercentageFont();
+        BitmapFont percentageFont = assetManager.getFont();
         float x = calculateFontX(tileX, tilePixelSize);
         float y = calculateFontY(tileY, percentageFont, alignment, tilePixelSize);
         percentageFont.setColor(COLOR_LEVEL_TEXT);

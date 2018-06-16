@@ -17,7 +17,7 @@ public class GamePhaseDrawer implements GamePhaseEventSubscriber {
 
     private static final float OVERLAY_THICKNESS = 0.2f;
     private static final Color COLOR_ENEMY_TURN = new Color(0xff9300cc);
-    private static final float Y_OVERLAY_TEXT = 3f;
+    private static final float Y_OVERLAY_TEXT = 2f;
 
     private final GameCamera hudCamera;
     private final ShapeRenderer shapeRenderer;

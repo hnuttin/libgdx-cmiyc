@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.render;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -51,7 +52,15 @@ public class GameAssetManager extends AssetManager {
     }
 
     public GameAssetManager() {
-        super();
+        this(new InternalFileHandleResolver());
+    }
+
+    public GameAssetManager(FileHandleResolver fileHandleResolver) {
+        super(fileHandleResolver);
+        init();
+    }
+
+    private void init() {
         configureLoaders();
         loadMaps();
         loadTextures();
@@ -60,8 +69,7 @@ public class GameAssetManager extends AssetManager {
     }
 
     private void configureLoaders() {
-        InternalFileHandleResolver resolver = new InternalFileHandleResolver();
-        setLoader(TiledMap.class, new LevelTiledMapLoader(resolver));
+        setLoader(TiledMap.class, new LevelTiledMapLoader(getFileHandleResolver()));
     }
 
     private void loadMaps() {
@@ -83,7 +91,7 @@ public class GameAssetManager extends AssetManager {
     }
 
     public FileHandle getObjectTypesFileHandle() {
-        return new FileHandle("maps/objecttypes.xml");
+        return getFileHandleResolver().resolve("maps/objecttypes.xml");
     }
 
     public LevelTiledMap getLevelTiledMap1() {
@@ -134,7 +142,7 @@ public class GameAssetManager extends AssetManager {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(TURN_ATLAS_REGION_MAPPING.get(turnsLeft));
     }
 
-    public BitmapFont getPercentageFont() {
+    public BitmapFont getFont() {
         return get(FONT_VCR, BitmapFont.class);
     }
 
