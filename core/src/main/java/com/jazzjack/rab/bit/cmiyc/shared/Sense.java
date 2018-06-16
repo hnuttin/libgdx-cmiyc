@@ -2,15 +2,15 @@ package com.jazzjack.rab.bit.cmiyc.shared;
 
 public enum Sense {
 
-    HIGH(40), MEDIUM(30), LOW(10), NONE(0);
+    HIGH(45), MEDIUM(35), LOW(25), NONE(0);
 
     private final int percentageWeight;
 
-    public int getPercentageWeight() {
-        return percentageWeight;
-    }
-
     Sense(int percentageWeight) {
         this.percentageWeight = percentageWeight;
+    }
+
+    public int getPercentageWeight() {
+        return percentageWeight;
     }
 }
