@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.cmiyc.render;
+package com.jazzjack.rab.bit.cmiyc.render.hud;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.jazzjack.rab.bit.cmiyc.actor.player.ActorContext;
@@ -6,6 +6,8 @@ import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
 import com.jazzjack.rab.bit.cmiyc.collision.NeverCollideCollisionDetector;
 import com.jazzjack.rab.bit.cmiyc.gdx.LibGdxAlphaDrawerSupport;
+import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
+import com.jazzjack.rab.bit.cmiyc.render.GameCamera;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.Position;
 
@@ -14,10 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import static com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile.playerProfileBuilder;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -48,14 +49,14 @@ class PlayerApDrawerTest extends LibGdxAlphaDrawerSupport {
 
     @Test
     void expectConsumedApDrawnCorrectly() {
-        ActorContext actorContext = new ActorContext(NeverCollideCollisionDetector.TEST_INSTANCE, mock(CollisionResolver.class));
+        ActorContext actorContext = new ActorContext(NeverCollideCollisionDetector.TEST_INSTANCE, Mockito.mock(CollisionResolver.class));
         Player player = new Player(actorContext, new Position(0, 0), playerProfileBuilder().build());
         player.moveToDirection(Direction.RIGHT);
         player.moveToDirection(Direction.RIGHT);
 
         playerApDrawer.draw(player);
 
-        InOrder inOrder = inOrder(batch);
+        InOrder inOrder = Mockito.inOrder(batch);
         alphaAsserter(inOrder)
                 .withAlpha(0.3f)
                 .doAssert(() -> inOrder.verify(batch).draw(apStartTexture, 5f, 0f, 1f, 1f));

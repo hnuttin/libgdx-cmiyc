@@ -1,4 +1,4 @@
-package com.jazzjack.rab.bit.cmiyc.render;
+package com.jazzjack.rab.bit.cmiyc.render.hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,50 +8,52 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
+import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
+import com.jazzjack.rab.bit.cmiyc.render.GameCamera;
+import com.jazzjack.rab.bit.cmiyc.render.Renderer;
 
 import static com.jazzjack.rab.bit.cmiyc.render.AlphaDrawer.alphaDrawer;
 
 public class HUDRenderer implements Renderer {
 
-    private static final float SCALE_TO_LEVEL = 2f;
+    private static final int SCALE_TO_LEVEL = 2;
+    private static final int ITEM_X_OFFSET = 10;
 
     private final Level level;
     private final GameAssetManager assetManager;
-    private final int numberOfHorizontalTilesToRender;
+    private final int hudWidth;
     private final Batch batch;
     private final ShapeRenderer shapeRenderer;
-    private final GameCamera camera;
+    private final GameCamera hudCamera;
     private final PlayerApDrawer playerApDrawer;
+    private final GamePhaseDrawer gamePhaseDrawer;
 
-    HUDRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
+    public HUDRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
         this.level = level;
         this.assetManager = assetManager;
-        this.numberOfHorizontalTilesToRender = numberOfHorizontalTilesToRender;
+        this.hudWidth = numberOfHorizontalTilesToRender * SCALE_TO_LEVEL;
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
-        this.camera = createCamera();
-        this.playerApDrawer = new PlayerApDrawer(this.assetManager, this.camera, this.batch);
+        this.hudCamera = createHUDCamera();
+        this.playerApDrawer = new PlayerApDrawer(this.assetManager, this.hudCamera, this.batch);
+        this.gamePhaseDrawer = new GamePhaseDrawer(assetManager, batch, this.hudCamera, level.getLevelTiledMap().getTilePixelSize());
     }
 
-    private GameCamera createCamera() {
+    private GameCamera createHUDCamera() {
         GameCamera gameCamera = new GameCamera();
-        gameCamera.setToOrtho(false, calculateViewportWidth(), calculateViewportHeight(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        gameCamera.setToOrtho(false, hudWidth, calculateViewportHeight(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         return gameCamera;
     }
 
-    private float calculateViewportWidth() {
-        return numberOfHorizontalTilesToRender * SCALE_TO_LEVEL;
-    }
-
     private float calculateViewportHeight(int screenWidthInPixels, int screenHeightInPixels) {
-        return calculateViewportWidth() * screenHeightInPixels / screenWidthInPixels;
+        return hudWidth * screenHeightInPixels / screenWidthInPixels;
     }
 
     @Override
-    public void resize(int width, int height) {
-        camera.viewportWidth = calculateViewportWidth();
-        camera.viewportHeight = calculateViewportHeight(width, height);
-        camera.position.set(camera.getViewportWidth() / 2f, camera.getViewportHeight() / 2f, 0f);
+    public void resize(int gameWidth, int gameHeight) {
+        hudCamera.setViewportWidth(hudWidth);
+        hudCamera.setViewportHeight(calculateViewportHeight(gameWidth, gameHeight));
+        hudCamera.setPosition(hudCamera.getViewportWidth() / 2f, hudCamera.getViewportHeight() / 2f);
     }
 
     @Override
@@ -62,12 +64,14 @@ public class HUDRenderer implements Renderer {
         renderStatusBar();
         renderTurnCounter();
         batch.end();
+        gamePhaseDrawer.drawGamePhaseOverlay();
     }
 
     private void updateCamera() {
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        shapeRenderer.setProjectionMatrix(camera.combined);
+        hudCamera.update();
+        batch.setProjectionMatrix(hudCamera.getCombinedProjectionMatrix());
+        shapeRenderer.setProjectionMatrix(hudCamera.getCombinedProjectionMatrix());
+        gamePhaseDrawer.updateCamera();
     }
 
     @Override
@@ -79,7 +83,7 @@ public class HUDRenderer implements Renderer {
     private void clearStatusBar() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(0f, 0f, numberOfHorizontalTilesToRender * SCALE_TO_LEVEL, 1f);
+        shapeRenderer.rect(0f, 0f, hudCamera.getViewportWidth(), 1f);
         shapeRenderer.end();
     }
 
@@ -102,7 +106,7 @@ public class HUDRenderer implements Renderer {
 
     private void renderPlayerItems() {
         for (Item item : level.getPlayer().getItems()) {
-            batch.draw(assetManager.getTextureForName(item.getName()), 10, 0f, 1f, 1f);
+            batch.draw(assetManager.getTextureForName(item.getName()), ITEM_X_OFFSET, 0f, 1f, 1f);
         }
     }
 
@@ -110,6 +114,6 @@ public class HUDRenderer implements Renderer {
         TextureAtlas.AtlasRegion turnsLeftTexture = assetManager.getTurnsLeftTexture(level.getTurnsLeft());
         alphaDrawer(batch)
                 .withAlpha(0.7f)
-                .draw(() -> batch.draw(turnsLeftTexture, 0, camera.viewportHeight - 2, 2, 2));
+                .draw(() -> batch.draw(turnsLeftTexture, 0, hudCamera.getViewportHeight() - 2, 2, 2));
     }
 }

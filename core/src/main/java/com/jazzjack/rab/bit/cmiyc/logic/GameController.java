@@ -40,6 +40,11 @@ public class GameController implements InputProcessor {
         return currentGamePhase;
     }
 
+    private void setCurrentGamePhase(GamePhase gamePhase) {
+        this.currentGamePhase = gamePhase;
+        publishEvent(new GamePhaseEvent(currentGamePhase));
+    }
+
     Level getCurrentLevel() {
         return currentLevel;
     }
@@ -118,7 +123,7 @@ public class GameController implements InputProcessor {
     }
 
     private void startEnemyTurn() {
-        currentGamePhase = GamePhase.ENEMY_TURN;
+        setCurrentGamePhase(GamePhase.ENEMY_TURN);
         currentLevel.moveAllEnemies().thenRun(this::endEnemyTurn);
     }
 
@@ -131,8 +136,7 @@ public class GameController implements InputProcessor {
     }
 
     private void startPlayerTurn() {
-        currentGamePhase = GamePhase.PLAYER_TURN;
-        publishEvent(new GamePhaseEvent(currentGamePhase));
+        setCurrentGamePhase(GamePhase.PLAYER_TURN);
         currentLevel.generateEnemyRoutes();
         currentLevel.getPlayer().resetActionPoints();
     }

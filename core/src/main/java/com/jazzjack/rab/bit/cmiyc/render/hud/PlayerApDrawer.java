@@ -1,20 +1,22 @@
-package com.jazzjack.rab.bit.cmiyc.render;
+package com.jazzjack.rab.bit.cmiyc.render.hud;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
+import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
+import com.jazzjack.rab.bit.cmiyc.render.GameCamera;
 
 import static com.jazzjack.rab.bit.cmiyc.render.AlphaDrawer.alphaDrawer;
 
 class PlayerApDrawer {
 
     private final GameAssetManager assetManager;
-    private final GameCamera camera;
+    private final GameCamera hudCamera;
     private final Batch batch;
 
-    PlayerApDrawer(GameAssetManager assetManager, GameCamera camera, Batch batch) {
+    PlayerApDrawer(GameAssetManager assetManager, GameCamera hudCamera, Batch batch) {
         this.assetManager = assetManager;
-        this.camera = camera;
+        this.hudCamera = hudCamera;
         this.batch = batch;
     }
 
@@ -22,7 +24,7 @@ class PlayerApDrawer {
         for (int apToRender = 0; apToRender < player.getActionPointsPerTurn(); apToRender++) {
             TextureAtlas.AtlasRegion apTexture = getApTextureForApToRender(player, apToRender);
             float alpha = getAlphaForApToRender(player, apToRender);
-            float apX = camera.getViewportWidth() - player.getActionPointsPerTurn() + apToRender;
+            float apX = hudCamera.getViewportWidth() - player.getActionPointsPerTurn() + apToRender;
             alphaDrawer(batch)
                     .withAlpha(alpha)
                     .draw(() -> batch.draw(apTexture, apX, 0f, 1f, 1f));

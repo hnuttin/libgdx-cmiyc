@@ -22,14 +22,14 @@ class LevelCamera extends GameCamera {
     }
 
     void resize(int width, int height) {
-        viewportWidth = calculateViewportWidth();
-        viewportHeight = calculateViewportHeight(width, height);
+        setViewportWidth(calculateViewportWidth());
+        setViewportHeight(calculateViewportHeight(width, height));
         update();
     }
 
     @Override
     public void update() {
-        position.set(calculateCameraX(), calculateCameraY(), 0);
+        setPosition(calculateCameraX(), calculateCameraY());
         super.update();
     }
 
@@ -54,11 +54,11 @@ class LevelCamera extends GameCamera {
     }
 
     private float topCameraLimit() {
-        return level.getLevelTiledMap().getHeight() - viewportHeight / 2f;
+        return level.getLevelTiledMap().getHeight() - getViewportHeight() / 2f;
     }
 
     private float bottomCameraLimit() {
-        return viewportHeight / 2f;
+        return getViewportHeight() / 2f;
     }
 
     private float rightCameraLimit() {
@@ -66,7 +66,7 @@ class LevelCamera extends GameCamera {
     }
 
     private float leftCameraLimit() {
-        return viewportWidth / 2f;
+        return getViewportWidth() / 2f;
     }
 
     private float playerCameraX() {

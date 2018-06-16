@@ -6,6 +6,7 @@ import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.NewLevelEvent;
 import com.jazzjack.rab.bit.cmiyc.level.NewLevelSubscriber;
+import com.jazzjack.rab.bit.cmiyc.render.hud.HUDRenderer;
 import com.jazzjack.rab.bit.cmiyc.render.level.LevelRenderer;
 
 public class GameRenderer implements Renderer, NewLevelSubscriber {

@@ -14,11 +14,12 @@ import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ItemMarkerObject;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 import com.jazzjack.rab.bit.cmiyc.render.Renderer;
+import com.jazzjack.rab.bit.cmiyc.shared.position.Alignment;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import static com.jazzjack.rab.bit.cmiyc.render.AlphaDrawer.alphaDrawer;
-import static com.jazzjack.rab.bit.cmiyc.render.level.TextDrawer.Position.BOTTOM;
-import static com.jazzjack.rab.bit.cmiyc.render.level.TextDrawer.Position.TOP;
+import static com.jazzjack.rab.bit.cmiyc.shared.position.Alignment.BOTTOM;
+import static com.jazzjack.rab.bit.cmiyc.shared.position.Alignment.TOP;
 
 public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Renderer {
 
@@ -29,7 +30,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     private final GameAssetManager assetManager;
     private final LevelCamera camera;
     private final Batch batch;
-    private final TextDrawer textDrawer;
+    private final LevelTextDrawer textDrawer;
     private final FogOfWarRenderer fogOfWarRenderer;
 
     public LevelRenderer(Level level, GameAssetManager assetManager, int numberOfHorizontalTilesToRender) {
@@ -38,7 +39,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
         this.assetManager = assetManager;
         this.camera = new LevelCamera(level, numberOfHorizontalTilesToRender, LEVEL_CAMERA_SCALE);
         this.batch = new SpriteBatch();
-        this.textDrawer = new TextDrawer(assetManager, this.batch, this.camera);
+        this.textDrawer = new LevelTextDrawer(assetManager, this.batch, this.camera);
         this.fogOfWarRenderer = new FogOfWarRenderer(this.level, this.batch, assetManager);
     }
 
@@ -102,7 +103,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
 
     private void drawPercentage(Route route) {
         Step lastStep = route.getLastStep();
-        textDrawer.drawText(
+        textDrawer.drawTextOnTile(
                 route.getPercentage() + "%",
                 lastStep.getX(),
                 lastStep.getY(),
@@ -110,7 +111,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
                 level.getLevelTiledMap().getTilePixelSize());
     }
 
-    private TextDrawer.Position percentagePositionForStep(Step step) {
+    private Alignment percentagePositionForStep(Step step) {
         return StepNames.ENDING_BOTTOM.equals(step.getName()) ? BOTTOM : TOP;
     }
 
