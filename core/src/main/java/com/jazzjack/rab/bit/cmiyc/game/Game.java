@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
 import com.jazzjack.rab.bit.cmiyc.animation.AnimationHandler;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResolver;
+import com.jazzjack.rab.bit.cmiyc.game.input.GameInputProcessor;
 import com.jazzjack.rab.bit.cmiyc.level.LevelContext;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.logic.GameController;
@@ -20,8 +21,8 @@ public class Game extends ApplicationAdapter {
 
     private GameAssetManager assetManager;
     private AnimationHandler animationHandler;
-    private GameController gameController;
     private GameRenderer gameRenderer;
+    private GameController gameController;
 
     @Override
     public void create() {
@@ -35,8 +36,10 @@ public class Game extends ApplicationAdapter {
         assetManager = new GameAssetManager();
         animationHandler = new AnimationHandler();
         PlayerProfile playerProfile = playerProfileBuilder().build();
-        gameController = new GameController(new LevelFactory(createLevelContext(playerProfile), assetManager), playerProfile);
         gameRenderer = new GameRenderer(assetManager);
+        gameController = new GameController(new LevelFactory(createLevelContext(playerProfile), assetManager), playerProfile);
+
+        Gdx.input.setInputProcessor(new GameInputProcessor(gameController, gameController, gameRenderer));
     }
 
     private LevelContext createLevelContext(PlayerProfile playerProfile) {
@@ -44,7 +47,6 @@ public class Game extends ApplicationAdapter {
     }
 
     private void startNewGame() {
-        Gdx.input.setInputProcessor(gameController);
         gameController.startGame();
     }
 

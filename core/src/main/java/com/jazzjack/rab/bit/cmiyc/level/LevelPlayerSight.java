@@ -111,7 +111,9 @@ public class LevelPlayerSight implements PlayerMovedSubscriber, GamePhaseEventSu
     }
 
     private void markEnemyRoutesVisited(Enemy enemy) {
-        enemy.getRoutes().forEach(this::markEnemyRouteVisited);
+        if (enemy.isMarked()) {
+            enemy.getRoutes().forEach(this::markEnemyRouteVisited);
+        }
     }
 
     private void markEnemyRouteVisited(Route route) {

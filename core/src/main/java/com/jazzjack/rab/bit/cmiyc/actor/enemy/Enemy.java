@@ -9,7 +9,6 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
-import com.jazzjack.rab.bit.cmiyc.shared.Randomizer;
 import com.jazzjack.rab.bit.cmiyc.shared.Sense;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
@@ -24,25 +23,47 @@ public class Enemy extends MovableActor implements HasPower {
     private final EnemyContext context;
 
     private final Predictability predictability;
-    private final List<Route> routes;
     private final Sense sense;
+    private final List<Route> routes;
 
     private boolean triggered;
+    private boolean marked;
 
     public Enemy(EnemyContext context, String name, Predictability predictability, Sense sense, HasPosition hasPosition) {
         super(context, name, hasPosition);
+
         this.context = context;
+
         this.predictability = predictability;
         this.sense = sense;
         this.routes = new ArrayList<>();
+
+        this.triggered = false;
+        this.marked = false;
     }
 
     public Predictability getPredictability() {
         return predictability;
     }
 
+    public Sense getSense() {
+        return isTriggered() ? Sense.NONE : sense;
+    }
+
     public ImmutableList<Route> getRoutes() {
         return ImmutableList.copyOf(routes);
+    }
+
+    public void trigger() {
+        triggered = true;
+    }
+
+    public boolean isTriggered() {
+        return triggered;
+    }
+
+    public boolean isMarked() {
+        return marked;
     }
 
     public void generateRoutes() {
@@ -55,7 +76,7 @@ public class Enemy extends MovableActor implements HasPower {
         if (routes.isEmpty()) {
             return CompletableFuture.completedFuture(null);
         } else {
-            Route routeToAnimate = chooseRoute(context.getRandomizer());
+            Route routeToAnimate = chooseRoute();
             routes.clear();
             routes.add(routeToAnimate);
             EnemyRouteAnimation animation = new EnemyRouteAnimation(this, routeToAnimate);
@@ -63,8 +84,8 @@ public class Enemy extends MovableActor implements HasPower {
         }
     }
 
-    private Route chooseRoute(Randomizer randomizer) {
-        return randomizer.chooseRandomChance(routes);
+    private Route chooseRoute() {
+        return context.getRandomizer().chooseRandomChance(routes);
     }
 
     public CollisionResult moveToStep(Step step) {
@@ -99,15 +120,4 @@ public class Enemy extends MovableActor implements HasPower {
         }
     }
 
-    public Sense getSense() {
-        return isTriggered() ? Sense.NONE : sense;
-    }
-
-    public void trigger() {
-        triggered = true;
-    }
-
-    public boolean isTriggered() {
-        return triggered;
-    }
 }

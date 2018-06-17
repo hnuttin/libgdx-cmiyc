@@ -1,5 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.render.level;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -41,6 +42,10 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
         this.batch = new SpriteBatch();
         this.textDrawer = new LevelTextDrawer(assetManager, this.batch, this.camera);
         this.fogOfWarRenderer = new FogOfWarRenderer(this.level, this.batch, assetManager);
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 
     @Override
@@ -93,7 +98,9 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     }
 
     private void drawEnemyRoutes(Enemy enemy) {
-        enemy.getRoutes().forEach(this::drawEnemyRoute);
+        if (enemy.isMarked()) {
+            enemy.getRoutes().forEach(this::drawEnemyRoute);
+        }
     }
 
     private void drawEnemyRoute(Route route) {

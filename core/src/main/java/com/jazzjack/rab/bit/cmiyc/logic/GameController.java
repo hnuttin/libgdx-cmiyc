@@ -1,19 +1,22 @@
 package com.jazzjack.rab.bit.cmiyc.logic;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
+import com.jazzjack.rab.bit.cmiyc.game.input.KeyInputProcessor;
+import com.jazzjack.rab.bit.cmiyc.game.input.MouseInputProcessor;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 
-public class GameController implements InputProcessor {
+public class GameController implements KeyInputProcessor, MouseInputProcessor {
 
     private static final Map<Integer, Direction> KEY_TO_DIRECTION_MAPPING = new HashMap<>();
 
@@ -66,13 +69,25 @@ public class GameController implements InputProcessor {
         startPlayerTurn();
     }
 
+    @Override
+    public boolean keyPressed(int keyCode) {
+        return isPlayerTurn() && handlePlayerKeys(keyCode);
+    }
+
     private boolean isPlayerTurn() {
         return currentGamePhase == GamePhase.PLAYER_TURN;
     }
 
     @Override
-    public boolean keyDown(int keycode) {
-        return isPlayerTurn() && handlePlayerKeys(keycode);
+    public boolean mouseMoved(HasPosition position) {
+        Gdx.app.debug(getClass().getSimpleName(), String.format("Mouse moved at position %s/%s", position.getX(), position.getY()));
+        return false;
+    }
+
+    @Override
+    public boolean mousePressed(HasPosition position) {
+        Gdx.app.debug(getClass().getSimpleName(), String.format("Mouse pressed at position %s/%s", position.getX(), position.getY()));
+        return false;
     }
 
     private boolean handlePlayerKeys(int keycode) {
@@ -141,38 +156,4 @@ public class GameController implements InputProcessor {
         currentLevel.getPlayer().resetActionPoints();
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
 }

@@ -1,15 +1,19 @@
 package com.jazzjack.rab.bit.cmiyc.render;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
+import com.jazzjack.rab.bit.cmiyc.game.GameWorldCameraProvider;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.NewLevelEvent;
 import com.jazzjack.rab.bit.cmiyc.level.NewLevelSubscriber;
 import com.jazzjack.rab.bit.cmiyc.render.hud.HUDRenderer;
 import com.jazzjack.rab.bit.cmiyc.render.level.LevelRenderer;
 
-public class GameRenderer implements Renderer, NewLevelSubscriber {
+import java.util.Optional;
+
+public class GameRenderer implements Renderer, NewLevelSubscriber, GameWorldCameraProvider {
 
     private static final int NUMBER_OF_HORIZONTAL_TILES_TO_RENDER = 20;
     private static final int NUMBER_OF_VERTICAL_TILES_TO_RENDER = 10;
@@ -21,6 +25,11 @@ public class GameRenderer implements Renderer, NewLevelSubscriber {
     public GameRenderer(GameAssetManager assetManager) {
         this.assetManager = assetManager;
         GameEventBus.registerSubscriber(this);
+    }
+
+    @Override
+    public Optional<Camera> getGameWorldCamera() {
+        return levelRenderer != null ? Optional.of(levelRenderer.getCamera()) : Optional.empty();
     }
 
     @Override
