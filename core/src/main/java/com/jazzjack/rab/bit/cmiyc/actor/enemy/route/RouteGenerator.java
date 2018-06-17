@@ -34,18 +34,30 @@ public class RouteGenerator {
         this.randomizer = randomizer;
     }
 
-    public List<Route> generateRoutes(Enemy enemy, int amount, int maxLength) {
+    public List<Route> generateRoutes(Enemy enemy, int maxLength) {
         StepResultCollisionDetector routeCollisionDetector = new StepResultCollisionDetector(collisionDetector);
         routeCollisionDetector.addStepResult(enemy);
-        List<RouteResult> routeResults = IntStream.range(0, amount)
+        Set<RouteResult> routes = IntStream.range(0, enemy.getPredictability().getNumberOfRoutes())
                 .boxed()
                 .map(i -> generateRoute(enemy, maxLength, routeCollisionDetector, enemy.getSense()))
                 .filter(route -> !route.getSteps().isEmpty())
-                .collect(toList());
-        List<Integer> percentages = routeResults.isEmpty() ? emptyList() : randomizer.randomPercentages(enemy.getPredictability(), routeResults.size());
+                .collect(toSet());
+        filterOutRoutesThatEndOnOtherRoute(routes);
+        List<Integer> percentages = routes.isEmpty() ? emptyList() : randomizer.randomPercentages(enemy.getPredictability(), routes.size());
         return Streams
-                .zip(percentages.stream(), routeResults.stream(), (percentage, routeResult) -> new Route(percentage, routeResult.getSteps()))
+                .zip(percentages.stream(), routes.stream(), (percentage, routeResult) -> new Route(percentage, routeResult.getSteps()))
                 .collect(toList());
+    }
+
+    private void filterOutRoutesThatEndOnOtherRoute(Set<RouteResult> routes) {
+        routes.removeIf(routeResult -> routeEndsOnOtherRoute(routeResult, routes));
+    }
+
+    private boolean routeEndsOnOtherRoute(RouteResult route, Set<RouteResult> allRoutes) {
+        return allRoutes.stream()
+                .filter(otherRoute -> otherRoute != route)
+                .flatMap(otherRoute -> otherRoute.getSteps().stream())
+                .anyMatch(step -> step.hasSamePositionAs(route.getEndingStep()));
     }
 
     private RouteResult generateRoute(HasPosition startPosition, int maxLength, StepResultCollisionDetector collisionDetector, Sense sense) {
@@ -63,6 +75,7 @@ public class RouteGenerator {
                 break;
             }
         }
+        collisionDetector.clearStepResults();
         List<Step> steps = convertToSteps(stepsResults);
         return new RouteResult(steps);
     }

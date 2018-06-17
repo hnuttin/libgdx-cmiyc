@@ -3,7 +3,6 @@ package com.jazzjack.rab.bit.cmiyc.collision;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
@@ -20,12 +19,12 @@ public class CollidablesCollisionDetector implements CollisionDetector {
         this.collidables.addAll(asList(collidables));
     }
 
-    public void addCollidable(List<? extends Collidable> collidables) {
-        this.collidables.addAll(collidables);
-    }
-
     public void removeCollidable(Collidable collidable) {
         collidables.remove(collidable);
+    }
+
+    public void clearCollidables() {
+        collidables.clear();
     }
 
     @Override
@@ -37,5 +36,4 @@ public class CollidablesCollisionDetector implements CollisionDetector {
                 .map(targetCollidable -> CollisionResult.collision(collidable, targetCollidable, direction))
                 .orElse(CollisionResult.noCollision());
     }
-
 }

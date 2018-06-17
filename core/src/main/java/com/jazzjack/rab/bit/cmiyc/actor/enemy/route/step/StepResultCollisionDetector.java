@@ -28,4 +28,7 @@ public class StepResultCollisionDetector implements CollisionDetector {
         collisionDetectorWithStepResults.addCollidable(collidable);
     }
 
+    public void clearStepResults() {
+        collisionDetectorWithStepResults.clearCollidables();
+    }
 }
