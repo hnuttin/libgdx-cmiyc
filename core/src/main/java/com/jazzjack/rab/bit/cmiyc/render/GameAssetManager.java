@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
@@ -148,5 +149,9 @@ public class GameAssetManager extends AssetManager {
 
     public ShaderProgram getFontShaderProgram() {
         return get(SHADER_FONT, ShaderProgram.class);
+    }
+
+    public TextureRegion getEnemyHoveredTexture() {
+        return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion("enemy-hovered");
     }
 }

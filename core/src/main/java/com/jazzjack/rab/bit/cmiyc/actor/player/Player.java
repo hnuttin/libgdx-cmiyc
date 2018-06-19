@@ -1,11 +1,13 @@
 package com.jazzjack.rab.bit.cmiyc.actor.player;
 
+import com.jazzjack.rab.bit.cmiyc.ability.Ability;
 import com.jazzjack.rab.bit.cmiyc.actor.HasPower;
 import com.jazzjack.rab.bit.cmiyc.actor.MovableActor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
+import com.jazzjack.rab.bit.cmiyc.shared.HasCost;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.List;
@@ -56,6 +58,10 @@ public class Player extends MovableActor implements HasPower {
         return actionPointsConsumed;
     }
 
+    public int getActionPointsLeft() {
+        return playerProfile.getActionPointsPerTurn() - actionPointsConsumed;
+    }
+
     public boolean hasActionPointsLeft() {
         return actionPointsConsumed < playerProfile.getActionPointsPerTurn();
     }
@@ -99,5 +105,18 @@ public class Player extends MovableActor implements HasPower {
                 shieldActive = true;
             }
         }
+    }
+
+    public boolean useAbility(Ability ability) {
+        if (playerProfile.hasAbility(ability) && hasEnoughActionPointsFor(ability)) {
+            actionPointsConsumed += ability.getCost();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean hasEnoughActionPointsFor(HasCost cost) {
+        return cost.getCost() <= getActionPointsLeft();
     }
 }

@@ -36,27 +36,27 @@ class GameControllerTest extends LibGdxTest {
 
     @Test
     void expectPlayerTurnEndedWhenPlayerMoved3Times() {
-        gameController.keyDown(Input.Keys.RIGHT);
-        gameController.keyDown(Input.Keys.RIGHT);
-        gameController.keyDown(Input.Keys.RIGHT);
+        gameController.keyPressed(Input.Keys.RIGHT);
+        gameController.keyPressed(Input.Keys.RIGHT);
+        gameController.keyPressed(Input.Keys.RIGHT);
 
         assertThat(gameController.getCurrentGamePhase()).isEqualTo(GamePhase.ENEMY_TURN);
     }
 
     @Test
     void expectPlayerTurnEndedWhenPlayerMoved2TimesAndShieldUsed() {
-        gameController.keyDown(Input.Keys.RIGHT);
-        gameController.keyDown(Input.Keys.RIGHT);
-        gameController.keyDown(Input.Keys.S);
+        gameController.keyPressed(Input.Keys.RIGHT);
+        gameController.keyPressed(Input.Keys.RIGHT);
+        gameController.keyPressed(Input.Keys.S);
 
         assertThat(gameController.getCurrentGamePhase()).isEqualTo(GamePhase.ENEMY_TURN);
     }
 
     @Test
     void expectEnemyTurnEndedWhenAllEnemyAnimationEnded() {
-        gameController.keyDown(Input.Keys.RIGHT);
-        gameController.keyDown(Input.Keys.RIGHT);
-        gameController.keyDown(Input.Keys.RIGHT);
+        gameController.keyPressed(Input.Keys.RIGHT);
+        gameController.keyPressed(Input.Keys.RIGHT);
+        gameController.keyPressed(Input.Keys.RIGHT);
         assertThat(gameController.getCurrentGamePhase()).isEqualTo(GamePhase.ENEMY_TURN);
 
         assertTimeout(Duration.ofSeconds(1), this::waitUntilEnemyRouteAnimationsEnded);

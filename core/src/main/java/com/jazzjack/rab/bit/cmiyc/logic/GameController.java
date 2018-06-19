@@ -79,12 +79,6 @@ public class GameController implements KeyInputProcessor, MouseInputProcessor {
     }
 
     @Override
-    public boolean mouseMoved(HasPosition position) {
-        Gdx.app.debug(getClass().getSimpleName(), String.format("Mouse moved at position %s/%s", position.getX(), position.getY()));
-        return false;
-    }
-
-    @Override
     public boolean mousePressed(HasPosition position) {
         Gdx.app.debug(getClass().getSimpleName(), String.format("Mouse pressed at position %s/%s", position.getX(), position.getY()));
         return false;
