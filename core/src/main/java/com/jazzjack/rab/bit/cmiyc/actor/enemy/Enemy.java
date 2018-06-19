@@ -66,6 +66,10 @@ public class Enemy extends MovableActor implements HasPower {
         return marked;
     }
 
+    public void mark() {
+        marked = true;
+    }
+
     public void generateRoutes() {
         routes.clear();
         routes.addAll(context.getRouteGenerator().generateRoutes(this, 4));

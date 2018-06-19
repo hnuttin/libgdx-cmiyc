@@ -107,6 +107,10 @@ public class Player extends MovableActor implements HasPower {
         }
     }
 
+    public List<Ability> getAbilities() {
+        return playerProfile.getAbilities();
+    }
+
     public boolean useAbility(Ability ability) {
         if (playerProfile.hasAbility(ability) && hasEnoughActionPointsFor(ability)) {
             actionPointsConsumed += ability.getCost();

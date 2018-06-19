@@ -1,9 +1,9 @@
 package com.jazzjack.rab.bit.cmiyc.game.input;
 
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector3;
 import com.jazzjack.rab.bit.cmiyc.game.GameWorldCameraProvider;
-import com.jazzjack.rab.bit.cmiyc.shared.position.Position;
+import com.jazzjack.rab.bit.cmiyc.render.GameCamera;
+import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.Optional;
 
@@ -36,7 +36,7 @@ public class GameInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return translateToGamePosition(screenX, screenY)
+        return getMouseGamePosition()
                 .map(mouseInputProcessor::mousePressed)
                 .orElse(false);
     }
@@ -61,10 +61,7 @@ public class GameInputProcessor implements InputProcessor {
         return false;
     }
 
-    private Optional<Position> translateToGamePosition(int screenX, int screenY) {
-        return gameWorldCameraProvider.getGameWorldCamera().map(camera -> {
-            Vector3 gameVector = camera.unproject(new Vector3(screenX, screenY, 0f));
-            return new Position((int) gameVector.x, (int) gameVector.y);
-        });
+    private Optional<HasPosition> getMouseGamePosition() {
+        return gameWorldCameraProvider.getGameWorldCamera().map(GameCamera::getMouseGamePosition);
     }
 }

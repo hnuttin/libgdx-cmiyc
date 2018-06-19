@@ -16,4 +16,8 @@ public enum Ability implements HasCost {
     public int getCost() {
         return cost;
     }
+
+    public String getName() {
+        return "ability-" + name().toLowerCase();
+    }
 }

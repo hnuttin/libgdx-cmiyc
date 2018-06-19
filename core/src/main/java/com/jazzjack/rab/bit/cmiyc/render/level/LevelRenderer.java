@@ -1,6 +1,5 @@
 package com.jazzjack.rab.bit.cmiyc.render.level;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -45,7 +44,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
         this.fogOfWarRenderer = new FogOfWarRenderer(this.level, this.batch, assetManager);
     }
 
-    public Camera getCamera() {
+    public LevelCamera getCamera() {
         return camera;
     }
 

@@ -1,7 +1,6 @@
 package com.jazzjack.rab.bit.cmiyc.render;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.game.GameWorldCameraProvider;
@@ -28,7 +27,7 @@ public class GameRenderer implements Renderer, NewLevelSubscriber, GameWorldCame
     }
 
     @Override
-    public Optional<Camera> getGameWorldCamera() {
+    public Optional<GameCamera> getGameWorldCamera() {
         return levelRenderer != null ? Optional.of(levelRenderer.getCamera()) : Optional.empty();
     }
 
