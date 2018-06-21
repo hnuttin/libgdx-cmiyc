@@ -91,7 +91,7 @@ public class GameController implements KeyInputProcessor, MouseInputProcessor {
     }
 
     private boolean markEnemy(Enemy enemy) {
-        if (currentLevel.getPlayer().useAbility(Ability.MARK)) {
+        if (!enemy.isMarked() && currentLevel.getPlayer().useAbility(Ability.MARK)) {
             enemy.mark();
             return true;
         } else {
