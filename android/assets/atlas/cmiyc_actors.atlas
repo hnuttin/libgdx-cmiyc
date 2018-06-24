@@ -4,9 +4,16 @@ size: 512,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+ability-mark
+  rotate: false
+  xy: 234, 100
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 ap-ending-left
   rotate: false
-  xy: 268, 132
+  xy: 104, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -34,6 +41,13 @@ eight
   index: -1
 end
   rotate: false
+  xy: 138, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+enemy-hovered
+  rotate: false
   xy: 334, 200
   size: 32, 32
   orig: 32, 32
@@ -41,14 +55,14 @@ end
   index: -1
 enemy1
   rotate: false
-  xy: 436, 200
+  xy: 368, 200
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 enemy2
   rotate: false
-  xy: 470, 200
+  xy: 234, 66
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -62,14 +76,14 @@ enemy3
   index: -1
 five
   rotate: false
-  xy: 200, 168
+  xy: 134, 102
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 four
   rotate: false
-  xy: 134, 102
+  xy: 68, 36
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -90,14 +104,14 @@ hp-filled
   index: -1
 item-hp
   rotate: false
-  xy: 138, 2
+  xy: 470, 200
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 item-shield
   rotate: false
-  xy: 368, 200
+  xy: 436, 200
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -111,42 +125,42 @@ nine
   index: -1
 one
   rotate: false
-  xy: 68, 102
+  xy: 200, 168
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 104, 2
+  xy: 402, 200
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-corner-bottom-left
   rotate: false
-  xy: 234, 32
+  xy: 302, 166
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-corner-bottom-right
   rotate: false
-  xy: 234, 100
+  xy: 234, 32
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-corner-top-left
   rotate: false
-  xy: 200, 32
+  xy: 268, 132
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-corner-top-right
   rotate: false
-  xy: 234, 66
+  xy: 268, 166
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -167,7 +181,7 @@ route-ending-left
   index: -1
 route-ending-right
   rotate: false
-  xy: 234, 134
+  xy: 200, 32
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -181,14 +195,14 @@ route-ending-top
   index: -1
 route-horizontal
   rotate: false
-  xy: 402, 200
+  xy: 234, 134
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 route-vertical
   rotate: false
-  xy: 268, 166
+  xy: 268, 98
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -202,14 +216,14 @@ seven
   index: -1
 six
   rotate: false
-  xy: 68, 36
+  xy: 134, 168
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 three
   rotate: false
-  xy: 134, 168
+  xy: 68, 102
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

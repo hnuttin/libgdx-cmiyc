@@ -4,7 +4,5 @@ import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 public interface MouseInputProcessor {
 
-    boolean mouseMoved(HasPosition position);
-
     boolean mousePressed(HasPosition position);
 }

@@ -2,6 +2,8 @@ package com.jazzjack.rab.bit.cmiyc.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.jazzjack.rab.bit.cmiyc.ability.Ability;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
 import com.jazzjack.rab.bit.cmiyc.game.input.KeyInputProcessor;
 import com.jazzjack.rab.bit.cmiyc.game.input.MouseInputProcessor;
@@ -79,15 +81,22 @@ public class GameController implements KeyInputProcessor, MouseInputProcessor {
     }
 
     @Override
-    public boolean mouseMoved(HasPosition position) {
-        Gdx.app.debug(getClass().getSimpleName(), String.format("Mouse moved at position %s/%s", position.getX(), position.getY()));
-        return false;
-    }
-
-    @Override
     public boolean mousePressed(HasPosition position) {
         Gdx.app.debug(getClass().getSimpleName(), String.format("Mouse pressed at position %s/%s", position.getX(), position.getY()));
-        return false;
+        return currentLevel.getEnemies().stream()
+                .filter(enemy -> enemy.hasSamePositionAs(position))
+                .findAny()
+                .map(this::markEnemy)
+                .orElse(false);
+    }
+
+    private boolean markEnemy(Enemy enemy) {
+        if (!enemy.isMarked() && currentLevel.getPlayer().useAbility(Ability.MARK)) {
+            enemy.mark();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private boolean handlePlayerKeys(int keycode) {

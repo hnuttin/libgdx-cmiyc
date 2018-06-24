@@ -7,6 +7,8 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.jazzjack.rab.bit.cmiyc.level.LevelTiledMap;
@@ -27,6 +29,7 @@ public class GameAssetManager extends AssetManager {
     private static final String ATLAS_REGION_AP_START = "ap-ending-left";
     private static final String ATLAS_REGION_AP_MIDDLE = "ap-horizontal";
     private static final String ATLAS_REGION_AP_END = "ap-ending-right";
+    private static final String ATLAS_REGION_ENEMY_HOVERED = "enemy-hovered";
 
     private static final String ATLAS_CMIYC_LIGHTS = "atlas/cmiyc_lights.atlas";
     private static final String ATLAS_REGION_LIGHTS_TILE_VISITED = "tile-visited";
@@ -102,44 +105,48 @@ public class GameAssetManager extends AssetManager {
         return (LevelTiledMap) get(MAP2, TiledMap.class);
     }
 
-    public TextureAtlas.AtlasRegion getSightTexture() {
+    public AtlasRegion getSightTexture() {
         return get(ATLAS_CMIYC_LIGHTS, TextureAtlas.class).findRegion(ATLAS_REGION_LIGHTS_SIGHT);
     }
 
-    public TextureAtlas.AtlasRegion getTileVisitedTexture() {
+    public AtlasRegion getTileVisitedTexture() {
         return get(ATLAS_CMIYC_LIGHTS, TextureAtlas.class).findRegion(ATLAS_REGION_LIGHTS_TILE_VISITED);
     }
 
-    public TextureAtlas.AtlasRegion getTextureForName(String name) {
+    public AtlasRegion getTextureForName(String name) {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(name);
     }
 
-    public TextureAtlas.AtlasRegion getHpFilledTexture() {
+    public AtlasRegion getHpFilledTexture() {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_HP_FILLED);
     }
 
-    public TextureAtlas.AtlasRegion getHpEmptyTexture() {
+    public AtlasRegion getHpEmptyTexture() {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_HP_EMPTY);
     }
 
-    public TextureAtlas.AtlasRegion getApStartTexture() {
+    public AtlasRegion getApStartTexture() {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_AP_START);
     }
 
-    public TextureAtlas.AtlasRegion getApMiddleTexture() {
+    public AtlasRegion getApMiddleTexture() {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_AP_MIDDLE);
     }
 
-    public TextureAtlas.AtlasRegion getApEndTexture() {
+    public AtlasRegion getApEndTexture() {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_AP_END);
     }
 
-    public TextureAtlas.AtlasRegion getPlayerEndTexture() {
+    public AtlasRegion getPlayerEndTexture() {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_PLAYER_END);
     }
 
-    public TextureAtlas.AtlasRegion getTurnsLeftTexture(int turnsLeft) {
+    public AtlasRegion getTurnsLeftTexture(int turnsLeft) {
         return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(TURN_ATLAS_REGION_MAPPING.get(turnsLeft));
+    }
+
+    public TextureRegion getEnemyHoveredTexture() {
+        return get(ATLAS_CMIYC_ACTORS, TextureAtlas.class).findRegion(ATLAS_REGION_ENEMY_HOVERED);
     }
 
     public BitmapFont getFont() {
