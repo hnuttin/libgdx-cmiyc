@@ -8,8 +8,6 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.collision.CollisionResult;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
-import com.jazzjack.rab.bit.cmiyc.shared.Predictability;
-import com.jazzjack.rab.bit.cmiyc.shared.Sense;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.ArrayList;
@@ -22,32 +20,26 @@ public class Enemy extends MovableActor implements HasPower {
 
     private final EnemyContext context;
 
-    private final Predictability predictability;
-    private final Sense sense;
+    private final EnemyConfig config;
     private final List<Route> routes;
 
     private boolean triggered;
     private boolean marked;
 
-    public Enemy(EnemyContext context, String name, Predictability predictability, Sense sense, HasPosition hasPosition) {
-        super(context, name, hasPosition);
+    public Enemy(EnemyContext context, EnemyConfig config, HasPosition hasPosition) {
+        super(context, config.getName(), hasPosition);
 
         this.context = context;
 
-        this.predictability = predictability;
-        this.sense = sense;
+        this.config = config;
         this.routes = new ArrayList<>();
 
         this.triggered = false;
         this.marked = false;
     }
 
-    public Predictability getPredictability() {
-        return predictability;
-    }
-
-    public Sense getSense() {
-        return isTriggered() ? Sense.NONE : sense;
+    public EnemyConfig getConfig() {
+        return config;
     }
 
     public ImmutableList<Route> getRoutes() {
@@ -72,7 +64,7 @@ public class Enemy extends MovableActor implements HasPower {
 
     public void generateRoutes() {
         routes.clear();
-        routes.addAll(context.getRouteGenerator().generateRoutes(this, 4));
+        routes.addAll(context.getRouteGenerator().generateRoutes(this));
         publishEvent(new NewEnemyRoutesEvent(this));
     }
 

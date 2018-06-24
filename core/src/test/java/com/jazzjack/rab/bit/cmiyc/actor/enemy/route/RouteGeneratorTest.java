@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
 import com.jazzjack.rab.bit.cmiyc.actor.Actor;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyConfig;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyContext;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.collision.Collidable;
@@ -27,6 +28,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyConfig.enemyConfig;
 import static com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames.CORNER_BOTTOM_LEFT;
 import static com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames.CORNER_BOTTOM_RIGHT;
 import static com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames.CORNER_TOP_LEFT;
@@ -85,7 +87,10 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(0, 1), eq(Direction.LEFT))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.LEFT));
         when(collisionDetector.collides(matchesCollidable(1, 0), eq(Direction.DOWN))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(1, 1, Predictability.HIGH), 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(1, 1, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(1)
+                .withMaxRouteLength(1)
+                .build()));
 
         assertThat(routes).hasSize(1);
         Route foute = routes.iterator().next();
@@ -110,7 +115,10 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(1, 1), eq(Direction.LEFT))).thenReturn(noCollision());
         when(collisionDetector.collides(matchesCollidable(2, 2), eq(Direction.UP))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 1, Predictability.HIGH), 5);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 1, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(1)
+                .withMaxRouteLength(5)
+                .build()));
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -140,7 +148,10 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(3, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
         when(collisionDetector.collides(matchesCollidable(2, 1), eq(Direction.UP))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, Predictability.MEDIUM), 3);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(2)
+                .withMaxRouteLength(3)
+                .build()));
 
         assertThat(routes).hasSize(2);
         Iterator<Route> routeIterator = routes.iterator();
@@ -174,7 +185,10 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(2, 0), eq(Direction.RIGHT))).thenReturn(noCollision(), noCollision());
         when(collisionDetector.collides(matchesCollidable(3, 0), eq(Direction.RIGHT))).thenReturn(noCollision(), noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, Predictability.MEDIUM), 3);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(2)
+                .withMaxRouteLength(3)
+                .build()));
 
         assertThat(routes).hasSize(1);
     }
@@ -200,7 +214,10 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(2, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
         when(collisionDetector.collides(matchesCollidable(3, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, Predictability.MEDIUM), 3);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(2)
+                .withMaxRouteLength(3)
+                .build()));
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -224,7 +241,10 @@ class RouteGeneratorTest {
         when(collisionDetector.collides(matchesCollidable(1, 0), eq(Direction.DOWN))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.DOWN));
         when(collisionDetector.collides(matchesCollidable(0, 1), eq(Direction.LEFT))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 1, Predictability.HIGH), 2);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 1, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(1)
+                .withMaxRouteLength(2)
+                .build()));
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -257,7 +277,10 @@ class RouteGeneratorTest {
                 aDirectionChance(Direction.DOWN));
         when(collisionDetector.collides(any(Collidable.class), any(Direction.class))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, Predictability.HIGH), 18);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(1)
+                .withMaxRouteLength(18)
+                .build()));
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -289,7 +312,10 @@ class RouteGeneratorTest {
         when(randomizer.chooseRandomChance(anyList())).thenReturn(aDirectionChance(Direction.RIGHT));
         when(collisionDetector.collides(any(Collidable.class), any(Direction.class))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, Predictability.HIGH), 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(1)
+                .withMaxRouteLength(1)
+                .build()));
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -303,7 +329,10 @@ class RouteGeneratorTest {
         when(randomizer.chooseRandomChance(anyList())).thenReturn(aDirectionChance(Direction.LEFT));
         when(collisionDetector.collides(any(Collidable.class), any(Direction.class))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(1, 0, Predictability.HIGH), 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(1, 0, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(1)
+                .withMaxRouteLength(1)
+                .build()));
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -317,7 +346,10 @@ class RouteGeneratorTest {
         when(randomizer.chooseRandomChance(anyList())).thenReturn(aDirectionChance(Direction.UP));
         when(collisionDetector.collides(any(Collidable.class), any(Direction.class))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, Predictability.HIGH), 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(1)
+                .withMaxRouteLength(1)
+                .build()));
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -327,19 +359,22 @@ class RouteGeneratorTest {
 
     @Test
     void expectDirectionChanceCalculatorAndRandomizerToBeCalledWithCorrectParameters() {
-        Enemy enemy = enemy(0, 0, Predictability.HIGH);
+        Enemy enemy = enemy(0, 0, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(1)
+                .withMaxRouteLength(2)
+                .build());
         List<DirectionChance> directionChances = emptyList();
-        when(directionChanceCalculator.calculate(matchesPosition(enemy), eq(Direction.valuesAsSet()), eq(enemy.getSense()))).thenReturn(directionChances);
+        when(directionChanceCalculator.calculate(matchesPosition(enemy), eq(Direction.valuesAsSet()), eq(enemy.getConfig().getSense()))).thenReturn(directionChances);
         when(randomizer.chooseRandomChance(directionChances)).thenReturn(aDirectionChance(Direction.RIGHT));
         when(collisionDetector.collides(matchesCollidable(1, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
-        when(directionChanceCalculator.calculate(matchesPosition(1, 0), eq(new HashSet<>(asList(Direction.RIGHT, Direction.UP, Direction.DOWN))), eq(enemy.getSense()))).thenReturn(directionChances);
+        when(directionChanceCalculator.calculate(matchesPosition(1, 0), eq(new HashSet<>(asList(Direction.RIGHT, Direction.UP, Direction.DOWN))), eq(enemy.getConfig().getSense()))).thenReturn(directionChances);
         when(randomizer.chooseRandomChance(directionChances)).thenReturn(aDirectionChance(Direction.UP));
         when(collisionDetector.collides(matchesCollidable(1, 1), eq(Direction.UP))).thenReturn(collision(mock(Collidable.class), mock(Collidable.class), Direction.UP));
-        when(directionChanceCalculator.calculate(matchesPosition(1, 1), eq(new HashSet<>(asList(Direction.RIGHT, Direction.DOWN))), eq(enemy.getSense()))).thenReturn(directionChances);
+        when(directionChanceCalculator.calculate(matchesPosition(1, 1), eq(new HashSet<>(asList(Direction.RIGHT, Direction.DOWN))), eq(enemy.getConfig().getSense()))).thenReturn(directionChances);
         when(randomizer.chooseRandomChance(directionChances)).thenReturn(aDirectionChance(Direction.RIGHT));
         when(collisionDetector.collides(matchesCollidable(2, 0), eq(Direction.RIGHT))).thenReturn(noCollision());
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy, 2);
+        List<Route> routes = routeGenerator.generateRoutes(enemy);
 
         assertThat(routes).hasSize(1);
         Route route = routes.iterator().next();
@@ -364,7 +399,10 @@ class RouteGeneratorTest {
                 collision(mock(Collidable.class), mock(Collidable.class), Direction.UP),
                 collision(mock(Collidable.class), mock(Collidable.class), Direction.DOWN));
 
-        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, Predictability.MEDIUM), 1);
+        List<Route> routes = routeGenerator.generateRoutes(enemy(0, 0, enemyConfig("enemy")
+                .withNumberOfRoutesToGenerate(1)
+                .withMaxRouteLength(1)
+                .build()));
 
         assertThat(routes).hasSize(1);
     }
@@ -379,8 +417,8 @@ class RouteGeneratorTest {
         return new DirectionChance(direction, 0);
     }
 
-    private Enemy enemy(int startX, int startY, Predictability predictability) {
-        return new Enemy(mock(EnemyContext.class), "enemy", predictability, Sense.LOW, new Position(startX, startY));
+    private Enemy enemy(int startX, int startY, EnemyConfig config) {
+        return new Enemy(mock(EnemyContext.class), config, new Position(startX, startY));
     }
 
 }

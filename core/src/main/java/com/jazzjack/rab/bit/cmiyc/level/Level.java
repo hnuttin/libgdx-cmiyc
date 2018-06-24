@@ -74,7 +74,7 @@ public class Level {
     }
 
     private Enemy createEnemy(EnemyContext enemyContext, EnemyMarkerObject enemyMarkerObject) {
-        Enemy enemy = new Enemy(enemyContext, enemyMarkerObject.getName(), enemyMarkerObject.getPredictability(), enemyMarkerObject.getSense(), enemyMarkerObject);
+        Enemy enemy = new Enemy(enemyContext, enemyMarkerObject.getEnemyConfig(), enemyMarkerObject);
         publishEvent(new EnemyAddedEvent(enemy));
         return enemy;
     }

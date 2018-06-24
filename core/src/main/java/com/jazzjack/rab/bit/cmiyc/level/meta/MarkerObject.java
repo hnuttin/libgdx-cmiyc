@@ -57,6 +57,11 @@ public class MarkerObject implements HasPosition {
         }
     }
 
+    int getIntProperty(String propertName) {
+        String stringProperty = getStringProperty(propertName);
+        return Integer.parseInt(stringProperty);
+    }
+
     @Override
     public int getX() {
         return position.getX();
