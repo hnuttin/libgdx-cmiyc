@@ -1,6 +1,5 @@
 package com.jazzjack.rab.bit.cmiyc.render.level;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,6 +9,7 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames;
+import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ItemMarkerObject;
@@ -44,7 +44,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
         this.fogOfWarRenderer = new FogOfWarRenderer(this.level, this.batch, assetManager);
     }
 
-    public Camera getCamera() {
+    public LevelCamera getCamera() {
         return camera;
     }
 
@@ -78,9 +78,10 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
     }
 
     private void renderPlayer() {
-        drawActor(level.getPlayer());
-        if (level.getPlayer().isShieldActive()) {
-            drawTextureOnPosition(assetManager.getTextureForName(Item.SHIELD.getName()), level.getPlayer());
+        Player player = level.getPlayer();
+        drawActor(player);
+        if (player.isShieldActive()) {
+            drawTextureOnPosition(assetManager.getTextureForName(Item.SHIELD.getName()), player);
         }
     }
 
@@ -94,6 +95,9 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
             alphaDrawer(batch)
                     .withAlpha(ROUTE_ALPHA)
                     .draw(() -> drawEnemyRoutes(enemy));
+            if (camera.getMouseGamePosition().hasSamePositionAs(enemy)) {
+                drawTextureOnPosition(assetManager.getEnemyHoveredTexture(), enemy);
+            }
         }
     }
 

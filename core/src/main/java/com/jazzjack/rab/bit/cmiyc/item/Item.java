@@ -2,21 +2,15 @@ package com.jazzjack.rab.bit.cmiyc.item;
 
 public enum Item {
 
-    HP("item-hp"), SHIELD("item-shield");
-
-    private final String name;
-
-    Item(String name) {
-        this.name = name;
-    }
+    HP, SHIELD;
 
     public String getName() {
-        return name;
+        return "item-" + name().toLowerCase();
     }
 
     public static Item forName(String name) {
         for (Item item : values()) {
-            if (item.name.equalsIgnoreCase(name)) {
+            if (item.getName().equalsIgnoreCase(name)) {
                 return item;
             }
         }

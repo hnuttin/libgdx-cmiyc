@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.jazzjack.rab.bit.cmiyc.ability.Ability;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
@@ -17,7 +18,7 @@ import static com.jazzjack.rab.bit.cmiyc.render.AlphaDrawer.alphaDrawer;
 public class HUDRenderer implements Renderer {
 
     private static final int SCALE_TO_LEVEL = 2;
-    private static final int ITEM_X_OFFSET = 10;
+    private static final int ACTIONS_X_OFFSET = 10;
 
     private final Level level;
     private final GameAssetManager assetManager;
@@ -89,7 +90,7 @@ public class HUDRenderer implements Renderer {
 
     private void renderStatusBar() {
         renderHp();
-        renderPlayerItems();
+        renderActions();
         playerApDrawer.draw(level.getPlayer());
     }
 
@@ -104,9 +105,15 @@ public class HUDRenderer implements Renderer {
         }
     }
 
-    private void renderPlayerItems() {
+    private void renderActions() {
+        int x = ACTIONS_X_OFFSET;
+        for (Ability ability : level.getPlayer().getAbilities()) {
+            batch.draw(assetManager.getTextureForName(ability.getName()), x, 0f, 1f, 1f);
+            x++;
+        }
         for (Item item : level.getPlayer().getItems()) {
-            batch.draw(assetManager.getTextureForName(item.getName()), ITEM_X_OFFSET, 0f, 1f, 1f);
+            batch.draw(assetManager.getTextureForName(item.getName()), x, 0f, 1f, 1f);
+            x++;
         }
     }
 

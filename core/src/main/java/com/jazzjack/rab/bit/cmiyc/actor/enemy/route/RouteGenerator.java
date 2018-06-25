@@ -2,6 +2,7 @@ package com.jazzjack.rab.bit.cmiyc.actor.enemy.route;
 
 import com.google.common.collect.Streams;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.Enemy;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyConfig;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepResult;
@@ -34,16 +35,17 @@ public class RouteGenerator {
         this.randomizer = randomizer;
     }
 
-    public List<Route> generateRoutes(Enemy enemy, int maxLength) {
+    public List<Route> generateRoutes(Enemy enemy) {
+        EnemyConfig enemyConfig = enemy.getConfig();
         StepResultCollisionDetector routeCollisionDetector = new StepResultCollisionDetector(collisionDetector);
         routeCollisionDetector.addStepResult(enemy);
-        Set<RouteResult> routes = IntStream.range(0, enemy.getPredictability().getNumberOfRoutes())
+        Set<RouteResult> routes = IntStream.range(0, enemyConfig.getNumberOfRoutesToGenerate())
                 .boxed()
-                .map(i -> generateRoute(enemy, maxLength, routeCollisionDetector, enemy.getSense()))
+                .map(i -> generateRoute(enemy, routeCollisionDetector))
                 .filter(route -> !route.getSteps().isEmpty())
                 .collect(toSet());
         filterOutRoutesThatEndOnOtherRoute(routes);
-        List<Integer> percentages = routes.isEmpty() ? emptyList() : randomizer.randomPercentages(enemy.getPredictability(), routes.size());
+        List<Integer> percentages = routes.isEmpty() ? emptyList() : randomizer.randomPercentages(enemyConfig.getPredictability(), routes.size());
         return Streams
                 .zip(percentages.stream(), routes.stream(), (percentage, routeResult) -> new Route(percentage, routeResult.getSteps()))
                 .collect(toList());
@@ -60,14 +62,15 @@ public class RouteGenerator {
                 .anyMatch(step -> step.hasSamePositionAs(route.getEndingStep()));
     }
 
-    private RouteResult generateRoute(HasPosition startPosition, int maxLength, StepResultCollisionDetector collisionDetector, Sense sense) {
-        List<StepResult> stepsResults = new ArrayList<>(maxLength);
-        for (int stepIndex = 0; stepIndex < maxLength; stepIndex++) {
+    private RouteResult generateRoute(Enemy enemy, StepResultCollisionDetector collisionDetector) {
+        EnemyConfig enemyConfig = enemy.getConfig();
+        List<StepResult> stepsResults = new ArrayList<>(enemyConfig.getMaxRouteLength());
+        for (int stepIndex = 0; stepIndex < enemyConfig.getMaxRouteLength(); stepIndex++) {
             StepResult stepResult = generateStep(
-                    stepsResults.isEmpty() ? startPosition : stepsResults.get(stepsResults.size() - 1),
+                    stepsResults.isEmpty() ? enemy : stepsResults.get(stepsResults.size() - 1),
                     Direction.valuesAsSet(),
                     collisionDetector,
-                    sense);
+                    enemyConfig.getSense());
             if (stepResult != null) {
                 stepsResults.add(stepResult);
                 collisionDetector.addStepResult(stepResult);

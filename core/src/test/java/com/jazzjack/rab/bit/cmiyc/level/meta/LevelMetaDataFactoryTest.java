@@ -1,6 +1,7 @@
 package com.jazzjack.rab.bit.cmiyc.level.meta;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.jazzjack.rab.bit.cmiyc.actor.enemy.EnemyConfig;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandle;
 import com.jazzjack.rab.bit.cmiyc.gdx.ClasspathFileHandleResolver;
 import com.jazzjack.rab.bit.cmiyc.gdx.LibGdxTest;
@@ -50,9 +51,9 @@ class LevelMetaDataFactoryTest extends LibGdxTest {
         LevelMetaData levelMetaData = levelMetaDataFactory.create(levelTiledMap);
 
         assertThat(levelMetaData.getEnemies()).hasSize(3);
-        assertEnemy(levelMetaData.getEnemies().get(0), "enemy1", Predictability.HIGH, Sense.LOW, 6, 7);
-        assertEnemy(levelMetaData.getEnemies().get(1), "enemy2", Predictability.MEDIUM, Sense.MEDIUM, 10, 4);
-        assertEnemy(levelMetaData.getEnemies().get(2), "enemy3", Predictability.LOW, Sense.HIGH, 16, 1);
+        assertEnemy(levelMetaData.getEnemies().get(0), "enemy1", Predictability.HIGH, Sense.LOW, 2, 4, 6, 7);
+        assertEnemy(levelMetaData.getEnemies().get(1), "enemy2", Predictability.MEDIUM, Sense.MEDIUM, 3, 5, 10, 4);
+        assertEnemy(levelMetaData.getEnemies().get(2), "enemy3", Predictability.LOW, Sense.HIGH, 4, 6, 16, 1);
     }
 
     @Test
@@ -70,11 +71,17 @@ class LevelMetaDataFactoryTest extends LibGdxTest {
         assertThat(itemMarkerObject.getY()).isEqualTo(y);
     }
 
-    private void assertEnemy(EnemyMarkerObject enemy, String name, Predictability predictability, Sense sense, int x, int y) {
-        assertThat(enemy.getType()).isEqualTo(name);
-        assertThat(enemy.getPredictability()).isEqualTo(predictability);
-        assertThat(enemy.getSense()).isEqualTo(sense);
+    private void assertEnemy(EnemyMarkerObject enemy, String name, Predictability predictability, Sense sense, int numberOfRoutesToGenerate, int maxRouteLength, int x, int y) {
+        assertEnemyConfig(enemy.getEnemyConfig(), name, predictability, sense, numberOfRoutesToGenerate, maxRouteLength);
         assertThat(enemy.getX()).isEqualTo(x);
         assertThat(enemy.getY()).isEqualTo(y);
+    }
+
+    private void assertEnemyConfig(EnemyConfig enemyConfig, String name, Predictability predictability, Sense sense, int numberOfRoutesToGenerate, int maxRouteLength) {
+        assertThat(enemyConfig.getName()).isEqualTo(name);
+        assertThat(enemyConfig.getPredictability()).isEqualTo(predictability);
+        assertThat(enemyConfig.getSense()).isEqualTo(sense);
+        assertThat(enemyConfig.getNumberOfRoutesToGenerate()).isEqualTo(numberOfRoutesToGenerate);
+        assertThat(enemyConfig.getMaxRouteLength()).isEqualTo(maxRouteLength);
     }
 }
