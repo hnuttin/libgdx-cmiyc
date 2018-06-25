@@ -1,52 +1,37 @@
 package com.jazzjack.rab.bit.cmiyc.game.input;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.jazzjack.rab.bit.cmiyc.event.Event;
+import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
 import com.jazzjack.rab.bit.cmiyc.game.GameWorldCameraProvider;
-import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.render.GameCamera;
-import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 
 public class KeyboardAndMouseInputProcessor implements InputProcessor {
 
-    private static final Map<Integer, Direction> KEY_TO_DIRECTION_MAPPING = new HashMap<>();
-
-    static {
-        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.LEFT, Direction.LEFT);
-        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.RIGHT, Direction.RIGHT);
-        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.UP, Direction.UP);
-        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.DOWN, Direction.DOWN);
-    }
-
+    private final Map<Integer, Function<Integer, Event>> keyToEventFactoryMapping;
     private final GameWorldCameraProvider gameWorldCameraProvider;
+    private final MousePressedToInputEventConverter mousePressedToInputEventConverter;
 
-    public KeyboardAndMouseInputProcessor(GameWorldCameraProvider gameWorldCameraProvider) {
+    KeyboardAndMouseInputProcessor(Map<Integer, Function<Integer, Event>> keyToEventFactoryMapping, GameWorldCameraProvider gameWorldCameraProvider, MousePressedToInputEventConverter mousePressedToInputEventConverter) {
+        this.keyToEventFactoryMapping = keyToEventFactoryMapping;
         this.gameWorldCameraProvider = gameWorldCameraProvider;
+        this.mousePressedToInputEventConverter = mousePressedToInputEventConverter;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case Input.Keys.E:
-                endPlayerTurn();
-                return true;
-            case Input.Keys.S:
-                currentLevel.getPlayer().useItem(Item.SHIELD);
-                endPlayerTurnIfNoActionPointsLeft();
-                return true;
+        Function<Integer, Event> eventFactory = keyToEventFactoryMapping.get(keycode);
+        if (eventFactory != null) {
+            publishEvent(eventFactory.apply(keycode));
         }
-        Direction direction = KEY_TO_DIRECTION_MAPPING.get(keycode);
-        if (direction != null) {
-            publishEvent(new PlayerMovementInputEvent(direction));
-        }
-        return keyInputProcessor.keyPressed(keycode);
+        return true;
     }
 
     @Override
@@ -61,9 +46,12 @@ public class KeyboardAndMouseInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return getMouseGamePosition()
-                .map(mouseInputProcessor::mousePressed)
-                .orElse(false);
+        getMouseGamePosition()
+                .map(mousePressedToInputEventConverter::convertToInputEvent)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .ifPresent(GameEventBus::publishEvent);
+        return true;
     }
 
     @Override
