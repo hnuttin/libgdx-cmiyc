@@ -3,29 +3,15 @@ package com.jazzjack.rab.bit.cmiyc.logic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
-import com.jazzjack.rab.bit.cmiyc.game.input.KeyInputProcessor;
-import com.jazzjack.rab.bit.cmiyc.game.input.MouseInputProcessor;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 
-public class GameController implements KeyInputProcessor, MouseInputProcessor {
-
-    private static final Map<Integer, Direction> KEY_TO_DIRECTION_MAPPING = new HashMap<>();
-
-    static {
-        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.LEFT, Direction.LEFT);
-        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.RIGHT, Direction.RIGHT);
-        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.UP, Direction.UP);
-        KEY_TO_DIRECTION_MAPPING.put(Input.Keys.DOWN, Direction.DOWN);
-    }
+public class GameController {
 
     private final LevelFactory levelFactory;
     private final PlayerProfile playerProfile;
