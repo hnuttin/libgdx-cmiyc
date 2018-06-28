@@ -95,7 +95,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
             alphaDrawer(batch)
                     .withAlpha(ROUTE_ALPHA)
                     .draw(() -> drawEnemyRoutes(enemy));
-            if (camera.getMouseGamePosition().hasSamePositionAs(enemy)) {
+            if (camera.getGamePosition().hasSamePositionAs(enemy)) {
                 drawTextureOnPosition(assetManager.getEnemyHoveredTexture(), enemy);
             }
         }

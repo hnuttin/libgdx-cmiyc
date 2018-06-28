@@ -3,7 +3,6 @@ package com.jazzjack.rab.bit.cmiyc.game.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.jazzjack.rab.bit.cmiyc.event.Event;
-import com.jazzjack.rab.bit.cmiyc.game.GameWorldCameraProvider;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 
@@ -23,8 +22,8 @@ public class KeyboardAndMouseInputProcessorFactory implements InputProcessorFact
     }
 
     @Override
-    public InputProcessor create(GameWorldCameraProvider gameWorldCameraProvider) {
-        return new KeyboardAndMouseInputProcessor(createKeyToEventFactoryMapping(), gameWorldCameraProvider, mousePressedToInputEventConverter);
+    public InputProcessor create(InputGamePositionProvider inputGamePositionProvider) {
+        return new KeyboardAndMouseInputProcessor(createKeyToEventFactoryMapping(), inputGamePositionProvider, mousePressedToInputEventConverter);
     }
 
     private Map<Integer, Function<Integer, Event>> createKeyToEventFactoryMapping() {

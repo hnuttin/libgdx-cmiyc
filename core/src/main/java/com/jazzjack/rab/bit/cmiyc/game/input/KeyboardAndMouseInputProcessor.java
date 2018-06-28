@@ -2,10 +2,6 @@ package com.jazzjack.rab.bit.cmiyc.game.input;
 
 import com.badlogic.gdx.InputProcessor;
 import com.jazzjack.rab.bit.cmiyc.event.Event;
-import com.jazzjack.rab.bit.cmiyc.event.GameEventBus;
-import com.jazzjack.rab.bit.cmiyc.game.GameWorldCameraProvider;
-import com.jazzjack.rab.bit.cmiyc.render.GameCamera;
-import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
 import java.util.Map;
 import java.util.Optional;
@@ -16,12 +12,12 @@ import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 public class KeyboardAndMouseInputProcessor implements InputProcessor {
 
     private final Map<Integer, Function<Integer, Event>> keyToEventFactoryMapping;
-    private final GameWorldCameraProvider gameWorldCameraProvider;
+    private final InputGamePositionProvider inputGamePositionProvider;
     private final MousePressedToInputEventConverter mousePressedToInputEventConverter;
 
-    KeyboardAndMouseInputProcessor(Map<Integer, Function<Integer, Event>> keyToEventFactoryMapping, GameWorldCameraProvider gameWorldCameraProvider, MousePressedToInputEventConverter mousePressedToInputEventConverter) {
+    KeyboardAndMouseInputProcessor(Map<Integer, Function<Integer, Event>> keyToEventFactoryMapping, InputGamePositionProvider inputGamePositionProvider, MousePressedToInputEventConverter mousePressedToInputEventConverter) {
         this.keyToEventFactoryMapping = keyToEventFactoryMapping;
-        this.gameWorldCameraProvider = gameWorldCameraProvider;
+        this.inputGamePositionProvider = inputGamePositionProvider;
         this.mousePressedToInputEventConverter = mousePressedToInputEventConverter;
     }
 
@@ -46,12 +42,13 @@ public class KeyboardAndMouseInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        getMouseGamePosition()
-                .map(mousePressedToInputEventConverter::convertToInputEvent)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .ifPresent(GameEventBus::publishEvent);
-        return true;
+        Optional<Event> event = mousePressedToInputEventConverter.convertToInputEvent(inputGamePositionProvider.getGamePosition());
+        if (event.isPresent()) {
+            publishEvent(event.get());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -72,9 +69,5 @@ public class KeyboardAndMouseInputProcessor implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
-    }
-
-    private Optional<HasPosition> getMouseGamePosition() {
-        return gameWorldCameraProvider.getGameWorldCamera().map(GameCamera::getMouseGamePosition);
     }
 }
