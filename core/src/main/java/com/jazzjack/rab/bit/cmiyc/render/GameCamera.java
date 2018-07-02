@@ -35,7 +35,7 @@ public class GameCamera extends OrthographicCamera implements InputGamePositionP
     }
 
     @Override
-    public HasPosition getGamePosition() {
+    public HasPosition getCameraMousePosition() {
         Vector3 gameVector = unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0f));
         return new Position((int) gameVector.x, (int) gameVector.y);
     }

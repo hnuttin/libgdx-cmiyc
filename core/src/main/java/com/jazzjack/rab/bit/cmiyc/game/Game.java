@@ -45,7 +45,7 @@ public class Game extends ApplicationAdapter {
         gameRenderer = new GameRenderer(assetManager);
         gameController = new GameController(new LevelFactory(createLevelContext(playerProfile), assetManager), playerProfile);
 
-        Gdx.input.setInputProcessor(inputProcessorFactory.create(gameRenderer));
+        Gdx.input.setInputProcessor(inputProcessorFactory.createInputProcessor(gameRenderer));
     }
 
     private LevelContext createLevelContext(PlayerProfile playerProfile) {

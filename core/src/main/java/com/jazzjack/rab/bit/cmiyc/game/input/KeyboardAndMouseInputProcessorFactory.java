@@ -22,8 +22,8 @@ public class KeyboardAndMouseInputProcessorFactory implements InputProcessorFact
     }
 
     @Override
-    public InputProcessor create(InputGamePositionProvider inputGamePositionProvider) {
-        return new KeyboardAndMouseInputProcessor(createKeyToEventFactoryMapping(), inputGamePositionProvider, mousePressedToInputEventConverter);
+    public InputProcessor createInputProcessor(MousePressedEventFactory mousePressedEventFactory) {
+        return new KeyboardAndMouseInputProcessor(createKeyToEventFactoryMapping(), mousePressedEventFactory);
     }
 
     private Map<Integer, Function<Integer, Event>> createKeyToEventFactoryMapping() {

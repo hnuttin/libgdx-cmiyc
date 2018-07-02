@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.jazzjack.rab.bit.cmiyc.ability.Ability;
-import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.render.GameAssetManager;
 import com.jazzjack.rab.bit.cmiyc.render.GameCamera;
@@ -105,17 +103,6 @@ public class HUDRenderer implements Renderer {
         }
     }
 
-    private void renderActions() {
-        int x = ACTIONS_X_OFFSET;
-        for (Ability ability : level.getPlayer().getAbilities()) {
-            batch.draw(assetManager.getTextureForName(ability.getName()), x, 0f, 1f, 1f);
-            x++;
-        }
-        for (Item item : level.getPlayer().getItems()) {
-            batch.draw(assetManager.getTextureForName(item.getName()), x, 0f, 1f, 1f);
-            x++;
-        }
-    }
 
     private void renderTurnCounter() {
         TextureAtlas.AtlasRegion turnsLeftTexture = assetManager.getTurnsLeftTexture(level.getTurnsLeft());

@@ -2,5 +2,5 @@ package com.jazzjack.rab.bit.cmiyc.logic;
 
 public enum GamePhase {
 
-    PLAYER_TURN, ENEMY_TURN
+    NOT_STARTED, PLAYER_TURN, ENEMY_TURN
 }

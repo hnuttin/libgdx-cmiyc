@@ -10,6 +10,8 @@ import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.Route;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.Step;
 import com.jazzjack.rab.bit.cmiyc.actor.enemy.route.step.StepNames;
 import com.jazzjack.rab.bit.cmiyc.actor.player.Player;
+import com.jazzjack.rab.bit.cmiyc.event.Event;
+import com.jazzjack.rab.bit.cmiyc.game.input.MousePressedEventFactory;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.meta.ItemMarkerObject;
@@ -18,11 +20,13 @@ import com.jazzjack.rab.bit.cmiyc.render.Renderer;
 import com.jazzjack.rab.bit.cmiyc.shared.position.Alignment;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
 
+import java.util.Optional;
+
 import static com.jazzjack.rab.bit.cmiyc.render.AlphaDrawer.alphaDrawer;
 import static com.jazzjack.rab.bit.cmiyc.shared.position.Alignment.BOTTOM;
 import static com.jazzjack.rab.bit.cmiyc.shared.position.Alignment.TOP;
 
-public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Renderer {
+public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Renderer, MousePressedEventFactory {
 
     private static final float ROUTE_ALPHA = 0.7f;
     private static final float LEVEL_CAMERA_SCALE = 1.5f;
@@ -44,8 +48,13 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
         this.fogOfWarRenderer = new FogOfWarRenderer(this.level, this.batch, assetManager);
     }
 
-    public LevelCamera getCamera() {
-        return camera;
+    @Override
+    public Optional<Event> createMousePressedEvent() {
+        HasPosition position = camera.getCameraMousePosition();
+        return level.getEnemies().stream()
+                .filter(enemy -> enemy.hasSamePositionAs(position))
+                .findAny()
+                .map(enemy -> new mark);
     }
 
     @Override
@@ -95,7 +104,7 @@ public class LevelRenderer extends OrthoCachedTiledMapRenderer implements Render
             alphaDrawer(batch)
                     .withAlpha(ROUTE_ALPHA)
                     .draw(() -> drawEnemyRoutes(enemy));
-            if (camera.getGamePosition().hasSamePositionAs(enemy)) {
+            if (camera.getCameraMousePosition().hasSamePositionAs(enemy)) {
                 drawTextureOnPosition(assetManager.getEnemyHoveredTexture(), enemy);
             }
         }

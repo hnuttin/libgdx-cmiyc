@@ -12,13 +12,11 @@ import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 public class KeyboardAndMouseInputProcessor implements InputProcessor {
 
     private final Map<Integer, Function<Integer, Event>> keyToEventFactoryMapping;
-    private final InputGamePositionProvider inputGamePositionProvider;
-    private final MousePressedToInputEventConverter mousePressedToInputEventConverter;
+    private final MousePressedEventFactory mousePressedEventFactory;
 
-    KeyboardAndMouseInputProcessor(Map<Integer, Function<Integer, Event>> keyToEventFactoryMapping, InputGamePositionProvider inputGamePositionProvider, MousePressedToInputEventConverter mousePressedToInputEventConverter) {
+    KeyboardAndMouseInputProcessor(Map<Integer, Function<Integer, Event>> keyToEventFactoryMapping, MousePressedEventFactory mousePressedEventFactory) {
         this.keyToEventFactoryMapping = keyToEventFactoryMapping;
-        this.inputGamePositionProvider = inputGamePositionProvider;
-        this.mousePressedToInputEventConverter = mousePressedToInputEventConverter;
+        this.mousePressedEventFactory = mousePressedEventFactory;
     }
 
     @Override
@@ -26,8 +24,10 @@ public class KeyboardAndMouseInputProcessor implements InputProcessor {
         Function<Integer, Event> eventFactory = keyToEventFactoryMapping.get(keycode);
         if (eventFactory != null) {
             publishEvent(eventFactory.apply(keycode));
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class KeyboardAndMouseInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Optional<Event> event = mousePressedToInputEventConverter.convertToInputEvent(inputGamePositionProvider.getGamePosition());
+        Optional<Event> event = mousePressedEventFactory.createMousePressedEvent();
         if (event.isPresent()) {
             publishEvent(event.get());
             return true;

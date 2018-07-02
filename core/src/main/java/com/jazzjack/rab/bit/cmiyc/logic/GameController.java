@@ -8,12 +8,13 @@ import com.jazzjack.rab.bit.cmiyc.actor.player.PlayerProfile;
 import com.jazzjack.rab.bit.cmiyc.item.Item;
 import com.jazzjack.rab.bit.cmiyc.level.Level;
 import com.jazzjack.rab.bit.cmiyc.level.LevelFactory;
-import com.jazzjack.rab.bit.cmiyc.shared.Direction;
 import com.jazzjack.rab.bit.cmiyc.shared.position.HasPosition;
+
+import java.util.Optional;
 
 import static com.jazzjack.rab.bit.cmiyc.event.GameEventBus.publishEvent;
 
-public class GameController {
+public class GameController implements LevelStateProvider {
 
     private final LevelFactory levelFactory;
     private final PlayerProfile playerProfile;
@@ -25,9 +26,12 @@ public class GameController {
     public GameController(LevelFactory levelFactory, PlayerProfile playerProfile) {
         this.levelFactory = levelFactory;
         this.playerProfile = playerProfile;
+
+        this.currentGamePhase = GamePhase.NOT_STARTED;
     }
 
-    GamePhase getCurrentGamePhase() {
+    @Override
+    public GamePhase getCurrentGamePhase() {
         return currentGamePhase;
     }
 
@@ -36,8 +40,9 @@ public class GameController {
         publishEvent(new GamePhaseEvent(currentGamePhase));
     }
 
-    Level getCurrentLevel() {
-        return currentLevel;
+    @Override
+    public Optional<Level> getCurrentLevel() {
+        return Optional.ofNullable(currentLevel);
     }
 
     public void startGame() {
@@ -117,11 +122,6 @@ public class GameController {
         if (!currentLevel.getPlayer().hasActionPointsLeft()) {
             endPlayerTurn();
         }
-    }
-
-    private Boolean movePlayer(int keycode) {
-        Direction direction = KEY_TO_DIRECTION_MAPPING.get(keycode);
-        return direction != null && currentLevel.getPlayer().moveToDirection(direction).isNoCollision();
     }
 
     private void endPlayerTurn() {
